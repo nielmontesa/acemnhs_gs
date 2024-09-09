@@ -2492,6 +2492,32 @@ html:has(.drawer-toggle:checked) {
   outline-width: 2px;
 }
 
+.link-primary {
+  --tw-text-opacity: 1;
+  color: rgb(var(--primary)/var(--tw-text-opacity));
+}
+
+.link-primary:hover {
+  color: rgb(var(--primary)/.75);
+}
+
+.link-primary:focus-visible {
+  outline-color: rgb(var(--primary));
+}
+
+.link-secondary {
+  --tw-text-opacity: 1;
+  color: rgb(var(--secondary)/var(--tw-text-opacity));
+}
+
+.link-secondary:hover {
+  color: rgb(var(--secondary)/.75);
+}
+
+.link-secondary:focus-visible {
+  outline-color: rgb(var(--secondary));
+}
+
 .absolute {
   position: absolute;
 }
@@ -2550,6 +2576,10 @@ html:has(.drawer-toggle:checked) {
 
 .mt-8 {
   margin-top: 2rem;
+}
+
+.mb-4 {
+  margin-bottom: 1rem;
 }
 
 .flex {
@@ -2831,6 +2861,18 @@ html:has(.drawer-toggle:checked) {
 .text-content2 {
   --tw-text-opacity: 1;
   color: rgb(var(--content2) / var(--tw-text-opacity));
+}
+
+.text-\[rgba\(0\2c 0\2c 0\2c 0\.02\)\] {
+  color: rgba(0,0,0,0.02);
+}
+
+.text-\[rgba\(0\2c 0\2c 0\2c 0\.8\)\] {
+  color: rgba(0,0,0,0.8);
+}
+
+.underline {
+  text-decoration-line: underline;
 }
 
 .opacity-75 {

@@ -106,10 +106,22 @@
                             class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
                         <div>
                             <h2 class="text-xl font-medium">Add Teacher</h2>
-                            <label for="teachername">
-                                <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Teacher Name</span>
-                                <input class="input-block input" placeholder="Please enter your username."
+                            <label for="teacherfirstname">
+                                <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Teacher First
+                                    Name</span>
+                                <input class="input-block input" placeholder="Please enter your first name."
                                     name="teachername" type="text" />
+                            </label>
+                            <label for="teacherlastname">
+                                <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Teacher Last
+                                    Name</span>
+                                <input class="input-block input" placeholder="Please enter your last name."
+                                    name="teachername" type="text" />
+                            </label>
+                            <label for="e-mail">
+                                <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">E-mail</span>
+                                <input class="input-block input" placeholder="Please enter your e-mail." name="e-mail"
+                                    type="email" />
                             </label>
                             <label for="username">
                                 <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Username</span>
@@ -160,7 +172,474 @@
                 </div>
             </div>
             <div class="flex w-full overflow-x-auto pt-8">
+                <div class="flex w-full overflow-x-auto">
+                    <table class="table-hover table">
+                        <thead>
+                            <tr>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>E-mail</th>
+                                <th>Username</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th>Roberto</th>
+                                <td>Dimagiba</td>
+                                <td>robertodimagiba@acemnhs.com</td>
+                                <td>rdimagiba</td>
+                                <td>
+                                    <input type="checkbox" id="drawer-right-2" class="drawer-toggle" />
 
+                                    <label for="drawer-right-2" class="btn btn-secondary">Edit</label>
+                                    <label class="overlay" for="drawer-right-2"></label>
+                                    <div class="drawer drawer-right">
+                                        <div class="drawer-content pt-10 flex flex-col h-full">
+                                            <label for="drawer-right-2"
+                                                class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
+                                            <div>
+                                                <h2 class="text-xl font-medium">Edit Teacher</h2>
+                                                <div class="flex flex-col gap-2">
+                                                    <label for="teacherfirstname">
+                                                        <span
+                                                            class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Teacher
+                                                            First
+                                                            Name</span> <br>
+                                                        <input class="input-block block input"
+                                                            placeholder="Please enter your first name."
+                                                            name="teachername" type="text" />
+                                                    </label>
+                                                    <label for="teacherlastname">
+                                                        <span
+                                                            class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Teacher
+                                                            Last
+                                                            Name</span> <br>
+                                                        <input class="input-block input"
+                                                            placeholder="Please enter your last name."
+                                                            name="teachername" type="text" />
+                                                    </label>
+                                                    <label for="e-mail">
+                                                        <span
+                                                            class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">E-mail</span>
+                                                        <br>
+                                                        <input class="input-block input"
+                                                            placeholder="Please enter your e-mail." name="e-mail"
+                                                            type="email" />
+                                                    </label>
+                                                    <label for="username">
+                                                        <span
+                                                            class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Username</span>
+                                                        <br>
+                                                        <input class="input-block input"
+                                                            placeholder="Please enter your username." name="username"
+                                                            type="text" />
+                                                    </label>
+                                                    <label for="Password">
+                                                        <span
+                                                            class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Password</span>
+                                                        <br>
+                                                        <input class="input-block input"
+                                                            placeholder="Please enter your password." name="password"
+                                                            type="password" />
+                                                    </label>
+
+                                                    <div class="mt-2 flex flex-col gap-2">
+                                                        <span>Sections Handled</span>
+                                                        <label class="flex cursor-pointer gap-2">
+                                                            <input type="checkbox" class="checkbox" />
+                                                            <span>Section 1</span>
+                                                        </label>
+                                                        <label class="flex cursor-pointer gap-2">
+                                                            <input type="checkbox" class="checkbox" />
+                                                            <span>Section 1</span>
+                                                        </label>
+                                                        <label class="flex cursor-pointer gap-2">
+                                                            <input type="checkbox" class="checkbox" />
+                                                            <span>Section 1</span>
+                                                        </label>
+                                                        <label class="flex cursor-pointer gap-2">
+                                                            <input type="checkbox" class="checkbox" />
+                                                            <span>Section 1</span>
+                                                        </label>
+                                                        <label class="flex cursor-pointer gap-2">
+                                                            <input type="checkbox" class="checkbox" />
+                                                            <span>Section 1</span>
+                                                        </label>
+                                                        <label class="flex cursor-pointer gap-2">
+                                                            <input type="checkbox" class="checkbox" />
+                                                            <span>Section 1</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="h-full flex flex-row justify-end items-end gap-2">
+                                                <button class="btn btn-ghost">Cancel</button>
+                                                <button class="btn btn-primary">Create</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <label class="btn btn-error" for="modal-1">Delete</label>
+                                    <input class="modal-state" id="modal-1" type="checkbox" />
+                                    <div class="modal">
+                                        <label class="modal-overlay" for="modal-1"></label>
+                                        <div class="modal-content flex flex-col gap-5">
+                                            <label for="modal-1"
+                                                class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
+                                            <h2 class="text-xl">Delete department?</h2>
+                                            <span>Are you sure you want to delete this department?</span>
+                                            <div class="flex gap-3">
+                                                <button class="btn btn-error btn-block">Delete</button>
+
+                                                <label for="modal-1" class="btn btn-block">Cancel</label>
+                                            </div>
+                                        </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Roberto</th>
+                                <td>Dimagiba</td>
+                                <td>robertodimagiba@acemnhs.com</td>
+                                <td>rdimagiba</td>
+                                <td>
+                                    <input type="checkbox" id="drawer-right-2" class="drawer-toggle" />
+
+                                    <label for="drawer-right-2" class="btn btn-secondary">Edit</label>
+                                    <label class="overlay" for="drawer-right-2"></label>
+                                    <div class="drawer drawer-right">
+                                        <div class="drawer-content pt-10 flex flex-col h-full">
+                                            <label for="drawer-right-2"
+                                                class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
+                                            <div>
+                                                <h2 class="text-xl font-medium">Edit Teacher</h2>
+                                                <div class="flex flex-col gap-2">
+                                                    <label for="teacherfirstname">
+                                                        <span
+                                                            class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Teacher
+                                                            First
+                                                            Name</span> <br>
+                                                        <input class="input-block block input"
+                                                            placeholder="Please enter your first name."
+                                                            name="teachername" type="text" />
+                                                    </label>
+                                                    <label for="teacherlastname">
+                                                        <span
+                                                            class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Teacher
+                                                            Last
+                                                            Name</span> <br>
+                                                        <input class="input-block input"
+                                                            placeholder="Please enter your last name."
+                                                            name="teachername" type="text" />
+                                                    </label>
+                                                    <label for="e-mail">
+                                                        <span
+                                                            class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">E-mail</span>
+                                                        <br>
+                                                        <input class="input-block input"
+                                                            placeholder="Please enter your e-mail." name="e-mail"
+                                                            type="email" />
+                                                    </label>
+                                                    <label for="username">
+                                                        <span
+                                                            class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Username</span>
+                                                        <br>
+                                                        <input class="input-block input"
+                                                            placeholder="Please enter your username." name="username"
+                                                            type="text" />
+                                                    </label>
+                                                    <label for="Password">
+                                                        <span
+                                                            class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Password</span>
+                                                        <br>
+                                                        <input class="input-block input"
+                                                            placeholder="Please enter your password." name="password"
+                                                            type="password" />
+                                                    </label>
+
+                                                    <div class="mt-2 flex flex-col gap-2">
+                                                        <span>Sections Handled</span>
+                                                        <label class="flex cursor-pointer gap-2">
+                                                            <input type="checkbox" class="checkbox" />
+                                                            <span>Section 1</span>
+                                                        </label>
+                                                        <label class="flex cursor-pointer gap-2">
+                                                            <input type="checkbox" class="checkbox" />
+                                                            <span>Section 1</span>
+                                                        </label>
+                                                        <label class="flex cursor-pointer gap-2">
+                                                            <input type="checkbox" class="checkbox" />
+                                                            <span>Section 1</span>
+                                                        </label>
+                                                        <label class="flex cursor-pointer gap-2">
+                                                            <input type="checkbox" class="checkbox" />
+                                                            <span>Section 1</span>
+                                                        </label>
+                                                        <label class="flex cursor-pointer gap-2">
+                                                            <input type="checkbox" class="checkbox" />
+                                                            <span>Section 1</span>
+                                                        </label>
+                                                        <label class="flex cursor-pointer gap-2">
+                                                            <input type="checkbox" class="checkbox" />
+                                                            <span>Section 1</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="h-full flex flex-row justify-end items-end gap-2">
+                                                <button class="btn btn-ghost">Cancel</button>
+                                                <button class="btn btn-primary">Create</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <label class="btn btn-error" for="modal-1">Delete</label>
+                                    <input class="modal-state" id="modal-1" type="checkbox" />
+                                    <div class="modal">
+                                        <label class="modal-overlay" for="modal-1"></label>
+                                        <div class="modal-content flex flex-col gap-5">
+                                            <label for="modal-1"
+                                                class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
+                                            <h2 class="text-xl">Delete department?</h2>
+                                            <span>Are you sure you want to delete this department?</span>
+                                            <div class="flex gap-3">
+                                                <button class="btn btn-error btn-block">Delete</button>
+
+                                                <label for="modal-1" class="btn btn-block">Cancel</label>
+                                            </div>
+                                        </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Roberto</th>
+                                <td>Dimagiba</td>
+                                <td>robertodimagiba@acemnhs.com</td>
+                                <td>rdimagiba</td>
+                                <td>
+                                    <input type="checkbox" id="drawer-right-2" class="drawer-toggle" />
+
+                                    <label for="drawer-right-2" class="btn btn-secondary">Edit</label>
+                                    <label class="overlay" for="drawer-right-2"></label>
+                                    <div class="drawer drawer-right">
+                                        <div class="drawer-content pt-10 flex flex-col h-full">
+                                            <label for="drawer-right-2"
+                                                class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
+                                            <div>
+                                                <h2 class="text-xl font-medium">Edit Teacher</h2>
+                                                <div class="flex flex-col gap-2">
+                                                    <label for="teacherfirstname">
+                                                        <span
+                                                            class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Teacher
+                                                            First
+                                                            Name</span> <br>
+                                                        <input class="input-block block input"
+                                                            placeholder="Please enter your first name."
+                                                            name="teachername" type="text" />
+                                                    </label>
+                                                    <label for="teacherlastname">
+                                                        <span
+                                                            class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Teacher
+                                                            Last
+                                                            Name</span> <br>
+                                                        <input class="input-block input"
+                                                            placeholder="Please enter your last name."
+                                                            name="teachername" type="text" />
+                                                    </label>
+                                                    <label for="e-mail">
+                                                        <span
+                                                            class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">E-mail</span>
+                                                        <br>
+                                                        <input class="input-block input"
+                                                            placeholder="Please enter your e-mail." name="e-mail"
+                                                            type="email" />
+                                                    </label>
+                                                    <label for="username">
+                                                        <span
+                                                            class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Username</span>
+                                                        <br>
+                                                        <input class="input-block input"
+                                                            placeholder="Please enter your username." name="username"
+                                                            type="text" />
+                                                    </label>
+                                                    <label for="Password">
+                                                        <span
+                                                            class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Password</span>
+                                                        <br>
+                                                        <input class="input-block input"
+                                                            placeholder="Please enter your password." name="password"
+                                                            type="password" />
+                                                    </label>
+
+                                                    <div class="mt-2 flex flex-col gap-2">
+                                                        <span>Sections Handled</span>
+                                                        <label class="flex cursor-pointer gap-2">
+                                                            <input type="checkbox" class="checkbox" />
+                                                            <span>Section 1</span>
+                                                        </label>
+                                                        <label class="flex cursor-pointer gap-2">
+                                                            <input type="checkbox" class="checkbox" />
+                                                            <span>Section 1</span>
+                                                        </label>
+                                                        <label class="flex cursor-pointer gap-2">
+                                                            <input type="checkbox" class="checkbox" />
+                                                            <span>Section 1</span>
+                                                        </label>
+                                                        <label class="flex cursor-pointer gap-2">
+                                                            <input type="checkbox" class="checkbox" />
+                                                            <span>Section 1</span>
+                                                        </label>
+                                                        <label class="flex cursor-pointer gap-2">
+                                                            <input type="checkbox" class="checkbox" />
+                                                            <span>Section 1</span>
+                                                        </label>
+                                                        <label class="flex cursor-pointer gap-2">
+                                                            <input type="checkbox" class="checkbox" />
+                                                            <span>Section 1</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="h-full flex flex-row justify-end items-end gap-2">
+                                                <button class="btn btn-ghost">Cancel</button>
+                                                <button class="btn btn-primary">Create</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <label class="btn btn-error" for="modal-1">Delete</label>
+                                    <input class="modal-state" id="modal-1" type="checkbox" />
+                                    <div class="modal">
+                                        <label class="modal-overlay" for="modal-1"></label>
+                                        <div class="modal-content flex flex-col gap-5">
+                                            <label for="modal-1"
+                                                class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
+                                            <h2 class="text-xl">Delete department?</h2>
+                                            <span>Are you sure you want to delete this department?</span>
+                                            <div class="flex gap-3">
+                                                <button class="btn btn-error btn-block">Delete</button>
+
+                                                <label for="modal-1" class="btn btn-block">Cancel</label>
+                                            </div>
+                                        </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Roberto</th>
+                                <td>Dimagiba</td>
+                                <td>robertodimagiba@acemnhs.com</td>
+                                <td>rdimagiba</td>
+                                <td>
+                                    <input type="checkbox" id="drawer-right-2" class="drawer-toggle" />
+
+                                    <label for="drawer-right-2" class="btn btn-secondary">Edit</label>
+                                    <label class="overlay" for="drawer-right-2"></label>
+                                    <div class="drawer drawer-right">
+                                        <div class="drawer-content pt-10 flex flex-col h-full">
+                                            <label for="drawer-right-2"
+                                                class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
+                                            <div>
+                                                <h2 class="text-xl font-medium">Edit Teacher</h2>
+                                                <div class="flex flex-col gap-2">
+                                                    <label for="teacherfirstname">
+                                                        <span
+                                                            class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Teacher
+                                                            First
+                                                            Name</span> <br>
+                                                        <input class="input-block block input"
+                                                            placeholder="Please enter your first name."
+                                                            name="teachername" type="text" />
+                                                    </label>
+                                                    <label for="teacherlastname">
+                                                        <span
+                                                            class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Teacher
+                                                            Last
+                                                            Name</span> <br>
+                                                        <input class="input-block input"
+                                                            placeholder="Please enter your last name."
+                                                            name="teachername" type="text" />
+                                                    </label>
+                                                    <label for="e-mail">
+                                                        <span
+                                                            class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">E-mail</span>
+                                                        <br>
+                                                        <input class="input-block input"
+                                                            placeholder="Please enter your e-mail." name="e-mail"
+                                                            type="email" />
+                                                    </label>
+                                                    <label for="username">
+                                                        <span
+                                                            class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Username</span>
+                                                        <br>
+                                                        <input class="input-block input"
+                                                            placeholder="Please enter your username." name="username"
+                                                            type="text" />
+                                                    </label>
+                                                    <label for="Password">
+                                                        <span
+                                                            class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Password</span>
+                                                        <br>
+                                                        <input class="input-block input"
+                                                            placeholder="Please enter your password." name="password"
+                                                            type="password" />
+                                                    </label>
+
+                                                    <div class="mt-2 flex flex-col gap-2">
+                                                        <span>Sections Handled</span>
+                                                        <label class="flex cursor-pointer gap-2">
+                                                            <input type="checkbox" class="checkbox" />
+                                                            <span>Section 1</span>
+                                                        </label>
+                                                        <label class="flex cursor-pointer gap-2">
+                                                            <input type="checkbox" class="checkbox" />
+                                                            <span>Section 1</span>
+                                                        </label>
+                                                        <label class="flex cursor-pointer gap-2">
+                                                            <input type="checkbox" class="checkbox" />
+                                                            <span>Section 1</span>
+                                                        </label>
+                                                        <label class="flex cursor-pointer gap-2">
+                                                            <input type="checkbox" class="checkbox" />
+                                                            <span>Section 1</span>
+                                                        </label>
+                                                        <label class="flex cursor-pointer gap-2">
+                                                            <input type="checkbox" class="checkbox" />
+                                                            <span>Section 1</span>
+                                                        </label>
+                                                        <label class="flex cursor-pointer gap-2">
+                                                            <input type="checkbox" class="checkbox" />
+                                                            <span>Section 1</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="h-full flex flex-row justify-end items-end gap-2">
+                                                <button class="btn btn-ghost">Cancel</button>
+                                                <button class="btn btn-primary">Create</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <label class="btn btn-error" for="modal-1">Delete</label>
+                                    <input class="modal-state" id="modal-1" type="checkbox" />
+                                    <div class="modal">
+                                        <label class="modal-overlay" for="modal-1"></label>
+                                        <div class="modal-content flex flex-col gap-5">
+                                            <label for="modal-1"
+                                                class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
+                                            <h2 class="text-xl">Delete department?</h2>
+                                            <span>Are you sure you want to delete this department?</span>
+                                            <div class="flex gap-3">
+                                                <button class="btn btn-error btn-block">Delete</button>
+
+                                                <label for="modal-1" class="btn btn-block">Cancel</label>
+                                            </div>
+                                        </div>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </main>
     </div>

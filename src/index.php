@@ -20,7 +20,7 @@
         <h1 class="font-bold text-4xl text-center">Antonio C. Esguerra MNHS</h1>
 
         <!-- Form -->
-
+        <bruh></bruh>
         <form action="./pages/admin/index.html" class="form-control">
             <div class="flex flex-col w-full gap-4">
                 <div class="w-full flex place-content-center">

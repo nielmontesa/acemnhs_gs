@@ -79,7 +79,7 @@
                             </div>
                         </label>
                         <div class="dropdown-menu-right-top dropdown-menu ml-2">
-                            <a tabindex="-1" class="dropdown-item text-sm">Account settings</a>
+                            <a href="settings.html" tabindex="-1" class="dropdown-item text-sm">Account settings</a>
                             <a href="../../index.php" tabindex="-1" class="dropdown-item text-sm">Logout</a>
                         </div>
                     </div>
@@ -88,35 +88,80 @@
         </div>
         <main class="main-content flex-1 p-8">
             <div class="w-fit">
-                <label for="sidebar-mobile-fixed" class="btn-primary btn sm:hidden mb-4">Open Sidebar</label>
+                <label for="sidebar-mobile-fixed" class="btn-primary btn sm:hidden">Open Sidebar</label>
             </div>
 
-            <h1 class="text-xl font-bold">Account Settings</h1>
-            <p class="pt-2">Change your username or your password.</p>
+            <h1 class="text-xl font-bold">English Department</h1>
+            <p class="pt-2">This is the English department of the school.</p>
 
-            <form action="./pages/admin/index.html" class="form-control">
-                <div class="flex flex-col gap-4 mt-4">
-                    <div class="flex flex-col gap-2">
-                        <label for="username">
-                            <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Username</span>
-                            <input class="input-block input" placeholder="Please enter your username." name="username"
-                                type="text" />
-                        </label>
-                        <label for="oldpassword">
-                            <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Old Password</span>
-                            <input class="input-block input" placeholder="Please enter your old password."
-                                name="password" type="password" />
-                        </label>
-                        <label for="newpassword">
-                            <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">New Password</span>
-                            <input class="input-block input" placeholder="Please enter your new password."
-                                name="password" type="password" />
-                        </label>
-                        <button class="btn btn-primary mt-2" type="submit">Update Details</button>
+
+            <div class="mt-8">
+                <input type="checkbox" id="drawer-right" class="drawer-toggle" />
+
+                <label for="drawer-right" class="btn btn-primary">Add Teacher</label>
+                <label class="overlay" for="drawer-right"></label>
+                <div class="drawer drawer-right">
+                    <div class="drawer-content pt-10 flex flex-col h-full">
+                        <label for="drawer-right"
+                            class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
+                        <div>
+                            <h2 class="text-xl font-medium">Add Teacher</h2>
+                            <label for="teachername">
+                                <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Teacher Name</span>
+                                <input class="input-block input" placeholder="Please enter your username."
+                                    name="teachername" type="text" />
+                            </label>
+                            <label for="username">
+                                <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Username</span>
+                                <input class="input-block input" placeholder="Please enter your username."
+                                    name="username" type="text" />
+                            </label>
+                            <label for="Password">
+                                <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Password</span>
+                                <input class="input-block input" placeholder="Please enter your password."
+                                    name="password" type="password" />
+                            </label>
+
+                            <div class="mt-2 flex flex-col gap-2">
+                                <span>Sections Handled</span>
+                                <label class="flex cursor-pointer gap-2">
+                                    <input type="checkbox" class="checkbox" />
+                                    <span>Section 1</span>
+                                </label>
+                                <label class="flex cursor-pointer gap-2">
+                                    <input type="checkbox" class="checkbox" />
+                                    <span>Section 1</span>
+                                </label>
+                                <label class="flex cursor-pointer gap-2">
+                                    <input type="checkbox" class="checkbox" />
+                                    <span>Section 1</span>
+                                </label>
+                                <label class="flex cursor-pointer gap-2">
+                                    <input type="checkbox" class="checkbox" />
+                                    <span>Section 1</span>
+                                </label>
+                                <label class="flex cursor-pointer gap-2">
+                                    <input type="checkbox" class="checkbox" />
+                                    <span>Section 1</span>
+                                </label>
+                                <label class="flex cursor-pointer gap-2">
+                                    <input type="checkbox" class="checkbox" />
+                                    <span>Section 1</span>
+                                </label>
+                            </div>
+
+
+                        </div>
+                        <div class="h-full flex flex-row justify-end items-end gap-2">
+                            <button class="btn btn-ghost">Cancel</button>
+                            <button class="btn btn-primary">Create</button>
+                        </div>
                     </div>
                 </div>
-            </form>
+            </div>
+            <div class="flex w-full overflow-x-auto pt-8">
 
+            </div>
         </main>
     </div>
 </body>

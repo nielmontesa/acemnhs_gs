@@ -1,17 +1,18 @@
 <!DOCTYPE html>
-<html data-theme=emerald">
+<html data-theme="light">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="color-scheme" content="light only">
     <title>Antonio C. Esguerra MNHS</title>
-    <link rel="stylesheet" href='styles/css/tailwind.css'>
+    <link rel="stylesheet" href='styles/tailwind.css'>
+    <link rel="stylesheet" href='styles/style.css'>
 </head>
 
-<body class="h-screen flex justify-center items-center bg-gray-200">
+<body class="h-screen flex justify-center items-center">
     <div
-        class="bg-gray-100 border border-gray-300 rounded-xl py-16 px-12 m-6 flex flex-col gap-4 align-center justify-center">
+        class="bg-gray-100 border-2 border-gray-200 rounded-xl py-16 px-12 m-6 flex flex-col gap-4 align-center justify-center">
         <div class="w-full rounded flex justify-center">
             <img src="./assets/acemnhs_logo.png" />
         </div>
@@ -19,25 +20,30 @@
 
         <!-- Form -->
 
-        <form action="" class="form-control">
-            <div class="join flex justify-center w-full mb-4">
-                <input class="join-item btn" type="radio" name="options" aria-label="Admin" required />
-                <input class="join-item btn" type="radio" name="options" aria-label="Faculty" required />
-                <input class="join-item btn" type="radio" name="options" aria-label="Parent" checked required />
+        <form action="./pages/admin/index.html" class="form-control">
+            <div class="flex flex-col w-full gap-4">
+                <div class="w-full flex place-content-center">
+                    <div class="btn-group mx-auto">
+                        <input type="radio" name="options" data-content="Admin" class="btn bg-[rgba(0,0,0,0.02)]" />
+                        <input type="radio" name="options" data-content="Faculty" class="btn bg-[rgba(0,0,0,0.02)]"
+                            checked />
+                        <input type="radio" name="options" data-content="Parent" class="btn bg-[rgba(0,0,0,0.02)]" />
+                    </div>
+                </div>
+                <div class="flex flex-col gap-2">
+                    <label for="username">
+                        <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Username</span>
+                        <input class="input-block input" placeholder="Please enter your username." name="username"
+                            type="text" />
+                    </label>
+                    <label for="Password">
+                        <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Username</span>
+                        <input class="input-block input" placeholder="Please enter your password." name="password"
+                            type="password" />
+                    </label>
+                    <button class="btn btn-primary btn-block mt-2" type="submit">Login</button>
+                </div>
             </div>
-            <div class="flex flex-col gap-2 form-control">
-                <label class="input input-bordered flex items-center gap-2">
-                    Username
-                    <input type="text" class="grow" placeholder="Enter your username." />
-                </label>
-                <label class="input input-bordered flex items-center gap-2">
-                    Password
-                    <input type="password" class="grow" placeholder="Enter your password." />
-
-                </label>
-                <button class="btn btn-primary" type="submit">Login</button>
-            </div>
-
         </form>
     </div>
 </body>

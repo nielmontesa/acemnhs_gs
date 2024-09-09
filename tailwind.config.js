@@ -2,15 +2,20 @@
 module.exports = {
   content: ["./src/**/*.{html,js,php}"],
   theme: {
-    extend: {
-      colors: {
-        "primary": "#04B2A8",
-      }
-    },
+    extend: {},
   },
-  plugins: [require('daisyui')],
-  daisyui: {
-    themes: ["emerald"],
-  }
+  plugins: [require('rippleui')],
+  rippleui: {
+    defaultTheme: 'light',
+		themes: [
+			{
+				themeName: "light",
+				colorScheme: "light",
+				colors: {
+					primary: "#04B2A8",
+				},
+			},
+			
+		],
+	},
 }
-

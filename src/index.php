@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="color-scheme" content="light only">
-    <title>Antonio C. Esguerraa MNHS</title>
+    <title>Antonio C. Esguerra MNHS</title>
     <link rel="stylesheet" href='styles/tailwind.css'>
     <link rel="stylesheet" href='styles/style.css'>
     <link rel="icon" href="./assets/acemnhs_logo.png">
@@ -17,7 +17,7 @@
         <div class="w-full rounded flex justify-center">
             <img src="./assets/acemnhs_logo.png" />
         </div>
-        <h1 class="font-bold text-4xl text-center">ASAAntonio C. Esguerra MNHS</h1>
+        <h1 class="font-bold text-4xl text-center">Antonio C. Esguerra MNHS</h1>
 
         <!-- Form -->
         <bruh></bruh>

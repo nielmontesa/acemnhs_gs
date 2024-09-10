@@ -18,10 +18,8 @@
             <img src="./assets/acemnhs_logo.png" />
         </div>
         <h1 class="font-bold text-4xl text-center">Antonio C. Esguerra MNHS</h1>
-
         <!-- Form -->
-        <!-- This is a test comment -->
-        <form action="./pages/admin/index.html" class="form-control">
+        <form action="./pages/admin/departments.html" class="form-control">
             <div class="flex flex-col w-full gap-4">
                 <div class="w-full flex place-content-center">
                     <div class="btn-group mx-auto">

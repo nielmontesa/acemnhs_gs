@@ -2614,14 +2614,6 @@ html:has(.drawer-toggle:checked) {
   gap: 1.25rem;
 }
 
-.gap-8 {
-  gap: 2rem;
-}
-
-.gap-16 {
-  gap: 4rem;
-}
-
 .overflow-x-auto {
   overflow-x: auto;
 }

@@ -36,7 +36,7 @@
                             type="text" />
                     </label>
                     <label for="Password">
-                        <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Username</span>
+                        <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Password</span>
                         <input class="input-block input" placeholder="Please enter your password." name="password"
                             type="password" />
                     </label>

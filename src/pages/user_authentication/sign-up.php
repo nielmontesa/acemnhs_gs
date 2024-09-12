@@ -1,3 +1,36 @@
+<?php
+
+include 'include ../connection.php';
+
+// Create connection
+$conn = mysqli_connect($servername, $username, $password, $dbname);
+
+// Check connection
+if (!$conn) {
+    die("Connection failed: " . mysqli_connect_error());
+}
+
+// Get data from form (assuming it's submitted via POST method)
+$username = $_POST['username'];
+$password = $_POST['password'];
+
+// Create the SQL INSERT statement
+$sql = "INSERT INTO admin (username, password) VALUES ('$username', '$password')";
+
+// Execute the query
+if (mysqli_query($conn, $sql)) {
+    echo "New record created successfully";
+    header('index.php');
+} else {
+    echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+}
+
+// Close connection
+mysqli_close($conn);
+?>
+
+
+
 <!DOCTYPE html>
 <html data-theme="light">
 
@@ -20,7 +53,7 @@
 
         <!-- Form -->
 
-        <form action="./pages/admin/index.html" class="form-control">
+        <form action="./pages/admin/index.html" method="post" class="form-control">
             <div class="flex flex-col w-full gap-4">
                 <div class="w-full flex place-content-center">
                     <div class="btn-group mx-auto">
@@ -36,11 +69,11 @@
                             type="text" />
                     </label>
                     <label for="Password">
-                        <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Username</span>
+                        <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Password</span>
                         <input class="input-block input" placeholder="Please enter your password." name="password"
                             type="password" />
                     </label>
-                    <button class="btn btn-primary btn-block mt-2" type="submit">Sign-up</button>
+                    <button class="btn btn-primary btn-block mt-2" name="submit" type="submit">Sign-up</button>
                 </div>
             </div>
         </form>

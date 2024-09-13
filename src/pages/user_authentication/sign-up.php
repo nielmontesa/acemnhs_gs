@@ -1,5 +1,4 @@
 <?php
-
 include 'C:\xampp\htdocs\Capstone\acemnhs_gs\src\connection.php';
 
 // Create connection
@@ -10,19 +9,34 @@ if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
-// Get data from form (assuming it's submitted via POST method)
-$username = $_POST['username'];
-$password = $_POST['password'];
+// Check if the form is submitted
+if (isset($_POST['submit'])) {
+    // Get data from form
+    $username = $_POST['username'];
+    $password = $_POST['password'];
 
-// Create the SQL INSERT statement
-$sql = "INSERT INTO admin (username, password) VALUES ('$username', '$password')";
+    // Hash the password before saving it to the database
+    $hashed_password = password_hash($password, PASSWORD_BCRYPT);
 
-// Execute the query
-if (mysqli_query($conn, $sql)) {
-    echo "New record created successfully";
-    header('index.php');
-} else {
-    echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+    // Use prepared statements to avoid SQL injection
+    $stmt = $conn->prepare("INSERT INTO admin (username, password) VALUES (?, ?)");
+
+    // Bind parameters (s = string)
+    $stmt->bind_param("ss", $username, $hashed_password);
+
+    // Execute the query and check if it was successful
+    if ($stmt->execute()) {
+        echo "New record created successfully";
+        
+        // Redirect to index.php
+        header("Location: C:\xampp\htdocs\Capstone\acemnhs_gs\src\index.php");
+        exit(); // Ensure no further code is executed after redirection
+    } else {
+        echo "Error: " . $stmt->error;
+    }
+
+    // Close the prepared statement
+    $stmt->close();
 }
 
 // Close connection

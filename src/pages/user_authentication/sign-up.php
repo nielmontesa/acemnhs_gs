@@ -1,6 +1,6 @@
 <?php
 
-include 'include ../connection.php';
+include 'C:\xampp\htdocs\Capstone\acemnhs_gs\src\connection.php';
 
 // Create connection
 $conn = mysqli_connect($servername, $username, $password, $dbname);

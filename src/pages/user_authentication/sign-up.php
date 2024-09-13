@@ -1,4 +1,5 @@
 <?php
+
 include 'C:\xampp\htdocs\Capstone\acemnhs_gs\src\connection.php';
 
 // Create connection
@@ -9,38 +10,25 @@ if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
-// Check if the form is submitted
 if (isset($_POST['submit'])) {
-    // Get data from form
-    $username = $_POST['username'];
-    $password = $_POST['password'];
 
-    // Hash the password before saving it to the database
-    $hashed_password = password_hash($password, PASSWORD_BCRYPT);
+    // Get form data
+    $user = $_POST['username'];
+    $pass = $_POST['password'];
 
-    // Use prepared statements to avoid SQL injection
-    $stmt = $conn->prepare("INSERT INTO admin (username, password) VALUES (?, ?)");
+    // Prepare SQL to insert data
+    $sql = "INSERT INTO admin (username, password) VALUES ('$user', '$pass')";
 
-    // Bind parameters (s = string)
-    $stmt->bind_param("ss", $username, $hashed_password);
-
-    // Execute the query and check if it was successful
-    if ($stmt->execute()) {
-        echo "New record created successfully";
-        
-        // Redirect to index.php
-        header("Location: C:\xampp\htdocs\Capstone\acemnhs_gs\src\index.php");
-        exit(); // Ensure no further code is executed after redirection
+    // Execute the query and check for success
+    if (mysqli_query($conn, $sql)) {
+        echo "New record created successfully!";
     } else {
-        echo "Error: " . $stmt->error;
+        echo "Error: " . $sql . "<br>" . mysqli_error($conn);
     }
 
-    // Close the prepared statement
-    $stmt->close();
+    // Close the connection
+    mysqli_close($conn);
 }
-
-// Close connection
-mysqli_close($conn);
 ?>
 
 
@@ -67,7 +55,7 @@ mysqli_close($conn);
 
         <!-- Form -->
 
-        <form action="./pages/admin/index.html" method="post" class="form-control">
+        <form action=" " method="post" class="form-control">
             <div class="flex flex-col w-full gap-4">
                 <div class="w-full flex place-content-center">
                     <div class="btn-group mx-auto">

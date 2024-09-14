@@ -11,22 +11,37 @@ if (isset($_POST['submit'])) {
 
     // Validate that all fields are filled
     if (empty($user) || empty($pass)) {
-        echo "Please fill out all fields!";
+        echo '<script>alert("Please fill out all fields!");</script>';
     } else {
-        // Insert data based on selected role
-        if ($role === 'admin') {
-            // Prepare SQL to insert data into admin table
-            $sql = "INSERT INTO admin (username, password) VALUES ('$user', '$pass')";
-        } elseif ($role === 'faculty') {
-            // Prepare SQL to insert data into faculty table
-            $sql = "INSERT INTO faculty (username, password) VALUES ('$user', '$pass')";
-        }
+        // Check if username already exists in either admin or faculty table
+        $checkAdmin = "SELECT * FROM admin WHERE username='$user'";
+        $checkFaculty = "SELECT * FROM faculty WHERE username='$user'";
+        $resultAdmin = mysqli_query($conn, $checkAdmin);
+        $resultFaculty = mysqli_query($conn, $checkFaculty);
 
-        // Execute the query and check for success
-        if (mysqli_query($conn, $sql)) {
-            echo "New record created successfully!";
+        if (mysqli_num_rows($resultAdmin) > 0 || mysqli_num_rows($resultFaculty) > 0) {
+            // If the username exists, show an alert and don't insert the record
+            echo '<script>
+                    alert("Admin or Faculty Already Exists!");
+                    window.location.href = "' . $_SERVER['PHP_SELF'] . '";
+                  </script>';
         } else {
-            echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+            // Insert data based on selected role
+            if ($role === 'admin') {
+                $sql = "INSERT INTO admin (username, password) VALUES ('$user', '$pass')";
+            } elseif ($role === 'faculty') {
+                $sql = "INSERT INTO faculty (username, password) VALUES ('$user', '$pass')";
+            }
+
+            // Execute the query and check for success
+            if (mysqli_query($conn, $sql)) {
+                echo '<script>
+                        alert("New record created successfully!");
+                        window.location.href = "../../index.php";
+                      </script>';
+            } else {
+                echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+            }
         }
     }
 
@@ -34,6 +49,8 @@ if (isset($_POST['submit'])) {
     mysqli_close($conn);
 }
 ?>
+
+
 
 <!DOCTYPE html>
 <html data-theme="light">
@@ -56,7 +73,7 @@ if (isset($_POST['submit'])) {
         <h1 class="font-bold text-4xl text-center">Antonio C. Esguerra MNHS</h1>
 
 
-        <form method="post" class="form-control">
+        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post" class="form-control">
             <div class="flex flex-col w-full gap-4">
                 <div class="w-full flex place-content-center">
                     <div class="btn-group mx-auto">

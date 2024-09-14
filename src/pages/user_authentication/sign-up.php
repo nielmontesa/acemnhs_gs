@@ -1,37 +1,39 @@
 <?php
 
-include 'C:\xampp\htdocs\Capstone\acemnhs_gs\src\connection.php';
-
-// Create connection
-$conn = mysqli_connect($servername, $username, $password, $dbname);
-
-// Check connection
-if (!$conn) {
-    die("Connection failed: " . mysqli_connect_error());
-}
+include 'C:\xampp\htdocs\Capstone\acemnhs_gs\src\connection\connection.php';
 
 if (isset($_POST['submit'])) {
 
-    // Get form data
-    $user = $_POST['username'];
-    $pass = $_POST['password'];
+    // Get and sanitize form data
+    $user = mysqli_real_escape_string($conn, trim($_POST['username']));
+    $pass = mysqli_real_escape_string($conn, trim($_POST['password']));
+    $role = mysqli_real_escape_string($conn, $_POST['role']);
 
-    // Prepare SQL to insert data
-    $sql = "INSERT INTO admin (username, password) VALUES ('$user', '$pass')";
-
-    // Execute the query and check for success
-    if (mysqli_query($conn, $sql)) {
-        echo "New record created successfully!";
+    // Validate that all fields are filled
+    if (empty($user) || empty($pass)) {
+        echo "Please fill out all fields!";
     } else {
-        echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+        // Insert data based on selected role
+        if ($role === 'admin') {
+            // Prepare SQL to insert data into admin table
+            $sql = "INSERT INTO admin (username, password) VALUES ('$user', '$pass')";
+        } elseif ($role === 'faculty') {
+            // Prepare SQL to insert data into faculty table
+            $sql = "INSERT INTO faculty (username, password) VALUES ('$user', '$pass')";
+        }
+
+        // Execute the query and check for success
+        if (mysqli_query($conn, $sql)) {
+            echo "New record created successfully!";
+        } else {
+            echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+        }
     }
 
     // Close the connection
     mysqli_close($conn);
 }
 ?>
-
-
 
 <!DOCTYPE html>
 <html data-theme="light">
@@ -53,27 +55,31 @@ if (isset($_POST['submit'])) {
         </div>
         <h1 class="font-bold text-4xl text-center">Antonio C. Esguerra MNHS</h1>
 
-        <!-- Form -->
 
-        <form action=" " method="post" class="form-control">
+        <form method="post" class="form-control">
             <div class="flex flex-col w-full gap-4">
                 <div class="w-full flex place-content-center">
                     <div class="btn-group mx-auto">
-                        <input type="radio" name="options" data-content="Admin" class="btn bg-[rgba(0,0,0,0.02)]" />
-                        <input type="radio" name="options" data-content="Faculty" class="btn bg-[rgba(0,0,0,0.02)]"
-                            checked />
+                        <label>
+                            <input type="radio" name="role" value="admin" class="btn bg-[rgba(0,0,0,0.02)]" required />
+                            Admin
+                        </label>
+                        <label>
+                            <input type="radio" name="role" value="faculty" class="btn bg-[rgba(0,0,0,0.02)]" required />
+                            Faculty
+                        </label>
                     </div>
                 </div>
                 <div class="flex flex-col gap-2">
                     <label for="username">
                         <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Username</span>
                         <input class="input-block input" placeholder="Please enter your username." name="username"
-                            type="text" />
+                            type="text" required />
                     </label>
                     <label for="Password">
                         <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Password</span>
                         <input class="input-block input" placeholder="Please enter your password." name="password"
-                            type="password" />
+                            type="password" required />
                     </label>
                     <button class="btn btn-primary btn-block mt-2" name="submit" type="submit">Sign-up</button>
                 </div>
@@ -83,6 +89,4 @@ if (isset($_POST['submit'])) {
                 class="link text-sm text-[rgba(0,0,0,0.8)] underline">Log-in</a></p>
     </div>
 </body>
-
-
 </html>

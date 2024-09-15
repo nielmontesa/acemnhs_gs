@@ -1312,6 +1312,13 @@ html {
   width: 100%;
 }
 
+.input-xs {
+  border-radius: .5rem;
+  font-size: .75rem;
+  height: 1.5rem;
+  line-height: 1rem;
+}
+
 .input::-moz-placeholder {
   --tw-text-opacity: 1;
   color: rgb(var(--content3)/var(--tw-text-opacity));
@@ -2516,6 +2523,10 @@ html:has(.drawer-toggle:checked) {
   margin: 1.5rem;
 }
 
+.m-8 {
+  margin: 2rem;
+}
+
 .mx-2 {
   margin-left: 0.5rem;
   margin-right: 0.5rem;
@@ -2623,6 +2634,10 @@ html:has(.drawer-toggle:checked) {
   width: 100%;
 }
 
+.w-1 {
+  width: 0.25rem;
+}
+
 .max-w-4xl {
   max-width: 56rem;
 }
@@ -2709,6 +2724,18 @@ html:has(.drawer-toggle:checked) {
 
 .border-2 {
   border-width: 2px;
+}
+
+.border-0 {
+  border-width: 0px;
+}
+
+.border-l-2 {
+  border-left-width: 2px;
+}
+
+.border-r-2 {
+  border-right-width: 2px;
 }
 
 .border-dashed {

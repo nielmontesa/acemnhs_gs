@@ -66,21 +66,14 @@
                                     <div class="menu-item-collapse">
                                         <div class="min-h-0">
                                             <label class="menu-item-disabled menu-item ml-6">Grades</label>
-                                            <label class="menu-item ml-6">Filipino</label>
-                                            <label class="menu-item ml-6">English</label>
-                                            <label class="menu-item ml-6">Mathematics</label>
-                                            <label class="menu-item ml-6">Science</label>
-                                            <label class="menu-item ml-6">Home Economics</label>
-                                            <label class="menu-item ml-6">Araling Panlipunan</label>
-                                            <label class="menu-item ml-6">EsP</label>
-                                            <label class="menu-item ml-6">TLE</label>
-                                            <label class="menu-item ml-6">MAPEH</label>
+                                            <a href="grades/report-card.html"><label class="menu-item ml-6">Report
+                                                    Cards</label></a>
+
                                         </div>
                                     </div>
                                 </li>
                             </ul>
                         </section>
-
                     </nav>
                 </section>
                 <section class="sidebar-footer justify-end bg-gray-2 pt-2">
@@ -108,7 +101,90 @@
         </div>
 
         <main class="main-content flex-1 p-8">
-
+            <h1 class="text-xl font-bold">Student Details</h1>
+            <p class="pt-2 pb-4">These are currently all of the student details.</p>
+            <div class="flex w-full overflow-x-auto">
+                <table class="table-compact table max-w-4xl">
+                    <thead>
+                        <tr>
+                            <th>Type</th>
+                            <th>Details</th>
+                            <th>Action(s)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>AKAP Status</th>
+                            <td>No Active Case</td>
+                            <td><button class="btn btn-error">View</button></td>
+                        </tr>
+                        <tr>
+                            <th>Full Name</th>
+                            <td>Roberto Dimagiba</td>
+                            <td><button class="btn" disabled>Edit</button></td>
+                        </tr>
+                        <tr>
+                            <th>First Name</th>
+                            <td>Roberto</td>
+                            <td><button class="btn" disabled>Edit</button></td>
+                        </tr>
+                        <tr>
+                            <th>Last Name</th>
+                            <td>Dimagiba</td>
+                            <td><button class="btn" disabled>Edit</button></td>
+                        </tr>
+                        <tr>
+                            <th>Parent Name</th>
+                            <td>Lydia Dimagiba</td>
+                            <td><button class="btn" disabled>Edit</button></td>
+                        </tr>
+                        <tr>
+                            <th>Parent E-mail</th>
+                            <td>lydiadimagiba65@gmail.com</td>
+                            <td><input type="checkbox" id="drawer-right" class="drawer-toggle" />
+                                <label for="drawer-right" class="btn btn-primary">Edit</label>
+                                <label class="overlay" for="drawer-right"></label>
+                                <div class="drawer drawer-right">
+                                    <div class="drawer-content pt-10 flex flex-col h-full">
+                                        <label for="drawer-right"
+                                            class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
+                                        <div>
+                                            <h2 class="text-xl font-medium">Edit field</h2>
+                                            <input class="input py-1.5 my-3" placeholder="Type here..." />
+                                        </div>
+                                        <div class="h-full flex flex-row justify-end items-end gap-2">
+                                            <button class="btn btn-ghost">Cancel</button>
+                                            <button class="btn btn-primary">Edit</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Parent Contact Number</th>
+                            <td>09152233859</td>
+                            <td><input type="checkbox" id="drawer-right" class="drawer-toggle" />
+                                <label for="drawer-right" class="btn btn-primary">Edit</label>
+                                <label class="overlay" for="drawer-right"></label>
+                                <div class="drawer drawer-right">
+                                    <div class="drawer-content pt-10 flex flex-col h-full">
+                                        <label for="drawer-right"
+                                            class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
+                                        <div>
+                                            <h2 class="text-xl font-medium">Edit field</h2>
+                                            <input class="input py-1.5 my-3" placeholder="Type here..." />
+                                        </div>
+                                        <div class="h-full flex flex-row justify-end items-end gap-2">
+                                            <button class="btn btn-ghost">Cancel</button>
+                                            <button class="btn btn-primary">Edit</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </main>
     </div>
 </body>

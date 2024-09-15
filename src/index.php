@@ -44,7 +44,7 @@
                 </div>
             </div>
         </form>
-        <p class="text-sm text-center"> No account? <a href="./pages/user_authentication/sign-up.html"
+        <p class="text-sm text-center"> No account? <a href="./pages/user_authentication/sign-up.php"
                 class="link text-sm text-[rgba(0,0,0,0.8)] underline">Sign
                 Up</a></p>
 

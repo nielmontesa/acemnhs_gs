@@ -1261,52 +1261,6 @@ html {
   outline-color: rgb(var(--primary));
 }
 
-.btn-outline-success {
-  --tw-border-opacity: 1;
-  --tw-text-opacity: 1;
-  background-color: transparent;
-  border-color: rgb(var(--success)/var(--tw-border-opacity));
-  border-width: 2px;
-  color: rgb(var(--success)/var(--tw-text-opacity));
-  transition-duration: .15s;
-  transition-property: transform,color,background-color,border-color,text-decoration-color,fill,stroke;
-  transition-timing-function: cubic-bezier(.4,0,.2,1);
-}
-
-.btn-outline-success:hover {
-  --tw-bg-opacity: 1;
-  --tw-text-opacity: 1;
-  background-color: rgb(var(--success)/var(--tw-bg-opacity));
-  color: rgb(255 255 255/var(--tw-text-opacity));
-}
-
-.btn-outline-success:focus-visible {
-  outline-color: rgb(var(--success));
-}
-
-.btn-outline-warning {
-  --tw-border-opacity: 1;
-  --tw-text-opacity: 1;
-  background-color: transparent;
-  border-color: rgb(var(--warning)/var(--tw-border-opacity));
-  border-width: 2px;
-  color: rgb(var(--warning)/var(--tw-text-opacity));
-  transition-duration: .15s;
-  transition-property: transform,color,background-color,border-color,text-decoration-color,fill,stroke;
-  transition-timing-function: cubic-bezier(.4,0,.2,1);
-}
-
-.btn-outline-warning:hover {
-  --tw-bg-opacity: 1;
-  --tw-text-opacity: 1;
-  background-color: rgb(var(--warning)/var(--tw-bg-opacity));
-  color: rgb(255 255 255/var(--tw-text-opacity));
-}
-
-.btn-outline-warning:focus-visible {
-  outline-color: rgb(var(--warning));
-}
-
 .btn-sm {
   border-radius: .5rem;
   height: 2rem;

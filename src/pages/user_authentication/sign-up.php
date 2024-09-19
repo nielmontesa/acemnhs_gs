@@ -1,6 +1,6 @@
 <?php
 
-include 'C:\xampp\htdocs\Capstone\acemnhs_gs\src\connection\connection.php';
+include __DIR__ . '/../../connection/connection.php';
 
 if (isset($_POST['submit'])) {
 
@@ -14,8 +14,8 @@ if (isset($_POST['submit'])) {
         echo '<script>alert("Please fill out all fields!");</script>';
     } else {
         // Check if username already exists in either admin or faculty table
-        $checkAdmin = "SELECT * FROM admin WHERE username='$user'";
-        $checkFaculty = "SELECT * FROM faculty WHERE username='$user'";
+        $checkAdmin = "SELECT * FROM admin WHERE email='$user'";
+        $checkFaculty = "SELECT * FROM teachers WHERE username='$user'";
         $resultAdmin = mysqli_query($conn, $checkAdmin);
         $resultFaculty = mysqli_query($conn, $checkFaculty);
 
@@ -26,11 +26,14 @@ if (isset($_POST['submit'])) {
                     window.location.href = "' . $_SERVER['PHP_SELF'] . '";
                   </script>';
         } else {
+            // Hash the password before inserting it into the database
+            $hashed_password = password_hash($pass, PASSWORD_DEFAULT);
+
             // Insert data based on selected role
             if ($role === 'admin') {
-                $sql = "INSERT INTO admin (username, password) VALUES ('$user', '$pass')";
+                $sql = "INSERT INTO admin (email, password) VALUES ('$user', '$hashed_password')";
             } elseif ($role === 'faculty') {
-                $sql = "INSERT INTO faculty (username, password) VALUES ('$user', '$pass')";
+                $sql = "INSERT INTO teachers (username, password) VALUES ('$user', '$hashed_password')";
             }
 
             // Execute the query and check for success

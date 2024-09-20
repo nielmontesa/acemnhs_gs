@@ -1,38 +1,71 @@
 <?php
 session_start();
-include 'C:\xampp\htdocs\Capstone\acemnhs_gs\src\connection\connection.php'; // Ensure connection file is included
+include 'C:\xampp\htdocs\Capstone\acemnhs_gs\src\connection\connection.php'; 
 
-if(isset($_POST['login'])){
+// Check if the session is valid
+if (empty($_SESSION['status'])) {
+    $_SESSION['status'] = 'invalid';
+}
+
+if ($_SESSION['status'] == 'valid') {
+    $role = $_SESSION['role']; // Ensure role is set in the session
+    if ($role == 'admin') {
+        echo '<script>window.location.href = "/Capstone/acemnhs_gs/src/pages/admin/departments.php";</script>';
+        exit();
+    } elseif ($role == 'teacher') {
+        echo '<script>window.location.href = "/Capstone/acemnhs_gs/src/pages/teacher/index.php";</script>';
+        exit();
+    } elseif ($role == 'parent') {
+        echo '<script>window.location.href = "/Capstone/acemnhs_gs/src/pages/parent/student_details.php";</script>';
+        exit();
+    }
+}
+
+if (isset($_POST['login'])) {
     // Retrieve and trim user inputs
     $username = trim($_POST['username']);
     $password = trim($_POST['password']);
     $role = $_POST['role']; // Get the selected role
 
-    if(empty($username) || empty($password)){
+    if (empty($username) || empty($password)) {
         echo '<script>alert("Please fill out all fields.");</script>';
     } else {
         // Check for user in the correct table based on the selected role
-        if($role == 'admin'){
+        $checkQuery = "";
+        if ($role == 'admin') {
             $checkQuery = "SELECT * FROM admin WHERE username='$username' AND password='$password'";
-        } elseif($role == 'teacher'){
+        } elseif ($role == 'teacher') {
             $checkQuery = "SELECT * FROM teachers WHERE username='$username' AND password='$password'";
-        } elseif($role == 'parent'){
+        } elseif ($role == 'parent') {
             $checkQuery = "SELECT * FROM parents WHERE username='$username' AND password='$password'";
         }
 
         $result = mysqli_query($conn, $checkQuery);
 
         // Check if the user exists in the selected role's table
-        if(mysqli_num_rows($result) > 0){
+        if (mysqli_num_rows($result) > 0) {
+            // Successful login
+            $_SESSION['status'] = 'valid';
+            $_SESSION['role'] = $role; // Store the role in the session
             echo '<script>alert("Logged in successfully as ' . ucfirst($role) . '!");</script>';
-            // You can redirect based on the role here
-            // header("Location: ".$role."_dashboard.php");
+            
+            // Redirect based on role using window.location
+            if ($role == 'admin') {
+                echo '<script>window.location.href = "/Capstone/acemnhs_gs/src/pages/admin/departments.html";</script>';
+            } elseif ($role == 'teacher') {
+                echo '<script>window.location.href = "/Capstone/acemnhs_gs/src/pages/teacher/index.html";</script>';
+            } elseif ($role == 'parent') {
+                echo '<script>window.location.href = "/Capstone/acemnhs_gs/src/pages/parent/student_details.html";</script>';
+            }
+            exit();
         } else {
             echo '<script>alert("Login failed. Incorrect username or password for ' . ucfirst($role) . '.");</script>';
         }
     }
 }
 ?>
+
+
 
 <!DOCTYPE html>
 <html data-theme="light">

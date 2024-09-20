@@ -1,3 +1,11 @@
+<?php
+    session_start();
+    session_unset();
+    session_destroy();
+    header("Location: /Capstone/acemnhs_gs/src/index.php"); // Change this to your login page
+    exit();
+?>
+
 <!DOCTYPE html>
 <html data-theme="light">
 
@@ -100,7 +108,7 @@
                         </label>
                         <div class="dropdown-menu-right-top dropdown-menu ml-2">
                             <a href="settings.html" tabindex="-1" class="dropdown-item text-sm">Account settings</a>
-                            <a href="../../index.php" tabindex="-1" class="dropdown-item text-sm">Logout</a>
+                            <a href="/Capstone/acemnhs_gs/src/connection/logout.php" tabindex="-1" class="dropdown-item text-sm">Logout</a>
                         </div>
                     </div>
                 </section>

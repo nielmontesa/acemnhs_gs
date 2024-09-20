@@ -1,54 +1,30 @@
 <?php
 include __DIR__ . '/../../connection/connection.php';
 
-if (isset($_POST['submit'])) {
-    // Get form data
-    $user = trim($_POST['username']);
-    $pass = trim($_POST['password']);
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
+    // Retrieve input values
     $role = $_POST['role'];
+    $username = $_POST['username'];
+    $password = $_POST['password']; 
 
-    // Validate that all fields are filled
-    if (empty($user) || empty($pass)) {
-        echo '<script>alert("Please fill out all fields!");</script>';
+    // Query to check if the user already exists in the selected role table
+    $check_sql = "SELECT * FROM $role WHERE username = '$username'";
+    $check_result = mysqli_query($conn, $check_sql);
+
+    if (mysqli_num_rows($check_result) > 0) {
+        // User already exists, notify the user
+        echo "<script>alert('User already exists. Please choose another user.');</script>";
     } else {
-        // Check if username already exists in either admin, faculty, or parent table
-        $checkAdmin = "SELECT * FROM admin WHERE email='$user'";
-        $checkFaculty = "SELECT * FROM teachers WHERE username='$user'";
-        $checkParent = "SELECT * FROM parents WHERE username = '$user'";
-        $resultAdmin = mysqli_query($conn, $checkAdmin);
-        $resultFaculty = mysqli_query($conn, $checkFaculty);
-        $resultParent = mysqli_query($conn, $checkParent);
+        // If the username does not exist, insert the new user data
+        $sql = "INSERT INTO $role (username, password) VALUES ('$username', '$password')";
 
-        if (mysqli_num_rows($resultAdmin) > 0 || mysqli_num_rows($resultFaculty) > 0 || mysqli_num_rows($resultParent) > 0) {
-            // If the username exists, show an alert and don't insert the record
-            echo '<script>
-                    alert("Admin, Faculty or Parent Already Exists!");
-                    window.location.href = "' . $_SERVER['PHP_SELF'] . '";
-                  </script>';
+        // Execute the insert query
+        if (mysqli_query($conn, $sql)) {
+            echo "<script>alert('New User created successfully!');</script>";
         } else {
-            // Insert data based on selected role
-            if ($role === 'admin') {
-                $sql = "INSERT INTO admin (email, password) VALUES ('$user', '$pass')";
-            } elseif ($role === 'faculty') {
-                $sql = "INSERT INTO teachers (username, password) VALUES ('$user', '$pass')";
-            } elseif ($role === 'parent') {
-                $sql = "INSERT INTO parents (username, password) VALUES ('$user', '$pass')";
-            }
-
-            // Execute the query and check for success
-            if (mysqli_query($conn, $sql)) {
-                echo '<script>
-                        alert("New record created successfully!");
-                        window.location.href = "../../index.php";
-                      </script>';
-            } else {
-                echo "Error: " . $sql . "<br>" . mysqli_error($conn);
-            }
+            echo "Error: " . $sql . "<br>" . mysqli_error($conn);
         }
     }
-
-    // Close the connection
-    mysqli_close($conn);
 }
 ?>
 
@@ -80,11 +56,11 @@ if (isset($_POST['submit'])) {
                             Admin
                         </label>
                         <label>
-                            <input type="radio" name="role" value="faculty" class="btn bg-[rgba(0,0,0,0.02)]" required />
-                            Faculty
+                            <input type="radio" name="role" value="teachers" class="btn bg-[rgba(0,0,0,0.02)]" required />
+                            Teacher
                         </label>
                         <label>
-                            <input type="radio" name="role" value="parent" class="btn bg-[rgba(0,0,0,0.02)]" required />
+                            <input type="radio" name="role" value="parents" class="btn bg-[rgba(0,0,0,0.02)]" required />
                             Parent
                         </label>
                     </div>

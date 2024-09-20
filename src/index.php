@@ -1,32 +1,37 @@
 <?php
-    session_start();
+session_start();
+include 'C:\xampp\htdocs\Capstone\acemnhs_gs\src\connection\connection.php'; // Ensure connection file is included
 
-    if(isset($_POST['login'])){
+if(isset($_POST['login'])){
+    // Retrieve and trim user inputs
+    $username = trim($_POST['username']);
+    $password = trim($_POST['password']);
+    $role = $_POST['role']; // Get the selected role
 
-        $username = trim($_POST['username']);
-        $password = trim($_POST['password']);
-
-        if(empty($_POST['username']) || empty($_POST['password'])){
-            echo 'Please Fill out all fields. ';
-        } else {
-            $checkAdmin = "SELECT * FROM admin WHERE email='$user'";
-            $checkFaculty = "SELECT * FROM teachers WHERE username='$user'";
-            $checkParent = "SELECT * FROM parents WHERE username = '$user'";
-            $resultAdmin = mysqli_query($conn, $checkAdmin);
-            $resultFaculty = mysqli_query($conn, $checkFaculty);
-            $resultParent = mysqli_query($conn, $checkParent);
-
-            if(mysqli_num_rows($resultAdmin) > 0 || mysqli_num_rows($resultFaculty) > 0 || mysqli_num_rows($resultParent) > 0){
-                echo "Logged in Successful";
-            } else {
-                echo "Logged in Failed";
-            }
+    if(empty($username) || empty($password)){
+        echo '<script>alert("Please fill out all fields.");</script>';
+    } else {
+        // Check for user in the correct table based on the selected role
+        if($role == 'admin'){
+            $checkQuery = "SELECT * FROM admin WHERE username='$username' AND password='$password'";
+        } elseif($role == 'teacher'){
+            $checkQuery = "SELECT * FROM teachers WHERE username='$username' AND password='$password'";
+        } elseif($role == 'parent'){
+            $checkQuery = "SELECT * FROM parents WHERE username='$username' AND password='$password'";
         }
 
-        
+        $result = mysqli_query($conn, $checkQuery);
 
-
+        // Check if the user exists in the selected role's table
+        if(mysqli_num_rows($result) > 0){
+            echo '<script>alert("Logged in successfully as ' . ucfirst($role) . '!");</script>';
+            // You can redirect based on the role here
+            // header("Location: ".$role."_dashboard.php");
+        } else {
+            echo '<script>alert("Login failed. Incorrect username or password for ' . ucfirst($role) . '.");</script>';
+        }
     }
+}
 ?>
 
 <!DOCTYPE html>
@@ -43,44 +48,44 @@
 </head>
 
 <body class="h-screen flex justify-center items-center">
-    <div
-        class="bg-gray-100 border-2 border-gray-200 rounded-xl py-16 px-12 m-6 flex flex-col gap-4 align-center justify-center">
+    <div class="bg-gray-100 border-2 border-gray-200 rounded-xl py-16 px-12 m-6 flex flex-col gap-4 align-center justify-center">
         <div class="w-full rounded flex justify-center">
             <img src="./assets/acemnhs_logo.png" />
         </div>
         <h1 class="font-bold text-4xl text-center">Antonio C. Esguerra MNHS</h1>
         <!-- Form -->
-        <form action="./pages/admin/departments.html" class="form-control">
+        <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST" class="form-control">
             <div class="flex flex-col w-full gap-4">
                 <div class="w-full flex place-content-center">
                     <div class="btn-group mx-auto">
-                        <input type="radio" name="options" data-content="Admin" class="btn bg-[rgba(0,0,0,0.02)]" />
-                        <input type="radio" name="options" data-content="Faculty" class="btn bg-[rgba(0,0,0,0.02)]"
-                            checked />
-                        <input type="radio" name="options" data-content="Parent" class="btn bg-[rgba(0,0,0,0.02)]" />
+                        <label>
+                            <input type="radio" name="role" value="admin" class="btn bg-[rgba(0,0,0,0.02)]" required />
+                            Admin
+                        </label>
+                        <label>
+                            <input type="radio" name="role" value="teacher" class="btn bg-[rgba(0,0,0,0.02)]" checked required />
+                            Teacher
+                        </label>
+                        <label>
+                            <input type="radio" name="role" value="parent" class="btn bg-[rgba(0,0,0,0.02)]" required />
+                            Parent
+                        </label>
                     </div>
                 </div>
                 <div class="flex flex-col gap-2">
                     <label for="username">
                         <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Username</span>
-                        <input class="input-block input" placeholder="Please enter your username." name="username"
-                            type="text" />
+                        <input class="input-block input" placeholder="Please enter your username." name="username" type="text" required />
                     </label>
                     <label for="Password">
                         <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Password</span>
-                        <input class="input-block input" placeholder="Please enter your password." name="password"
-                            type="password" />
+                        <input class="input-block input" placeholder="Please enter your password." name="password" type="password" required />
                     </label>
-                    <button class="btn btn-primary btn-block mt-2" type="submit" name = "login">Login</button>
+                    <button class="btn btn-primary btn-block mt-2" type="submit" name="login">Login</button>
                 </div>
             </div>
         </form>
-        <p class="text-sm text-center"> No account? <a href="./pages/user_authentication/sign-up.php"
-                class="link text-sm text-[rgba(0,0,0,0.8)] underline">Sign
-                Up</a></p>
-
+        <p class="text-sm text-center"> No account? <a href="./pages/user_authentication/sign-up.php" class="link text-sm text-[rgba(0,0,0,0.8)] underline">Sign Up</a></p>
     </div>
 </body>
-
-
 </html>

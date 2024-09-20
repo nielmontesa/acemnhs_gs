@@ -1,3 +1,34 @@
+<?php
+    session_start();
+
+    if(isset($_POST['login'])){
+
+        $username = trim($_POST['username']);
+        $password = trim($_POST['password']);
+
+        if(empty($_POST['username']) || empty($_POST['password'])){
+            echo 'Please Fill out all fields. ';
+        } else {
+            $checkAdmin = "SELECT * FROM admin WHERE email='$user'";
+            $checkFaculty = "SELECT * FROM teachers WHERE username='$user'";
+            $checkParent = "SELECT * FROM parents WHERE username = '$user'"
+            $resultAdmin = mysqli_query($conn, $checkAdmin);
+            $resultFaculty = mysqli_query($conn, $checkFaculty);
+            $resultParent = mysqli_query($conn, $checkParent);
+
+            if(mysqli_num_rows($resultAdmin) > 0 || mysqli_num_rows($resultFaculty) > 0 || mysqli_num_rows($resultParent) > 0){
+                echo "Logged in Successful";
+            } else {
+                echo "Logged in Failed";
+            }
+        }
+
+        
+
+
+    }
+?>
+
 <!DOCTYPE html>
 <html data-theme="light">
 
@@ -40,7 +71,7 @@
                         <input class="input-block input" placeholder="Please enter your password." name="password"
                             type="password" />
                     </label>
-                    <button class="btn btn-primary btn-block mt-2" type="submit">Login</button>
+                    <button class="btn btn-primary btn-block mt-2" type="submit" name = "login">Login</button>
                 </div>
             </div>
         </form>

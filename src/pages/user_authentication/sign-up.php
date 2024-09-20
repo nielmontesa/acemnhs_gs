@@ -16,13 +16,15 @@ if (isset($_POST['submit'])) {
         // Check if username already exists in either admin or faculty table
         $checkAdmin = "SELECT * FROM admin WHERE email='$user'";
         $checkFaculty = "SELECT * FROM teachers WHERE username='$user'";
+        $checkParent = "SELECT * FROM parents WHERE username = '$user'"
         $resultAdmin = mysqli_query($conn, $checkAdmin);
         $resultFaculty = mysqli_query($conn, $checkFaculty);
+        $resultParent = mysqli_query($conn, $checkParent);
 
         if (mysqli_num_rows($resultAdmin) > 0 || mysqli_num_rows($resultFaculty) > 0) {
             // If the username exists, show an alert and don't insert the record
             echo '<script>
-                    alert("Admin or Faculty Already Exists!");
+                    alert("Admin, Faculty or Parent Already Exists!");
                     window.location.href = "' . $_SERVER['PHP_SELF'] . '";
                   </script>';
         } else {
@@ -34,6 +36,8 @@ if (isset($_POST['submit'])) {
                 $sql = "INSERT INTO admin (email, password) VALUES ('$user', '$hashed_password')";
             } elseif ($role === 'faculty') {
                 $sql = "INSERT INTO teachers (username, password) VALUES ('$user', '$hashed_password')";
+            } elseif ($role === 'parent') {
+                $sql = "INSERT INTO parents (username, password) VALUES ('$user', '$hashed_password')";
             }
 
             // Execute the query and check for success
@@ -86,6 +90,10 @@ if (isset($_POST['submit'])) {
                         </label>
                         <label>
                             <input type="radio" name="role" value="faculty" class="btn bg-[rgba(0,0,0,0.02)]" required />
+                            Faculty
+                        </label>
+                        <label>
+                            <input type="radio" name="role" value="parent" class="btn bg-[rgba(0,0,0,0.02)]" required />
                             Faculty
                         </label>
                     </div>

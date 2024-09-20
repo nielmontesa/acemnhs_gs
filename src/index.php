@@ -11,7 +11,7 @@
         } else {
             $checkAdmin = "SELECT * FROM admin WHERE email='$user'";
             $checkFaculty = "SELECT * FROM teachers WHERE username='$user'";
-            $checkParent = "SELECT * FROM parents WHERE username = '$user'"
+            $checkParent = "SELECT * FROM parents WHERE username = '$user'";
             $resultAdmin = mysqli_query($conn, $checkAdmin);
             $resultFaculty = mysqli_query($conn, $checkFaculty);
             $resultParent = mysqli_query($conn, $checkParent);

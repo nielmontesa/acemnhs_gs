@@ -30,7 +30,7 @@
                         <section class="menu-section px-4">
                             <span class="menu-title">Welcome, Username</span>
                             <ul class="menu-items">
-                                <a href="student_details.html">
+                                <a href="sections.html">
                                     <li class="menu-item">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-75" fill="none"
                                             viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -39,42 +39,11 @@
                                             <path stroke-linecap="round" stroke-linejoin="round"
                                                 d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                         </svg>
-                                        <span>Student Details</span>
+                                        <span>Sections</span>
                                     </li>
                                 </a>
-                                <li>
-                                    <input type="checkbox" id="menu-1" class="menu-toggle" />
-                                    <label class="menu-item justify-between" for="menu-1">
-                                        <div class="flex gap-2">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-75"
-                                                fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                            </svg>
-                                            <span>Grades</span>
-                                        </div>
-
-                                        <span class="menu-icon">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
-                                                fill="currentColor">
-                                                <path fill-rule="evenodd"
-                                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                                    clip-rule="evenodd" />
-                                            </svg>
-                                        </span>
-                                    </label>
-
-                                    <div class="menu-item-collapse">
-                                        <div class="min-h-0">
-                                            <label class="menu-item-disabled menu-item ml-6">Grades</label>
-                                            <label class="menu-item ml-6">Report Cards</label>
-
-                                        </div>
-                                    </div>
-                                </li>
                             </ul>
                         </section>
-
                     </nav>
                 </section>
                 <section class="sidebar-footer justify-end bg-gray-2 pt-2">
@@ -88,7 +57,7 @@
 
                                 <div class="flex flex-col">
                                     <span>Username</span>
-                                    <span class="text-xs">Parent</span>
+                                    <span class="text-xs">Teacher</span>
                                 </div>
                             </div>
                         </label>
@@ -102,7 +71,30 @@
         </div>
 
         <main class="main-content flex-1 p-8">
+            <h1 class="text-xl font-bold">Student Details</h1>
+            <p class="pt-2 pb-4">These are currently all of the student details.</p>
+            <div class="flex w-full overflow-x-auto">
+                <table class="table-compact table max-w-4xl">
+                    <thead>
+                        <tr>
+                            <th>Grade Level</th>
+                            <th>Section Name</th>
+                            <th>Subject</th>
+                            <th>Action(s)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>Grade 7</th>
+                            <td>Rizal</td>
+                            <td>Mathematics</td>
+                            <td><a href="students.html"><button class="btn btn-secondary">View</button></a></td>
+                        </tr>
 
+
+                    </tbody>
+                </table>
+            </div>
         </main>
     </div>
 </body>

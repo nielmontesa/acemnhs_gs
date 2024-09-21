@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="color-scheme" content="light only">
     <title>Antonio C. Esguerra MNHS</title>
-    <link rel="stylesheet" href='../../styles/tailwind.css'>
-    <link rel="stylesheet" href='../../styles/style.css'>
-    <link rel="icon" href="../../assets/acemnhs_logo.png">
+    <link rel="stylesheet" href='../../../styles/tailwind.css'>
+    <link rel="stylesheet" href='../../../styles/style.css'>
+    <link rel="icon" href="../../../assets/acemnhs_logo.png">
 </head>
 
 <body>
@@ -19,7 +19,7 @@
             <aside
                 class="sidebar sidebar-fixed-left sidebar-mobile h-full justify-start max-sm:fixed max-sm:-translate-x-full">
                 <section class="sidebar-title items-center p-4 gap-2">
-                    <img src="../../assets/acemnhs_logo.png" class="w-14" alt="">
+                    <img src="../../../assets/acemnhs_logo.png" class="w-14" alt="">
                     <div class="flex flex-col">
                         <span class="text-lg">ACEMN High School</span>
                         <span class="text-xs font-normal text-content2">Grading System</span>
@@ -30,7 +30,7 @@
                         <section class="menu-section px-4">
                             <span class="menu-title">Welcome, Username</span>
                             <ul class="menu-items">
-                                <a href="student_details.html">
+                                <a href="../student_details.html">
                                     <li class="menu-item">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-75" fill="none"
                                             viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -66,7 +66,7 @@
                                     <div class="menu-item-collapse">
                                         <div class="min-h-0">
                                             <label class="menu-item-disabled menu-item ml-6">Grades</label>
-                                            <a href="grades/report-card.html"><label class="menu-item ml-6">Report
+                                            <a href="report-card.html"><label class="menu-item ml-6">Report
                                                     Cards</label></a>
 
                                         </div>
@@ -87,49 +87,55 @@
 
                                 <div class="flex flex-col">
                                     <span>Username</span>
-                                    <span class="text-xs">Administrator</span>
+                                    <span class="text-xs">Parent</span>
                                 </div>
                             </div>
                         </label>
                         <div class="dropdown-menu-right-top dropdown-menu ml-2">
-                            <a tabindex="-1" class="dropdown-item text-sm">Account settings</a>
+                            <a href="../settings.html" tabindex="-1" class="dropdown-item text-sm">Account settings</a>
                             <a href="../../index.php" tabindex="-1" class="dropdown-item text-sm">Logout</a>
                         </div>
                     </div>
                 </section>
             </aside>
         </div>
+
         <main class="main-content flex-1 p-8">
-            <div class="w-fit">
-                <label for="sidebar-mobile-fixed" class="btn-primary btn sm:hidden mb-4">Open Sidebar</label>
+            <h1 class="text-xl font-bold">Report Cards</h1>
+            <p class="pt-2 pb-4">These are currently all of the student details.</p>
+            <div class="flex w-full overflow-x-auto">
+                <table class="table-compact table max-w-4xl">
+                    <thead>
+                        <tr>
+                            <th>Grade Level</th>
+                            <th>Academic Year</th>
+                            <th>Action(s)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Grade 7</td>
+                            <td>2021-2022</td>
+                            <td> <button class="btn btn-secondary">Download</button></td>
+                        </tr>
+                        <tr>
+                            <td>Grade 8</td>
+                            <td>2022-2023</td>
+                            <td> <button class="btn btn-secondary">Download</button></td>
+                        </tr>
+                        <tr>
+                            <td>Grade 9</td>
+                            <td>2023-2024</td>
+                            <td> <button class="btn btn-secondary">Download</button></td>
+                        </tr>
+                        <tr>
+                            <td>Grade 10</td>
+                            <td>2024-2025</td>
+                            <td> <button class="btn btn-secondary">Download</button></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-
-            <h1 class="text-xl font-bold">Account Settings</h1>
-            <p class="pt-2">Change your username or your password.</p>
-
-            <form action="./pages/admin/departments.html" class="form-control">
-                <div class="flex flex-col gap-4 mt-4">
-                    <div class="flex flex-col gap-2">
-                        <label for="username">
-                            <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Username</span>
-                            <input class="input-block input" placeholder="Please enter your username." name="username"
-                                type="text" />
-                        </label>
-                        <label for="oldpassword">
-                            <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Old Password</span>
-                            <input class="input-block input" placeholder="Please enter your old password."
-                                name="password" type="password" />
-                        </label>
-                        <label for="newpassword">
-                            <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">New Password</span>
-                            <input class="input-block input" placeholder="Please enter your new password."
-                                name="password" type="password" />
-                        </label>
-                        <button class="btn btn-primary mt-2" type="submit">Update Details</button>
-                    </div>
-                </div>
-            </form>
-
         </main>
     </div>
 </body>

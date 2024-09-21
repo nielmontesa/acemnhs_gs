@@ -1,9 +1,9 @@
 <?php
 // Database connection details
-$servername = "localhost";  
-$username = "root";         
-$password = "";             
-$dbname = "esguerradb";      
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "esguerradb";
 
 // Create connection
 $conn = mysqli_connect($servername, $username, $password, $dbname);

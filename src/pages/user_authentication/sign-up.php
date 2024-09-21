@@ -4,29 +4,42 @@ include __DIR__ . '/../../connection/connection.php';
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
     // Retrieve input values
     $role = $_POST['role'];
-    $username = $_POST['username'];
-    $password = $_POST['password']; 
+    $username = trim($_POST['username']);
+    $password = trim($_POST['password']); 
 
-    // Query to check if the user already exists in the selected role table
-    $check_sql = "SELECT * FROM $role WHERE username = '$username'";
+    // Adjust query based on role
+    if ($role == 'admin') {
+        // For admin, use email instead of username
+        $check_sql = "SELECT * FROM admin WHERE email = '$username'";
+        $insert_sql = "INSERT INTO admin (email, password) VALUES ('$username', '$password')";
+    } else {
+        // For other roles, use username
+        $check_sql = "SELECT * FROM $role WHERE username = '$username'";
+        $insert_sql = "INSERT INTO $role (username, password) VALUES ('$username', '$password')";
+    }
+
+    // Execute the query and check for errors
     $check_result = mysqli_query($conn, $check_sql);
+
+    if (!$check_result) {
+        // Output the specific SQL error
+        die("Error executing query: " . mysqli_error($conn));
+    }
 
     if (mysqli_num_rows($check_result) > 0) {
         // User already exists, notify the user
-        echo "<script>alert('User already exists. Please choose another user.');</script>";
+        echo "<script>alert('User already exists. Please choose another.');</script>";
     } else {
-        // If the username does not exist, insert the new user data
-        $sql = "INSERT INTO $role (username, password) VALUES ('$username', '$password')";
-
-        // Execute the insert query
-        if (mysqli_query($conn, $sql)) {
+        // Insert the new user data
+        if (mysqli_query($conn, $insert_sql)) {
             echo "<script>alert('New User created successfully!');</script>";
         } else {
-            echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+            echo "Error: " . $insert_sql . "<br>" . mysqli_error($conn);
         }
     }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html data-theme="light">

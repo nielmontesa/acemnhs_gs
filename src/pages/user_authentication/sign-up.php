@@ -1,55 +1,44 @@
 <?php
+include __DIR__ . '/../../connection/connection.php';
 
-include '../../connection/connection.php';
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
+    // Retrieve input values
+    $role = $_POST['role'];
+    $username = trim($_POST['username']);
+    $password = trim($_POST['password']);
 
-if (isset($_POST['submit'])) {
-
-    // Get and sanitize form data
-    $user = mysqli_real_escape_string($conn, trim($_POST['username']));
-    $pass = mysqli_real_escape_string($conn, trim($_POST['password']));
-    $role = mysqli_real_escape_string($conn, $_POST['role']);
-
-    // Validate that all fields are filled
-    if (empty($user) || empty($pass)) {
-        echo '<script>alert("Please fill out all fields!");</script>';
+    // Adjust query based on role
+    if ($role == 'admin') {
+        // For admin, use email instead of username
+        $check_sql = "SELECT * FROM admin WHERE email = '$username'";
+        $insert_sql = "INSERT INTO admin (email, password) VALUES ('$username', '$password')";
     } else {
-        // Check if username already exists in either admin or faculty table
-        $checkAdmin = "SELECT * FROM admin WHERE username='$user'";
-        $checkFaculty = "SELECT * FROM faculty WHERE username='$user'";
-        $resultAdmin = mysqli_query($conn, $checkAdmin);
-        $resultFaculty = mysqli_query($conn, $checkFaculty);
-
-        if (mysqli_num_rows($resultAdmin) > 0 || mysqli_num_rows($resultFaculty) > 0) {
-            // If the username exists, show an alert and don't insert the record
-            echo '<script>
-                    alert("Admin or Faculty Already Exists!");
-                    window.location.href = "' . $_SERVER['PHP_SELF'] . '";
-                  </script>';
-        } else {
-            // Insert data based on selected role
-            if ($role === 'admin') {
-                $sql = "INSERT INTO admin (username, password) VALUES ('$user', '$pass')";
-            } elseif ($role === 'faculty') {
-                $sql = "INSERT INTO faculty (username, password) VALUES ('$user', '$pass')";
-            }
-
-            // Execute the query and check for success
-            if (mysqli_query($conn, $sql)) {
-                echo '<script>
-                        alert("New record created successfully!");
-                        window.location.href = "../../index.php";
-                      </script>';
-            } else {
-                echo "Error: " . $sql . "<br>" . mysqli_error($conn);
-            }
-        }
+        // For other roles, use username
+        $check_sql = "SELECT * FROM $role WHERE username = '$username'";
+        $insert_sql = "INSERT INTO $role (username, password) VALUES ('$username', '$password')";
     }
 
-    // Close the connection
-    mysqli_close($conn);
+    // Execute the query and check for errors
+    $check_result = mysqli_query($conn, $check_sql);
+
+    if (!$check_result) {
+        // Output the specific SQL error
+        die("Error executing query: " . mysqli_error($conn));
+    }
+
+    if (mysqli_num_rows($check_result) > 0) {
+        // User already exists, notify the user
+        echo "<script>alert('User already exists. Please choose another.');</script>";
+    } else {
+        // Insert the new user data
+        if (mysqli_query($conn, $insert_sql)) {
+            echo "<script>alert('New User created successfully!');</script>";
+        } else {
+            echo "Error: " . $insert_sql . "<br>" . mysqli_error($conn);
+        }
+    }
 }
 ?>
-
 
 
 <!DOCTYPE html>
@@ -71,14 +60,25 @@ if (isset($_POST['submit'])) {
             <img src="../../assets/acemnhs_logo.png" />
         </div>
         <h1 class="font-bold text-4xl text-center">Antonio C. Esguerra MNHS</h1>
+
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" class="form-control">
             <div class="flex flex-col w-full gap-4">
                 <div class="w-full flex place-content-center">
                     <div class="btn-group mx-auto">
-                        <input type="radio" name="role" data-content="Admin" value="admin"
-                            class="btn bg-[rgba(0,0,0,0.02)]" required checked />
-                        <input type="radio" name="role" data-content="Faculty" value="faculty"
-                            class="btn bg-[rgba(0,0,0,0.02)]" required />
+                        <label>
+                            <input type="radio" name="role" value="admin" class="btn bg-[rgba(0,0,0,0.02)]" required />
+                            Admin
+                        </label>
+                        <label>
+                            <input type="radio" name="role" value="teachers" class="btn bg-[rgba(0,0,0,0.02)]"
+                                required />
+                            Teacher
+                        </label>
+                        <label>
+                            <input type="radio" name="role" value="parents" class="btn bg-[rgba(0,0,0,0.02)]"
+                                required />
+                            Parent
+                        </label>
                     </div>
                 </div>
                 <div class="flex flex-col gap-2">

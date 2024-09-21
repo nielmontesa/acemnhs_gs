@@ -1,6 +1,6 @@
 <?php
 
-include 'C:\xampp\htdocs\Capstone\acemnhs_gs\src\connection\connection.php';
+include '../../connection/connection.php';
 
 if (isset($_POST['submit'])) {
 
@@ -71,20 +71,14 @@ if (isset($_POST['submit'])) {
             <img src="../../assets/acemnhs_logo.png" />
         </div>
         <h1 class="font-bold text-4xl text-center">Antonio C. Esguerra MNHS</h1>
-
-
-        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post" class="form-control">
+        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" class="form-control">
             <div class="flex flex-col w-full gap-4">
                 <div class="w-full flex place-content-center">
                     <div class="btn-group mx-auto">
-                        <label>
-                            <input type="radio" name="role" value="admin" class="btn bg-[rgba(0,0,0,0.02)]" required />
-                            Admin
-                        </label>
-                        <label>
-                            <input type="radio" name="role" value="faculty" class="btn bg-[rgba(0,0,0,0.02)]" required />
-                            Faculty
-                        </label>
+                        <input type="radio" name="role" data-content="Admin" value="admin"
+                            class="btn bg-[rgba(0,0,0,0.02)]" required checked />
+                        <input type="radio" name="role" data-content="Faculty" value="faculty"
+                            class="btn bg-[rgba(0,0,0,0.02)]" required />
                     </div>
                 </div>
                 <div class="flex flex-col gap-2">
@@ -106,4 +100,5 @@ if (isset($_POST['submit'])) {
                 class="link text-sm text-[rgba(0,0,0,0.8)] underline">Log-in</a></p>
     </div>
 </body>
+
 </html>

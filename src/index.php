@@ -91,18 +91,12 @@ if (isset($_POST['login'])) {
             <div class="flex flex-col w-full gap-4">
                 <div class="w-full flex place-content-center">
                     <div class="btn-group mx-auto">
-                        <label>
-                            <input type="radio" name="role" value="admin" class="btn bg-[rgba(0,0,0,0.02)]" required />
-                            Admin
-                        </label>
-                        <label>
-                            <input type="radio" name="role" value="teacher" class="btn bg-[rgba(0,0,0,0.02)]" checked
-                                required /> Teacher
-                        </label>
-                        <label>
-                            <input type="radio" name="role" value="parent" class="btn bg-[rgba(0,0,0,0.02)]" required />
-                            Parent
-                        </label>
+                        <input type="radio" name="role" value="admin" data-content="Admin"
+                            class="btn bg-[rgba(0,0,0,0.02)]" required />
+                        <input type="radio" name="role" value="teacher" data-content="Teacher"
+                            class="btn bg-[rgba(0,0,0,0.02)]" checked required />
+                        <input type="radio" name="role" value="parent" data-content="Parent"
+                            class="btn bg-[rgba(0,0,0,0.02)]" required />
                     </div>
                 </div>
                 <div class="flex flex-col gap-2">

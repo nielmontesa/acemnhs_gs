@@ -55,9 +55,9 @@ if (isset($_POST['login'])) {
             if ($role == 'admin') {
                 echo '<script>window.location.href = "pages/admin/departments.php";</script>';
             } elseif ($role == 'teacher') {
-                echo '<script>window.location.href = "/Capstone/acemnhs_gs/src/pages/teacher/index.php";</script>';
+                echo '<script>window.location.href = "pages/teacher/sections.html";</script>';
             } elseif ($role == 'parent') {
-                echo '<script>window.location.href = "/Capstone/acemnhs_gs/src/pages/parent/student_details.php";</script>';
+                echo '<script>window.location.href = "pages/parent/student_details.php";</script>';
             }
             exit();
         } else {

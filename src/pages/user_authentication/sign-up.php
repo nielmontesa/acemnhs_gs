@@ -1,5 +1,5 @@
 <?php
-include __DIR__ . '/../../connection/connection.php';
+include '../../connection/connection.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
     // Retrieve input values
@@ -50,8 +50,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
     <meta name="color-scheme" content="light only">
     <title>Antonio C. Esguerra MNHS</title>
     <link rel="stylesheet" href='../../styles/tailwind.css'>
-    <link rel="stylesheet" href='../../styles/style.css'>
 </head>
+<link rel="stylesheet" href='../../styles/style.css'>
 
 <body class="h-screen flex justify-center items-center">
     <div
@@ -65,20 +65,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
             <div class="flex flex-col w-full gap-4">
                 <div class="w-full flex place-content-center">
                     <div class="btn-group mx-auto">
-                        <label>
-                            <input type="radio" name="role" value="admin" class="btn bg-[rgba(0,0,0,0.02)]" required />
-                            Admin
-                        </label>
-                        <label>
-                            <input type="radio" name="role" value="teachers" class="btn bg-[rgba(0,0,0,0.02)]"
-                                required />
-                            Teacher
-                        </label>
-                        <label>
-                            <input type="radio" name="role" value="parents" class="btn bg-[rgba(0,0,0,0.02)]"
-                                required />
-                            Parent
-                        </label>
+                        <input type="radio" name="role" data-content="Admin" value="admin"
+                            class="btn bg-[rgba(0,0,0,0.02)]" required />
+                        <input type="radio" data-content="Teachers" name="role" value="teachers"
+                            class="btn bg-[rgba(0,0,0,0.02)]" required checked />
+                        <input type="radio" data-content="Parents" name="role" value="parents"
+                            class="btn bg-[rgba(0,0,0,0.02)]" required />
                     </div>
                 </div>
                 <div class="flex flex-col gap-2">

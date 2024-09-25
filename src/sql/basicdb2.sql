@@ -136,13 +136,13 @@ DROP TABLE IF EXISTS `parents`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `parents` (
   `parent_id` int NOT NULL AUTO_INCREMENT,
-  `username` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `username` varchar(50) COLLATE utf8mb4_general_ci NULL,
   `password` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `first_name` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
-  `last_name` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
-  `contact.no` int NOT NULL,
-  `email` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
-  `student_id` int NOT NULL,
+  `first_name` varchar(50) COLLATE utf8mb4_general_ci NULL,
+  `last_name` varchar(50) COLLATE utf8mb4_general_ci NULL,
+  `contact.no` int NULL,
+  `email` varchar(50) COLLATE utf8mb4_general_ci NULL,
+  `student_id` int NULL,
   PRIMARY KEY (`parent_id`),
   KEY `fk_students` (`student_id`),
   CONSTRAINT `fk_students` FOREIGN KEY (`student_id`) REFERENCES `students` (`student_id`)
@@ -328,11 +328,11 @@ DROP TABLE IF EXISTS `students`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `students` (
   `student_id` int NOT NULL,
-  `first_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `last_name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `section_ID` int NOT NULL,
+  `first_name` varchar(255) COLLATE utf8mb4_general_ci NULL,
+  `last_name` varchar(255) COLLATE utf8mb4_general_ci NULL,
+  `section_ID` int NULL,
   `akap_status` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `parent_id` int NOT NULL,
+  `parent_id` int NULL,
   PRIMARY KEY (`student_id`),
   KEY `fk_sections` (`section_ID`),
   KEY `fk_parents` (`parent_id`)

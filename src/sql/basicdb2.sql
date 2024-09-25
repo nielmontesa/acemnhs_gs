@@ -136,7 +136,7 @@ DROP TABLE IF EXISTS `parents`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `parents` (
   `parent_id` int NOT NULL AUTO_INCREMENT,
-  `username` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `username` varchar(50) COLLATE utf8mb4_general_ci NULL,
   `password` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `first_name` varchar(50) COLLATE utf8mb4_general_ci NULL,
   `last_name` varchar(50) COLLATE utf8mb4_general_ci NULL,

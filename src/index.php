@@ -101,7 +101,7 @@ if (isset($_POST['login'])) {
                             class="btn bg-[rgba(0,0,0,0.02)]" required />
                         <input type="radio" name="role" value="teacher" data-content="Teacher"
                             class="btn bg-[rgba(0,0,0,0.02)]" checked required />
-                        <input type="radio" name="role" value="parent" data-content="Parent"
+                        <input type="radio" name="role" value="parent" data-content="Student"
                             class="btn bg-[rgba(0,0,0,0.02)]" required />
                     </div>
                 </div>
@@ -116,12 +116,12 @@ if (isset($_POST['login'])) {
                         <input class="input-block input" placeholder="Please enter your password." name="password"
                             type="password" required />
                     </label>
-                    <button class="btn btn-primary btn-block mt-2" type="submit" name="login">Login</button>
+                    <button class="btn btn-primary btn-block mt-2" type="submit" name="login">Log-in</button>
                 </div>
             </div>
         </form>
         <p class="text-sm text-center"> No account? <a href="./pages/user_authentication/sign-up.php"
-                class="link text-sm text-[rgba(0,0,0,0.8)] underline">Sign Up</a></p>
+                class="link text-sm text-[rgba(0,0,0,0.8)] underline">Sign-up</a></p>
     </div>
 </body>
 

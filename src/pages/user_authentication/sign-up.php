@@ -10,16 +10,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
     // Adjust query based on role
     if ($role == 'admin') {
         // For admin, use email instead of username
-        $check_sql = "SELECT * FROM admin WHERE username = '$username'";
-        $insert_sql = "INSERT INTO admin (username, password) VALUES ('$username', '$password')";
+        $check_sql = "SELECT * FROM admin WHERE username = ?";
+        $insert_sql = "INSERT INTO admin (username, password) VALUES (?, ?)";
     } else {
         // For other roles, use username
-        $check_sql = "SELECT * FROM $role WHERE username = '$username'";
-        $insert_sql = "INSERT INTO $role (username, password) VALUES ('$username', '$password')";
+        $check_sql = "SELECT * FROM $role WHERE username = ?";
+        $insert_sql = "INSERT INTO $role (username, password) VALUES (?, ?)";
     }
 
+    // Prepare the statements
+    $check_stmt = mysqli_prepare($conn, $check_sql);
+    $insert_stmt = mysqli_prepare($conn, $insert_sql);
+
+    // Bind the parameters
+    mysqli_stmt_bind_param($check_stmt, "s", $username);
+    mysqli_stmt_bind_param($insert_stmt, "ss", $username, $password);
+
     // Execute the query and check for errors
-    $check_result = mysqli_query($conn, $check_sql);
+    mysqli_stmt_execute($check_stmt);
+    $check_result = mysqli_stmt_get_result($check_stmt);
 
     if (!$check_result) {
         // Output the specific SQL error
@@ -31,10 +40,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
         echo "<script>alert('User already exists. Please choose another.');</script>";
     } else {
         // Insert the new user data
-        if (mysqli_query($conn, $insert_sql)) {
+        mysqli_stmt_execute($insert_stmt);
+        if (mysqli_stmt_affected_rows($insert_stmt) > 0) {
             echo "<script>alert('New User created successfully!');</script>";
         } else {
-            echo "Error: " . $insert_sql . "<br>" . mysqli_error($conn);
+            echo "Error: " . mysqli_error($conn);
         }
     }
 }

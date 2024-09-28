@@ -24,8 +24,8 @@ if ($_SESSION['status'] == 'valid') {
 
 // Handle login form submission
 if (isset($_POST['login'])) {
-    $username = trim($_POST['username']);
-    $password = trim($_POST['password']);
+    $username = mysqli_real_escape_string($conn, trim($_POST['username']));
+    $password = mysqli_real_escape_string($conn, trim($_POST['password']));
     $role = $_POST['role'];
 
     if (empty($username) || empty($password)) {
@@ -33,21 +33,25 @@ if (isset($_POST['login'])) {
     } else {
         // Prepare SQL query based on role
         if ($role == 'admin') {
-            $checkQuery = "SELECT * FROM admin WHERE username='$username' AND password='$password'";
+            $checkQuery = "SELECT * FROM admin WHERE username=? AND password=?";
         } elseif ($role == 'teacher') {
-            $checkQuery = "SELECT * FROM teachers WHERE username='$username' AND password='$password'";
+            $checkQuery = "SELECT * FROM teachers WHERE username=? AND password=?";
         } elseif ($role == 'parent') {
-            $checkQuery = "SELECT * FROM parents WHERE username='$username' AND password='$password'";
+            $checkQuery = "SELECT * FROM parents WHERE username=? AND password=?";
         }
 
-        $result = mysqli_query($conn, $checkQuery);
-        $row = $result->fetch_assoc();
+        // Use prepared statements to prevent SQL injection
+        $stmt = mysqli_prepare($conn, $checkQuery);
+        mysqli_stmt_bind_param($stmt, "ss", $username, $password);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
 
         if (!$result) {
             die('Query Error: ' . mysqli_error($conn));
         }
 
         if (mysqli_num_rows($result) > 0) {
+            $row = mysqli_fetch_assoc($result);
             $_SESSION['status'] = 'valid';
             $_SESSION['role'] = $role;
             $_SESSION['username'] = $row['username'];

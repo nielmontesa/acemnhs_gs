@@ -1,5 +1,5 @@
 <?php
-    session_start();
+session_start();
 ?>
 
 <!DOCTYPE html>
@@ -34,7 +34,7 @@
                         <section class="menu-section px-4">
                             <span class="menu-title">Welcome, <?php echo $_SESSION['username']; ?></span>
                             <ul class="menu-items">
-                                <a href="departments.html">
+                                <a href="departments.php">
                                     <li class="menu-item  menu-active">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-75" fill="none"
                                             viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -105,7 +105,6 @@
 
             <div class="mt-8">
                 <input type="checkbox" id="drawer-right" class="drawer-toggle" />
-
                 <label for="drawer-right" class="btn btn-primary">Add Department</label>
                 <label class="overlay" for="drawer-right"></label>
                 <div class="drawer drawer-right">
@@ -122,6 +121,8 @@
                         </div>
                     </div>
                 </div>
+                <a href="all_teachers.html">
+                    <button class="btn btn-outline-primary">View All Teachers</button></a>
             </div>
             <div class="flex w-full overflow-x-auto pt-8">
                 <table class="table-hover table w-full">
@@ -137,17 +138,17 @@
                             <th>English</th>
                             <td>20</td>
                             <td><a href="teachers.html"><button class="btn btn-secondary">View</button></a> <label
-                                    class="btn btn-error" for="modal-1">Delete</label>
+                                    class="btn btn-error" for="modal-1">Archive</label>
                                 <input class="modal-state" id="modal-1" type="checkbox" />
                                 <div class="modal">
                                     <label class="modal-overlay" for="modal-1"></label>
                                     <div class="modal-content flex flex-col gap-5">
                                         <label for="modal-1"
                                             class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
-                                        <h2 class="text-xl">Delete department?</h2>
-                                        <span>Are you sure you want to delete this department?</span>
+                                        <h2 class="text-xl">Archive department?</h2>
+                                        <span>Are you sure you want to Archive this department?</span>
                                         <div class="flex gap-3">
-                                            <button class="btn btn-error btn-block">Delete</button>
+                                            <button class="btn btn-error btn-block">Archive</button>
 
                                             <label for="modal-1" class="btn btn-block">Cancel</label>
                                         </div>
@@ -155,20 +156,20 @@
                                 </div>
                         </tr>
                         <tr>
-                            <th>English</th>
+                            <th>Filipino</th>
                             <td>20</td>
                             <td><a href="teachers.html"><button class="btn btn-secondary">View</button></a> <label
-                                    class="btn btn-error" for="modal-1">Delete</label>
+                                    class="btn btn-error" for="modal-1">Archive</label>
                                 <input class="modal-state" id="modal-1" type="checkbox" />
                                 <div class="modal">
                                     <label class="modal-overlay" for="modal-1"></label>
                                     <div class="modal-content flex flex-col gap-5">
                                         <label for="modal-1"
                                             class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
-                                        <h2 class="text-xl">Delete department?</h2>
-                                        <span>Are you sure you want to delete this department?</span>
+                                        <h2 class="text-xl">Archive department?</h2>
+                                        <span>Are you sure you want to Archive this department?</span>
                                         <div class="flex gap-3">
-                                            <button class="btn btn-error btn-block">Delete</button>
+                                            <button class="btn btn-error btn-block">Archive</button>
 
                                             <label for="modal-1" class="btn btn-block">Cancel</label>
                                         </div>
@@ -176,42 +177,41 @@
                                 </div>
                         </tr>
                         <tr>
-                            <th>English</th>
+                            <th>Mathematics</th>
                             <td>20</td>
                             <td><a href="teachers.html"><button class="btn btn-secondary">View</button></a> <label
-                                    class="btn btn-error" for="modal-1">Delete</label>
+                                    class="btn btn-error" for="modal-1">Archive</label>
                                 <input class="modal-state" id="modal-1" type="checkbox" />
                                 <div class="modal">
                                     <label class="modal-overlay" for="modal-1"></label>
                                     <div class="modal-content flex flex-col gap-5">
                                         <label for="modal-1"
                                             class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
-                                        <h2 class="text-xl">Delete department?</h2>
-                                        <span>Are you sure you want to delete this department?</span>
+                                        <h2 class="text-xl">Archive department?</h2>
+                                        <span>Are you sure you want to Archive this department?</span>
                                         <div class="flex gap-3">
-                                            <button class="btn btn-error btn-block">Delete</button>
+                                            <button class="btn btn-error btn-block">Archive</button>
 
                                             <label for="modal-1" class="btn btn-block">Cancel</label>
                                         </div>
                                     </div>
                                 </div>
-                            </td>
                         </tr>
                         <tr>
-                            <th>English</th>
+                            <th>Science</th>
                             <td>20</td>
                             <td><a href="teachers.html"><button class="btn btn-secondary">View</button></a> <label
-                                    class="btn btn-error" for="modal-1">Delete</label>
+                                    class="btn btn-error" for="modal-1">Archive</label>
                                 <input class="modal-state" id="modal-1" type="checkbox" />
                                 <div class="modal">
                                     <label class="modal-overlay" for="modal-1"></label>
                                     <div class="modal-content flex flex-col gap-5">
                                         <label for="modal-1"
                                             class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
-                                        <h2 class="text-xl">Delete department?</h2>
-                                        <span>Are you sure you want to delete this department?</span>
+                                        <h2 class="text-xl">Archive department?</h2>
+                                        <span>Are you sure you want to Archive this department?</span>
                                         <div class="flex gap-3">
-                                            <button class="btn btn-error btn-block">Delete</button>
+                                            <button class="btn btn-error btn-block">Archive</button>
 
                                             <label for="modal-1" class="btn btn-block">Cancel</label>
                                         </div>
@@ -219,20 +219,20 @@
                                 </div>
                         </tr>
                         <tr>
-                            <th>English</th>
+                            <th>Home Economics</th>
                             <td>20</td>
                             <td><a href="teachers.html"><button class="btn btn-secondary">View</button></a> <label
-                                    class="btn btn-error" for="modal-1">Delete</label>
+                                    class="btn btn-error" for="modal-1">Archive</label>
                                 <input class="modal-state" id="modal-1" type="checkbox" />
                                 <div class="modal">
                                     <label class="modal-overlay" for="modal-1"></label>
                                     <div class="modal-content flex flex-col gap-5">
                                         <label for="modal-1"
                                             class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
-                                        <h2 class="text-xl">Delete department?</h2>
-                                        <span>Are you sure you want to delete this department?</span>
+                                        <h2 class="text-xl">Archive department?</h2>
+                                        <span>Are you sure you want to Archive this department?</span>
                                         <div class="flex gap-3">
-                                            <button class="btn btn-error btn-block">Delete</button>
+                                            <button class="btn btn-error btn-block">Archive</button>
 
                                             <label for="modal-1" class="btn btn-block">Cancel</label>
                                         </div>
@@ -240,20 +240,20 @@
                                 </div>
                         </tr>
                         <tr>
-                            <th>English</th>
+                            <th>Araling Panlipunan</th>
                             <td>20</td>
                             <td><a href="teachers.html"><button class="btn btn-secondary">View</button></a> <label
-                                    class="btn btn-error" for="modal-1">Delete</label>
+                                    class="btn btn-error" for="modal-1">Archive</label>
                                 <input class="modal-state" id="modal-1" type="checkbox" />
                                 <div class="modal">
                                     <label class="modal-overlay" for="modal-1"></label>
                                     <div class="modal-content flex flex-col gap-5">
                                         <label for="modal-1"
                                             class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
-                                        <h2 class="text-xl">Delete department?</h2>
-                                        <span>Are you sure you want to delete this department?</span>
+                                        <h2 class="text-xl">Archive department?</h2>
+                                        <span>Are you sure you want to Archive this department?</span>
                                         <div class="flex gap-3">
-                                            <button class="btn btn-error btn-block">Delete</button>
+                                            <button class="btn btn-error btn-block">Archive</button>
 
                                             <label for="modal-1" class="btn btn-block">Cancel</label>
                                         </div>
@@ -261,21 +261,62 @@
                                 </div>
                         </tr>
                         <tr>
-                            <th>English</th>
+                            <th>Edukasyon sa Pagpapakatao</th>
                             <td>20</td>
-                            <td><a href="teachers.html"><a href="teachers.html"><button
-                                            class="btn btn-secondary">View</button></a></a> <label class="btn btn-error"
-                                    for="modal-1">Delete</label>
+                            <td><a href="teachers.html"><button class="btn btn-secondary">View</button></a> <label
+                                    class="btn btn-error" for="modal-1">Archive</label>
                                 <input class="modal-state" id="modal-1" type="checkbox" />
                                 <div class="modal">
                                     <label class="modal-overlay" for="modal-1"></label>
                                     <div class="modal-content flex flex-col gap-5">
                                         <label for="modal-1"
                                             class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
-                                        <h2 class="text-xl">Delete department?</h2>
-                                        <span>Are you sure you want to delete this department?</span>
+                                        <h2 class="text-xl">Archive department?</h2>
+                                        <span>Are you sure you want to Archive this department?</span>
                                         <div class="flex gap-3">
-                                            <button class="btn btn-error btn-block">Delete</button>
+                                            <button class="btn btn-error btn-block">Archive</button>
+
+                                            <label for="modal-1" class="btn btn-block">Cancel</label>
+                                        </div>
+                                    </div>
+                                </div>
+                        </tr>
+                        <tr>
+                            <th>TLE</th>
+                            <td>20</td>
+                            <td><a href="teachers.html"><button class="btn btn-secondary">View</button></a> <label
+                                    class="btn btn-error" for="modal-1">Archive</label>
+                                <input class="modal-state" id="modal-1" type="checkbox" />
+                                <div class="modal">
+                                    <label class="modal-overlay" for="modal-1"></label>
+                                    <div class="modal-content flex flex-col gap-5">
+                                        <label for="modal-1"
+                                            class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
+                                        <h2 class="text-xl">Archive department?</h2>
+                                        <span>Are you sure you want to Archive this department?</span>
+                                        <div class="flex gap-3">
+                                            <button class="btn btn-error btn-block">Archive</button>
+
+                                            <label for="modal-1" class="btn btn-block">Cancel</label>
+                                        </div>
+                                    </div>
+                                </div>
+                        </tr>
+                        <tr>
+                            <th>MAPEH</th>
+                            <td>20</td>
+                            <td><a href="teachers.html"><button class="btn btn-secondary">View</button></a> <label
+                                    class="btn btn-error" for="modal-1">Archive</label>
+                                <input class="modal-state" id="modal-1" type="checkbox" />
+                                <div class="modal">
+                                    <label class="modal-overlay" for="modal-1"></label>
+                                    <div class="modal-content flex flex-col gap-5">
+                                        <label for="modal-1"
+                                            class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
+                                        <h2 class="text-xl">Archive department?</h2>
+                                        <span>Are you sure you want to Archive this department?</span>
+                                        <div class="flex gap-3">
+                                            <button class="btn btn-error btn-block">Archive</button>
 
                                             <label for="modal-1" class="btn btn-block">Cancel</label>
                                         </div>

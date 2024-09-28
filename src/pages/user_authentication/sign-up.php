@@ -67,9 +67,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
                     <div class="btn-group mx-auto">
                         <input type="radio" name="role" data-content="Admin" value="admin"
                             class="btn bg-[rgba(0,0,0,0.02)]" required />
-                        <input type="radio" data-content="Teachers" name="role" value="teachers"
+                        <input type="radio" data-content="Teacher" name="role" value="teachers"
                             class="btn bg-[rgba(0,0,0,0.02)]" required checked />
-                        <input type="radio" data-content="Parents" name="role" value="parents"
+                        <input type="radio" data-content="Student" name="role" value="parents"
                             class="btn bg-[rgba(0,0,0,0.02)]" required />
                     </div>
                 </div>

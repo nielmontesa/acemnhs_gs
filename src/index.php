@@ -14,7 +14,7 @@ if ($_SESSION['status'] == 'valid') {
         echo '<script>window.location.href = "pages/admin/departments.php";</script>';
         exit();
     } elseif ($role == 'teacher') {
-        echo '<script>window.location.href = "pages/teacher/index.php";</script>';
+        echo '<script>window.location.href = "pages/teacher/sections.php";</script>';
         exit();
     } elseif ($role == 'parent') {
         echo '<script>window.location.href = "pages/parent/student_details.php";</script>';
@@ -33,7 +33,7 @@ if (isset($_POST['login'])) {
     } else {
         // Prepare SQL query based on role
         if ($role == 'admin') {
-            $checkQuery = "SELECT * FROM admin WHERE email='$username' AND password='$password'";
+            $checkQuery = "SELECT * FROM admin WHERE username='$username' AND password='$password'";
         } elseif ($role == 'teacher') {
             $checkQuery = "SELECT * FROM teachers WHERE username='$username' AND password='$password'";
         } elseif ($role == 'parent') {
@@ -41,6 +41,7 @@ if (isset($_POST['login'])) {
         }
 
         $result = mysqli_query($conn, $checkQuery);
+        $row = $result->fetch_assoc();
 
         if (!$result) {
             die('Query Error: ' . mysqli_error($conn));
@@ -49,13 +50,14 @@ if (isset($_POST['login'])) {
         if (mysqli_num_rows($result) > 0) {
             $_SESSION['status'] = 'valid';
             $_SESSION['role'] = $role;
+            $_SESSION['username'] = $row['username'];
 
             // Alert and redirect based on role
             echo '<script>alert("Logged in successfully as ' . ucfirst($role) . '!");</script>';
             if ($role == 'admin') {
                 echo '<script>window.location.href = "pages/admin/departments.php";</script>';
             } elseif ($role == 'teacher') {
-                echo '<script>window.location.href = "pages/teacher/sections.html";</script>';
+                echo '<script>window.location.href = "pages/teacher/sections.php";</script>';
             } elseif ($role == 'parent') {
                 echo '<script>window.location.href = "pages/parent/student_details.php";</script>';
             }

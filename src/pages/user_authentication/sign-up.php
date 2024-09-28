@@ -10,8 +10,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
     // Adjust query based on role
     if ($role == 'admin') {
         // For admin, use email instead of username
-        $check_sql = "SELECT * FROM admin WHERE email = '$username'";
-        $insert_sql = "INSERT INTO admin (email, password) VALUES ('$username', '$password')";
+        $check_sql = "SELECT * FROM admin WHERE username = '$username'";
+        $insert_sql = "INSERT INTO admin (username, password) VALUES ('$username', '$password')";
     } else {
         // For other roles, use username
         $check_sql = "SELECT * FROM $role WHERE username = '$username'";

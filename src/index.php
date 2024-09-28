@@ -14,7 +14,7 @@ if ($_SESSION['status'] == 'valid') {
         echo '<script>window.location.href = "pages/admin/departments.php";</script>';
         exit();
     } elseif ($role == 'teacher') {
-        echo '<script>window.location.href = "pages/teacher/index.php";</script>';
+        echo '<script>window.location.href = "pages/teacher/sections.php";</script>';
         exit();
     } elseif ($role == 'parent') {
         echo '<script>window.location.href = "pages/parent/student_details.php";</script>';
@@ -24,8 +24,8 @@ if ($_SESSION['status'] == 'valid') {
 
 // Handle login form submission
 if (isset($_POST['login'])) {
-    $username = trim($_POST['username']);
-    $password = trim($_POST['password']);
+    $username = mysqli_real_escape_string($conn, trim($_POST['username']));
+    $password = mysqli_real_escape_string($conn, trim($_POST['password']));
     $role = $_POST['role'];
 
     if (empty($username) || empty($password)) {
@@ -33,29 +33,35 @@ if (isset($_POST['login'])) {
     } else {
         // Prepare SQL query based on role
         if ($role == 'admin') {
-            $checkQuery = "SELECT * FROM admin WHERE email='$username' AND password='$password'";
+            $checkQuery = "SELECT * FROM admin WHERE username=? AND password=?";
         } elseif ($role == 'teacher') {
-            $checkQuery = "SELECT * FROM teachers WHERE username='$username' AND password='$password'";
+            $checkQuery = "SELECT * FROM teachers WHERE username=? AND password=?";
         } elseif ($role == 'parent') {
-            $checkQuery = "SELECT * FROM parents WHERE username='$username' AND password='$password'";
+            $checkQuery = "SELECT * FROM parents WHERE username=? AND password=?";
         }
 
-        $result = mysqli_query($conn, $checkQuery);
+        // Use prepared statements to prevent SQL injection
+        $stmt = mysqli_prepare($conn, $checkQuery);
+        mysqli_stmt_bind_param($stmt, "ss", $username, $password);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
 
         if (!$result) {
             die('Query Error: ' . mysqli_error($conn));
         }
 
         if (mysqli_num_rows($result) > 0) {
+            $row = mysqli_fetch_assoc($result);
             $_SESSION['status'] = 'valid';
             $_SESSION['role'] = $role;
+            $_SESSION['username'] = $row['username'];
 
             // Alert and redirect based on role
             echo '<script>alert("Logged in successfully as ' . ucfirst($role) . '!");</script>';
             if ($role == 'admin') {
                 echo '<script>window.location.href = "pages/admin/departments.php";</script>';
             } elseif ($role == 'teacher') {
-                echo '<script>window.location.href = "pages/teacher/sections.html";</script>';
+                echo '<script>window.location.href = "pages/teacher/sections.php";</script>';
             } elseif ($role == 'parent') {
                 echo '<script>window.location.href = "pages/parent/student_details.php";</script>';
             }
@@ -95,7 +101,7 @@ if (isset($_POST['login'])) {
                             class="btn bg-[rgba(0,0,0,0.02)]" required />
                         <input type="radio" name="role" value="teacher" data-content="Teacher"
                             class="btn bg-[rgba(0,0,0,0.02)]" checked required />
-                        <input type="radio" name="role" value="parent" data-content="Parent"
+                        <input type="radio" name="role" value="parent" data-content="Student"
                             class="btn bg-[rgba(0,0,0,0.02)]" required />
                     </div>
                 </div>
@@ -110,12 +116,12 @@ if (isset($_POST['login'])) {
                         <input class="input-block input" placeholder="Please enter your password." name="password"
                             type="password" required />
                     </label>
-                    <button class="btn btn-primary btn-block mt-2" type="submit" name="login">Login</button>
+                    <button class="btn btn-primary btn-block mt-2" type="submit" name="login">Log-in</button>
                 </div>
             </div>
         </form>
         <p class="text-sm text-center"> No account? <a href="./pages/user_authentication/sign-up.php"
-                class="link text-sm text-[rgba(0,0,0,0.8)] underline">Sign Up</a></p>
+                class="link text-sm text-[rgba(0,0,0,0.8)] underline">Sign-up</a></p>
     </div>
 </body>
 

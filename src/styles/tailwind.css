@@ -1238,6 +1238,15 @@ html {
   outline-color: rgb(var(--error));
 }
 
+.btn-warning {
+  --tw-bg-opacity: 1;
+  background-color: rgb(var(--warning)/var(--tw-bg-opacity));
+}
+
+.btn-warning:focus-visible {
+  outline-color: rgb(var(--warning));
+}
+
 .btn-outline-primary {
   --tw-border-opacity: 1;
   --tw-text-opacity: 1;

@@ -83,7 +83,7 @@ if (isset($_POST['login'])) {
     <title>Antonio C. Esguerra MNHS</title>
     <link rel="stylesheet" href='styles/tailwind.css'>
     <link rel="stylesheet" href='styles/style.css'>
-    <link rel="icon" href="./assets/acemnhs_logo.png">
+    <link rel="icon" href="assets/acemnhs_logo.png">
 </head>
 
 <body class="h-screen flex justify-center items-center">

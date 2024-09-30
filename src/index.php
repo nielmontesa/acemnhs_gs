@@ -12,7 +12,8 @@
 </head>
 
 <body class="h-screen flex justify-center items-center">
-    <div class="bg-gray-100 border-2 border-gray-200 rounded-xl py-16 px-12 m-6 flex flex-col gap-4 align-center justify-center">
+    <div
+        class="bg-gray-100 border-2 border-gray-200 rounded-xl py-16 px-12 m-6 flex flex-col gap-4 align-center justify-center">
         <div class="w-full rounded flex justify-center">
             <img src="./assets/acemnhs_logo.png" />
         </div>
@@ -25,8 +26,6 @@
                             class="btn bg-[rgba(0,0,0,0.02)]" required />
                         <input type="radio" name="role" value="teacher" data-content="Teacher"
                             class="btn bg-[rgba(0,0,0,0.02)]" checked required />
-                        <input type="radio" name="role" value="parent" data-content="Student"
-                            class="btn bg-[rgba(0,0,0,0.02)]" required />
                     </div>
                 </div>
                 <div class="flex flex-col gap-2">

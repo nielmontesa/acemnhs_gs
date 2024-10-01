@@ -1,3 +1,38 @@
+<?php
+// Include your database connection
+include '../../connection/connection.php';
+
+// Handle form submission
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Get the form data
+    $student_lrn = $_POST['studentlrn'];
+    $student_firstname = $_POST['studentfirstname'];
+    $student_lastname = $_POST['studentlastname'];
+    $parent_email = $_POST['email'];
+    $gender = $_POST['gender'];
+    $akap_status = $_POST['akap_status']; // Get the Akap Status from the form
+
+    // Use the section ID from the session
+    $section_id = $_GET['section_id'] ?? null;
+
+    // Check if section ID is available
+    if ($section_id === null) {
+        die('Error: Section ID is missing.');
+    }
+
+    // SQL query to insert student data, including the section ID and Akap Status
+    $sql = "INSERT INTO students (student_id, first_name, last_name, email, gender, akap_status, section_id)
+            VALUES ('$student_lrn', '$student_firstname', '$student_lastname', '$parent_email', '$gender', '$akap_status', '$section_id')";
+
+    if ($conn->query($sql) === TRUE) {
+        echo "New student added successfully";
+    } else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
+}
+?>
+
+
 <!DOCTYPE html>
 <html data-theme="light">
 
@@ -99,13 +134,12 @@
             <p class="pt-2">This is currently all of the students in the Grade 7 Rizal.</p>
 
             <div class="flex justify-between items-center mt-4" style="justify-content: space-between;">
-                <div>
+                <form method="POST">
                     <input type="checkbox" id="drawer-right" class="drawer-toggle" />
-
                     <label for="drawer-right" class="btn btn-primary">Add Student</label>
                     <label class="overlay" for="drawer-right"></label>
                     <div class="drawer drawer-right">
-                        <form class="drawer-content pt-10 flex flex-col h-full">
+                        <div class="drawer-content pt-10 flex flex-col h-full">
                             <label for="drawer-right"
                                 class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
                             <div>
@@ -113,52 +147,53 @@
                                 <label for="studentlrn">
                                     <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">LRN</span>
                                     <input class="input-block input" placeholder="Please enter the LRN."
-                                        name="studentfirstname" type="text" />
+                                        name="studentlrn" type="text" required />
                                 </label>
                                 <label for="studentfirstname">
                                     <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Student First
                                         Name</span>
                                     <input class="input-block input" placeholder="Please enter first name."
-                                        name="studentfirstname" type="text" />
+                                        name="studentfirstname" type="text" required />
                                 </label>
-                                <label for="teacherlastname">
+                                <label for="studentlastname">
                                     <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Student Last
                                         Name</span>
                                     <input class="input-block input" placeholder="Please enter last name."
-                                        name="studentlastname" type="text" />
+                                        name="studentlastname" type="text" required />
                                 </label>
-                                <label for="e-mail">
+                                <label for="email">
                                     <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Parent
                                         E-mail</span>
                                     <input class="input-block input" placeholder="Please enter parent e-mail."
-                                        name="e-mail" type="email" />
+                                        name="email" type="email" required />
                                 </label>
-                                <label for="username">
-                                    <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Username</span>
-                                    <input class="input-block input" placeholder="Please enter username."
-                                        name="username" type="text" />
-                                </label>
-                                <label for="Password">
-                                    <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Password</span>
-                                    <input class="input-block input" placeholder="Please enter password."
-                                        name="password" type="password" />
-                                </label>
-                                <label for="Gender">
+                                <label for="gender">
                                     <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Gender</span>
-                                    <select class="select" for="select">
-                                        <option>Select Gender...</option>
-                                        <option>Male</option>
-                                        <option>Female</option>
+                                    <select class="select" name="gender" required>
+                                        <option value="">Select Gender...</option>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                    </select>
+                                </label>
+                                <label for="akap_status">
+                                    <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Akap
+                                        Status</span>
+                                    <select class="select" name="akap_status" required>
+                                        <option value="">Select Akap Status...</option>
+                                        <option value="Active">Active</option>
+                                        <option value="Inactive">Inactive</option>
                                     </select>
                                 </label>
                             </div>
                             <div class="h-full flex flex-row justify-end items-end gap-2">
-                                <button class="btn btn-ghost">Cancel</button>
-                                <button class="btn btn-primary">Create</button>
+                                <button type="button" class="btn btn-ghost"
+                                    onclick="document.getElementById('drawer-right').checked = false;">Cancel</button>
+                                <button type="submit" class="btn btn-primary">Create</button>
                             </div>
-                        </form>
+                        </div>
                     </div>
-                </div>
+                </form>
+
                 <div class="flex gap-4">
                     <div class="flex gap-4 items-center">
                         <span class="text-sm">Filter Students:</span>
@@ -192,18 +227,49 @@
                             <th>First Name</th>
                             <th>Last Name</th>
                             <th>Parent E-mail</th>
-                            <th>Username</th>
+                            <th>Gender</th>
                             <th>AKAP Status</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
+                        <?php
+
+                        include '../../connection/connection.php';
+
+                        // Check if section_id is passed in the URL
+                        if (isset($_GET['section_id'])) {
+                            $section_id = $_GET['section_id'];
+
+                            // Query the database for students in this section
+                            $sql = "SELECT * FROM students WHERE section_ID = $section_id AND is_archived = 0";
+                            $result = $conn->query($sql);
+
+                            if ($result->num_rows > 0) {
+                                while ($student = $result->fetch_assoc()) {
+                                    // Output student information here
+                                    echo '<tr>';
+                                    echo '<th>' . $student['student_id'] . '</th>';
+                                    echo '<th>' . $student['first_name'] . '</th>';
+                                    echo '<td>' . $student['last_name'] . '</td>';
+                                    echo '<td>' . $student['email'] . '</td>';
+                                    echo '<td>' . $student['gender'] . '</td>';
+                                    echo '<td>' . $student['akap_status'] . '</td>';
+                                    echo '</tr>';
+                                }
+                            } else {
+                                echo "<tr> <td colspan='8'> No students found in this section. </td></tr>";
+                            }
+                        } else {
+                            echo "<p>No section selected.</p>";
+                        }
+                        ?>
+                        <!-- <tr>
                             <th>13777577575</th>
                             <th>Roberto</th>
                             <td>Dimagiba</td>
                             <td>robertodimagiba@acemnhs.com</td>
-                            <td>rdimagiba</td>
+                            <td>Male</td>
                             <td>Active</td>
                             <td>
                                 <input type="checkbox" id="drawer-right-2" class="drawer-toggle" />
@@ -247,22 +313,6 @@
                                                     <br>
                                                     <input class="input-block input" placeholder="Please enter e-mail."
                                                         name="e-mail" type="email" />
-                                                </label>
-                                                <label for="username">
-                                                    <span
-                                                        class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Username</span>
-                                                    <br>
-                                                    <input class="input-block input"
-                                                        placeholder="Please enter username." name="username"
-                                                        type="text" />
-                                                </label>
-                                                <label for="Password">
-                                                    <span
-                                                        class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Password</span>
-                                                    <br>
-                                                    <input class="input-block input"
-                                                        placeholder="Please enter password." name="password"
-                                                        type="password" />
                                                 </label>
                                                 <label for="Gender">
                                                     <span
@@ -312,8 +362,7 @@
                                         </div>
                                     </div>
                             </td>
-                        </tr>
-
+                        </tr> -->
                     </tbody>
                 </table>
             </div>

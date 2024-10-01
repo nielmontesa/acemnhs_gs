@@ -220,7 +220,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                         <td><?php echo $row['section_name']; ?></td>
                                         <td>0</td>
                                         <td>
-                                            <a href="students.php"><button class="btn btn-secondary">View</button></a>
+                                            <a href="students.php?section_id=<?php echo $row['section_id']; ?>">
+                                                <button class="btn btn-secondary">View</button>
+                                            </a>
                                             <label class="btn btn-error"
                                                 for="modal-1-<?php echo $row['section_id']; ?>">Archive</label>
                                             <input class="modal-state" id="modal-1-<?php echo $row['section_id']; ?>"
@@ -283,7 +285,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                         <td><?php echo $row['section_name']; ?></td>
                                         <td>0</td>
                                         <td>
-                                            <a href="students.php"><button class="btn btn-secondary">View</button></a>
+                                            <a href="students.php?section_id=<?php echo $row['section_id']; ?>">
+                                                <button class="btn btn-secondary">View</button>
+                                            </a>
                                             <label class="btn btn-error"
                                                 for="modal-1-<?php echo $row['section_id']; ?>">Archive</label>
                                             <input class="modal-state" id="modal-1-<?php echo $row['section_id']; ?>"
@@ -346,7 +350,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                         <td><?php echo $row['section_name']; ?></td>
                                         <td>0</td>
                                         <td>
-                                            <a href="students.php"><button class="btn btn-secondary">View</button></a>
+                                            <a href="students.php?section_id=<?php echo $row['section_id']; ?>">
+                                                <button class="btn btn-secondary">View</button>
+                                            </a>
                                             <label class="btn btn-error"
                                                 for="modal-1-<?php echo $row['section_id']; ?>">Archive</label>
                                             <input class="modal-state" id="modal-1-<?php echo $row['section_id']; ?>"
@@ -409,7 +415,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                         <td><?php echo $row['section_name']; ?></td>
                                         <td>0</td>
                                         <td>
-                                            <a href="students.php"><button class="btn btn-secondary">View</button></a>
+                                            <a href="students.php?section_id=<?php echo $row['section_id']; ?>">
+                                                <button class="btn btn-secondary">View</button>
+                                            </a>
                                             <label class="btn btn-error"
                                                 for="modal-1-<?php echo $row['section_id']; ?>">Archive</label>
                                             <input class="modal-state" id="modal-1-<?php echo $row['section_id']; ?>"

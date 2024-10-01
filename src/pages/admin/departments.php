@@ -1,5 +1,23 @@
 <?php
 session_start();
+include '../../connection/connection.php';
+
+$sql = "SELECT department_id, department_name, is_archived FROM department WHERE is_archived = 0";
+$result = mysqli_query($conn, $sql);
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    header("Location: ../../pages/admin/departments.php");
+    $departmentName = $_POST['department_name'];
+
+    // Prepare and execute the SQL query
+    $sql = "INSERT INTO department (department_name) VALUES (?)";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $departmentName);
+    $stmt->execute();
+
+    // Display an alert message
+    echo "<script>alert('Department created successfully!');</script>";
+}
 ?>
 
 <!DOCTYPE html>
@@ -46,7 +64,7 @@ session_start();
                                         <span>Faculty</span>
                                     </li>
                                 </a>
-                                <a href="sections.php">
+                                <a href="sections.html">
                                     <li class="menu-item">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-75" fill="none"
                                             viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -56,7 +74,7 @@ session_start();
                                         <span>Students</span>
                                     </li>
                                 </a>
-                                <a href="reports.php">
+                                <a href="reports.html">
                                     <li class="menu-item">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-75" fill="none"
                                             viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -87,7 +105,7 @@ session_start();
                             </div>
                         </label>
                         <div class="dropdown-menu-right-top dropdown-menu ml-2">
-                            <a href="settings.php" tabindex="-1" class="dropdown-item text-sm">Account settings</a>
+                            <a href="settings.html" tabindex="-1" class="dropdown-item text-sm">Account settings</a>
                             <a href="../../connection/logout.php" tabindex="-1" class="dropdown-item text-sm">Logout</a>
                         </div>
                     </div>
@@ -103,7 +121,7 @@ session_start();
             <p class="pt-2">This is currently all of the departments in the school.</p>
 
 
-            <form class="mt-8">
+            <div class="mt-8">
                 <input type="checkbox" id="drawer-right" class="drawer-toggle" />
                 <label for="drawer-right" class="btn btn-primary">Add Department</label>
                 <label class="overlay" for="drawer-right"></label>
@@ -113,17 +131,19 @@ session_start();
                             class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
                         <div>
                             <h2 class="text-xl font-medium">Add Department</h2>
-                            <input class="input py-1.5 my-3" placeholder="Department Name" />
+                            <form action="departments.php" method="post">
+                            <input class="input py-1.5 my-3" name="department_name" placeholder="Department Name" />
                         </div>
                         <div class="h-full flex flex-row justify-end items-end gap-2">
                             <button class="btn btn-ghost">Cancel</button>
                             <button class="btn btn-primary">Create</button>
                         </div>
+                        </form>
                     </div>
                 </div>
                 <a href="all_teachers.php">
                     <button class="btn btn-outline-primary">View All Teachers</button></a>
-            </form>
+            </div>
             <div class="flex w-full overflow-x-auto pt-8">
                 <table class="table-hover table w-full">
                     <thead>
@@ -134,193 +154,36 @@ session_start();
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <th>English</th>
-                            <td>20</td>
-                            <td><a href="teachers.php"><button class="btn btn-secondary">View</button></a> <label
-                                    class="btn btn-error" for="modal-1">Archive</label>
-                                <input class="modal-state" id="modal-1" type="checkbox" />
-                                <form class="modal">
-                                    <label class="modal-overlay" for="modal-1"></label>
-                                    <div class="modal-content flex flex-col gap-5">
-                                        <label for="modal-1"
-                                            class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
-                                        <h2 class="text-xl">Archive department?</h2>
-                                        <span>Are you sure you want to Archive this department?</span>
-                                        <div class="flex gap-3">
-                                            <button class="btn btn-error btn-block">Archive</button>
-                                            <label for="modal-1" class="btn btn-block">Cancel</label>
-                                        </div>
-                                    </div>
-                                </form>
-                        </tr>
-                        <tr>
-                            <th>Filipino</th>
-                            <td>20</td>
-                            <td><a href="teachers.php"><button class="btn btn-secondary">View</button></a> <label
-                                    class="btn btn-error" for="modal-1">Archive</label>
-                                <input class="modal-state" id="modal-1" type="checkbox" />
-                                <form class="modal">
-                                    <label class="modal-overlay" for="modal-1"></label>
-                                    <div class="modal-content flex flex-col gap-5">
-                                        <label for="modal-1"
-                                            class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
-                                        <h2 class="text-xl">Archive department?</h2>
-                                        <span>Are you sure you want to Archive this department?</span>
-                                        <div class="flex gap-3">
-                                            <button class="btn btn-error btn-block">Archive</button>
-
-                                            <label for="modal-1" class="btn btn-block">Cancel</label>
-                                        </div>
-                                    </div>
-                                </form>
-                        </tr>
-                        <tr>
-                            <th>Mathematics</th>
-                            <td>20</td>
-                            <td><a href="teachers.php"><button class="btn btn-secondary">View</button></a> <label
-                                    class="btn btn-error" for="modal-1">Archive</label>
-                                <input class="modal-state" id="modal-1" type="checkbox" />
-                                <form class="modal">
-                                    <label class="modal-overlay" for="modal-1"></label>
-                                    <div class="modal-content flex flex-col gap-5">
-                                        <label for="modal-1"
-                                            class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
-                                        <h2 class="text-xl">Archive department?</h2>
-                                        <span>Are you sure you want to Archive this department?</span>
-                                        <div class="flex gap-3">
-                                            <button class="btn btn-error btn-block">Archive</button>
-
-                                            <label for="modal-1" class="btn btn-block">Cancel</label>
-                                        </div>
-                                    </div>
-                                </form>
-                        </tr>
-                        <tr>
-                            <th>Science</th>
-                            <td>20</td>
-                            <td><a href="teachers.php"><button class="btn btn-secondary">View</button></a> <label
-                                    class="btn btn-error" for="modal-1">Archive</label>
-                                <input class="modal-state" id="modal-1" type="checkbox" />
-                                <form class="modal">
-                                    <label class="modal-overlay" for="modal-1"></label>
-                                    <div class="modal-content flex flex-col gap-5">
-                                        <label for="modal-1"
-                                            class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
-                                        <h2 class="text-xl">Archive department?</h2>
-                                        <span>Are you sure you want to Archive this department?</span>
-                                        <div class="flex gap-3">
-                                            <button class="btn btn-error btn-block">Archive</button>
-
-                                            <label for="modal-1" class="btn btn-block">Cancel</label>
-                                        </div>
-                                    </div>
-                                </form>
-                        </tr>
-                        <tr>
-                            <th>Home Economics</th>
-                            <td>20</td>
-                            <td><a href="teachers.php"><button class="btn btn-secondary">View</button></a> <label
-                                    class="btn btn-error" for="modal-1">Archive</label>
-                                <input class="modal-state" id="modal-1" type="checkbox" />
-                                <form class="modal">
-                                    <label class="modal-overlay" for="modal-1"></label>
-                                    <div class="modal-content flex flex-col gap-5">
-                                        <label for="modal-1"
-                                            class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
-                                        <h2 class="text-xl">Archive department?</h2>
-                                        <span>Are you sure you want to Archive this department?</span>
-                                        <div class="flex gap-3">
-                                            <button class="btn btn-error btn-block">Archive</button>
-
-                                            <label for="modal-1" class="btn btn-block">Cancel</label>
-                                        </div>
-                                    </div>
-                                </form>
-                        </tr>
-                        <tr>
-                            <th>Araling Panlipunan</th>
-                            <td>20</td>
-                            <td><a href="teachers.php"><button class="btn btn-secondary">View</button></a> <label
-                                    class="btn btn-error" for="modal-1">Archive</label>
-                                <input class="modal-state" id="modal-1" type="checkbox" />
-                                <form class="modal">
-                                    <label class="modal-overlay" for="modal-1"></label>
-                                    <div class="modal-content flex flex-col gap-5">
-                                        <label for="modal-1"
-                                            class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
-                                        <h2 class="text-xl">Archive department?</h2>
-                                        <span>Are you sure you want to Archive this department?</span>
-                                        <div class="flex gap-3">
-                                            <button class="btn btn-error btn-block">Archive</button>
-
-                                            <label for="modal-1" class="btn btn-block">Cancel</label>
-                                        </div>
-                                    </div>
-                                </form>
-                        </tr>
-                        <tr>
-                            <th>Edukasyon sa Pagpapakatao</th>
-                            <td>20</td>
-                            <td><a href="teachers.php"><button class="btn btn-secondary">View</button></a> <label
-                                    class="btn btn-error" for="modal-1">Archive</label>
-                                <input class="modal-state" id="modal-1" type="checkbox" />
-                                <form class="modal">
-                                    <label class="modal-overlay" for="modal-1"></label>
-                                    <div class="modal-content flex flex-col gap-5">
-                                        <label for="modal-1"
-                                            class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
-                                        <h2 class="text-xl">Archive department?</h2>
-                                        <span>Are you sure you want to Archive this department?</span>
-                                        <div class="flex gap-3">
-                                            <button class="btn btn-error btn-block">Archive</button>
-                                            <label for="modal-1" class="btn btn-block">Cancel</label>
-                                        </div>
-                                    </div>
-                                </form>
-                        </tr>
-                        <tr>
-                            <th>TLE</th>
-                            <td>20</td>
-                            <td><a href="teachers.php"><button class="btn btn-secondary">View</button></a> <label
-                                    class="btn btn-error" for="modal-1">Archive</label>
-                                <input class="modal-state" id="modal-1" type="checkbox" />
-                                <form class="modal">
-                                    <label class="modal-overlay" for="modal-1"></label>
-                                    <div class="modal-content flex flex-col gap-5">
-                                        <label for="modal-1"
-                                            class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
-                                        <h2 class="text-xl">Archive department?</h2>
-                                        <span>Are you sure you want to Archive this department?</span>
-                                        <div class="flex gap-3">
-                                            <button class="btn btn-error btn-block">Archive</button>
-
-                                            <label for="modal-1" class="btn btn-block">Cancel</label>
-                                        </div>
-                                    </div>
-                                </form>
-                        </tr>
-                        <tr>
-                            <th>MAPEH</th>
-                            <td>20</td>
-                            <td><a href="teachers.php"><button class="btn btn-secondary">View</button></a> <label
-                                    class="btn btn-error" for="modal-1">Archive</label>
-                                <input class="modal-state" id="modal-1" type="checkbox" />
-                                <form class="modal">
-                                    <label class="modal-overlay" for="modal-1"></label>
-                                    <div class="modal-content flex flex-col gap-5">
-                                        <label for="modal-1"
-                                            class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
-                                        <h2 class="text-xl">Archive department?</h2>
-                                        <span>Are you sure you want to Archive this department?</span>
-                                        <div class="flex gap-3">
-                                            <button class="btn btn-error btn-block">Archive</button>
-
-                                            <label for="modal-1" class="btn btn-block">Cancel</label>
-                                        </div>
-                                    </div>
-                                </form>
-                        </tr>
+                        <?php
+                    if ($result->num_rows > 0) {
+                        while ($row = $result->fetch_assoc()) {
+                        echo "<tr>";
+                        echo "<td>" . $row['department_name'] . "</td>";
+                        echo "<td>20</td>"; // Replace with actual teacher count
+                        echo "<td><a href='teachers.html'><button class='btn btn-secondary'>View</button></a> 
+                              <label class='btn btn-error' for='modal-1'>Archive</label>
+                              <input class='modal-state' id='modal-1' type='checkbox' />
+                              <div class='modal'>
+                                  <label class='modal-overlay' for='modal-1'></label>
+                                  <div class='modal-content flex flex-col gap-5'>
+                                      <label for='modal-1' class='btn btn-sm btn-circle btn-ghost absolute right-2 top-2'>✕</label>
+                                      <h2 class='text-xl'>Archive department?</h2>
+                                      <span>Are you sure you want to Archive this department?</span>
+                                      <div class='flex gap-3'>
+                                          <button class='btn btn-error btn-block'>Archive</button>
+                                          <label for='modal-1' class='btn btn-block'>Cancel</label>
+                                      </div>
+                                  </div>
+                              </div>
+                              </td>";
+                                echo "</tr>";
+                                }
+                            } else {
+                                echo "0 results";
+                            }
+                            $conn->close();
+                            ?>
+             
                     </tbody>
                 </table>
             </div>

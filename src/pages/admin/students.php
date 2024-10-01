@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // SQL query to insert student data, including the section ID and Akap Status
-    $sql = "INSERT INTO students (student_id, first_name, last_name, email, gender, akap_status, section_id)
+    $sql = "INSERT INTO students (LRN, first_name, last_name, email, gender, akap_status, section_id)
             VALUES ('$student_lrn', '$student_firstname', '$student_lastname', '$parent_email', '$gender', '$akap_status', '$section_id')";
 
     if ($conn->query($sql) === TRUE) {
@@ -30,6 +30,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
 }
+
+
 ?>
 
 
@@ -44,6 +46,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href='../../styles/tailwind.css'>
     <link rel="stylesheet" href='../../styles/style.css'>
     <link rel="icon" href="../../assets/acemnhs_logo.png">
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const radioButtons = document.querySelectorAll('#gender-filter');
+            const sections = document.querySelectorAll('#student-tables > div');
+
+            radioButtons.forEach(radio => {
+                radio.addEventListener('change', () => {
+                    const selectedGender = radio.value;
+                    sections.forEach(section => {
+                        if (section.getAttribute('data-type') === selectedGender) {
+                            section.style.display = 'block';
+                        } else {
+                            section.style.display = 'none';
+                        }
+                    });
+                });
+            });
+        });
+    </script>
 </head>
 
 <body>
@@ -130,8 +151,51 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <label for="sidebar-mobile-fixed" class="btn-primary btn sm:hidden">Open Sidebar</label>
             </div>
 
-            <h1 class="text-xl font-bold">Grade 7 - Rizal</h1>
-            <p class="pt-2">This is currently all of the students in the Grade 7 Rizal.</p>
+
+            <h1 class="text-xl font-bold">
+                <?php
+
+                if (isset($_GET['section_id'])) {
+                    $section_id = $_GET['section_id'];
+                    $section_details_query = "SELECT section_name, grade_level, section_id FROM section WHERE section_id = $section_id";
+                    $result = $conn->query($section_details_query);
+
+                    if ($result->num_rows > 0) {
+                        // Fetch the result as an associative array and display section_name
+                        while ($row = $result->fetch_assoc()) {
+                            echo "Grade ";
+                            echo $row['grade_level'];
+                            echo " - ";
+                            echo $row['section_name']; // Output each section name
+                        }
+                    } else {
+                        echo "No sections found.";
+                    }
+                }
+                ?>
+            </h1>
+            <p class='pt-2'>This is currently all of the students in
+
+                <?php
+                if (isset($_GET['section_id'])) {
+                    $section_id = $_GET['section_id'];
+                    $section_details_query = "SELECT section_name, grade_level, section_id FROM section WHERE section_id = $section_id";
+                    $result = $conn->query($section_details_query);
+
+                    if ($result->num_rows > 0) {
+                        // Fetch the result as an associative array and display section_name
+                        while ($row = $result->fetch_assoc()) {
+                            echo "Grade ";
+                            echo $row['grade_level'];
+                            echo " - ";
+                            echo $row['section_name']; // Output each section name
+                        }
+                    } else {
+                        echo "No sections found.";
+                    }
+                }
+                ?>.
+            </p>
 
             <div class="flex justify-between items-center mt-4" style="justify-content: space-between;">
                 <form method="POST">
@@ -147,7 +211,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <label for="studentlrn">
                                     <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">LRN</span>
                                     <input class="input-block input" placeholder="Please enter the LRN."
-                                        name="studentlrn" type="text" required />
+                                        name="studentlrn" type="text" maxlength="12" required />
                                 </label>
                                 <label for="studentfirstname">
                                     <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Student First
@@ -169,7 +233,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 </label>
                                 <label for="gender">
                                     <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Gender</span>
-                                    <select class="select" name="gender" required>
+                                    <select class="select" name="gender" id="gender-filter" required>
                                         <option value="">Select Gender...</option>
                                         <option value="Male">Male</option>
                                         <option value="Female">Female</option>
@@ -192,6 +256,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
                         </div>
                     </div>
+                    <a href="#" class="btn btn-outline-primary">Gradesheets</a>
                 </form>
 
                 <div class="flex gap-4">
@@ -199,8 +264,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <span class="text-sm">Filter Students:</span>
                         <form>
                             <div class="btn-group">
-                                <input type="radio" name="options" data-content="Male" class="btn bg-[rgba(0,0,0,0.02)]"
+                                <input type="radio" name="options" data-content="All" class="btn bg-[rgba(0,0,0,0.02)]"
                                     checked />
+                                <input type="radio" name="options" data-content="Male"
+                                    class="btn bg-[rgba(0,0,0,0.02)]" />
                                 <input type="radio" name="options" data-content="Female"
                                     class="btn bg-[rgba(0,0,0,0.02)]" />
                             </div>
@@ -219,7 +286,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                 </div>
             </div>
-            <div class="flex w-full overflow-x-auto pt-8">
+            <div class="flex w-full overflow-x-auto pt-8" data-type="all">
                 <table class="table-hover table">
                     <thead>
                         <tr>
@@ -234,7 +301,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </thead>
                     <tbody>
                         <?php
-
                         include '../../connection/connection.php';
 
                         // Check if section_id is passed in the URL
@@ -245,26 +311,154 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             $sql = "SELECT * FROM students WHERE section_ID = $section_id AND is_archived = 0";
                             $result = $conn->query($sql);
 
-                            if ($result->num_rows > 0) {
-                                while ($student = $result->fetch_assoc()) {
-                                    // Output student information here
-                                    echo '<tr>';
-                                    echo '<th>' . $student['student_id'] . '</th>';
-                                    echo '<th>' . $student['first_name'] . '</th>';
-                                    echo '<td>' . $student['last_name'] . '</td>';
-                                    echo '<td>' . $student['email'] . '</td>';
-                                    echo '<td>' . $student['gender'] . '</td>';
-                                    echo '<td>' . $student['akap_status'] . '</td>';
-                                    echo '</tr>';
-                                }
-                            } else {
-                                echo "<tr> <td colspan='8'> No students found in this section. </td></tr>";
-                            }
+                            if ($result->num_rows > 0):
+                                ?>
+                            <tbody>
+                                <?php while ($student = $result->fetch_assoc()): ?>
+                                    <tr>
+                                        <th><?php echo $student['LRN']; ?></th>
+                                        <th><?php echo $student['first_name']; ?></th>
+                                        <td><?php echo $student['last_name']; ?></td>
+                                        <td><?php echo $student['email']; ?></td>
+                                        <td><?php echo $student['gender']; ?></td>
+                                        <td><?php echo $student['akap_status']; ?></td>
+                                        <td>
+                                            <input type="checkbox" id="drawer-right-2" class="drawer-toggle" />
+                                            <label for="drawer-right-2" class="btn btn-secondary">Edit</label>
+                                            <label class="overlay" for="drawer-right-2"></label>
+                                            <div class="drawer drawer-right">
+                                                <form method="POST" action="../../connection/update_student.php"
+                                                    class="drawer-content pt-10 flex flex-col h-full">
+                                                    <label for="drawer-right-2"
+                                                        class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
+                                                    <div>
+                                                        <h2 class="text-xl font-medium">Edit Student</h2>
+                                                        <div class="flex flex-col gap-2">
+                                                            <label for="student_lrn">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">LRN</span>
+                                                                <br>
+                                                                <input class="input-block input" placeholder="Please enter the LRN."
+                                                                    name="student_lrn" type="text"
+                                                                    value="<?php echo htmlspecialchars($student['LRN']); ?>"
+                                                                    required />
+                                                            </label>
+                                                            <label for="student_firstname">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Student
+                                                                    First Name</span>
+                                                                <br>
+                                                                <input class="input-block input"
+                                                                    placeholder="Please enter first name." name="student_firstname"
+                                                                    type="text"
+                                                                    value="<?php echo htmlspecialchars($student['first_name']); ?>"
+                                                                    required />
+                                                            </label>
+                                                            <label for="student_lastname">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Student
+                                                                    Last Name</span>
+                                                                <br>
+                                                                <input class="input-block input"
+                                                                    placeholder="Please enter last name." name="student_lastname"
+                                                                    type="text"
+                                                                    value="<?php echo htmlspecialchars($student['last_name']); ?>"
+                                                                    required />
+                                                            </label>
+                                                            <label for="email">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">E-mail</span>
+                                                                <br>
+                                                                <input class="input-block input" placeholder="Please enter e-mail."
+                                                                    name="email" type="email"
+                                                                    value="<?php echo htmlspecialchars($student['email']); ?>"
+                                                                    required />
+                                                            </label>
+                                                            <label for="gender">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Gender</span>
+                                                                <br>
+                                                                <select class="select" name="gender" required>
+                                                                    <option value="">Select Gender...</option>
+                                                                    <option value="Male" <?php echo ($student['gender'] == 'Male') ? 'selected' : ''; ?>>Male</option>
+                                                                    <option value="Female" <?php echo ($student['gender'] == 'Female') ? 'selected' : ''; ?>>Female
+                                                                    </option>
+                                                                </select>
+                                                            </label>
+                                                            <label for="akap_status">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">AKAP</span>
+                                                                <br>
+                                                                <select class="select" name="akap_status" required>
+                                                                    <option value="">Select Status...</option>
+                                                                    <option value="Active" <?php echo ($student['akap_status'] == 'Active') ? 'selected' : ''; ?>>
+                                                                        Active</option>
+                                                                    <option value="Inactive" <?php echo ($student['akap_status'] == 'Inactive') ? 'selected' : ''; ?>>
+                                                                        Inactive</option>
+                                                                    <option value="Solved" <?php echo ($student['akap_status'] == 'Solved') ? 'selected' : ''; ?>>
+                                                                        Solved</option>
+                                                                </select>
+                                                            </label>
+
+                                                            <div class="h-full flex flex-row justify-end items-end gap-2">
+                                                                <button type="button" class="btn btn-ghost"
+                                                                    onclick="document.getElementById('drawer-right-2').checked = false;">Cancel</button>
+                                                                <button type="submit" class="btn btn-primary">Update</button>
+                                                                <input type="hidden" name="student_id"
+                                                                    value="<?php echo htmlspecialchars($student['student_id']); ?>" />
+                                                                <!-- Hidden field for student ID -->
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+
+                                            <label class="btn btn-error"
+                                                for="modal-1-<?php echo $student['student_id']; ?>">Archive</label>
+                                            <input class="modal-state" id="modal-1-<?php echo $student['student_id']; ?>"
+                                                type="checkbox" />
+                                            <div class="modal">
+                                                <label class="modal-overlay"
+                                                    for="modal-1-<?php echo $student['student_id']; ?>"></label>
+                                                <form method="POST" action="../../connection/archive_student.php"
+                                                    class="modal-content flex flex-col gap-5">
+                                                    <label for="modal-1-<?php echo $student['student_id']; ?>"
+                                                        class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
+                                                    <h2 class="text-xl">Archive Student?</h2>
+                                                    <span>Are you sure you want to archive this student?</span>
+
+                                                    <!-- Hidden input to send student ID -->
+                                                    <input type="hidden" name="student_id"
+                                                        value="<?php echo $student['student_id']; ?>" />
+
+                                                    <!-- Hidden input to send the current section ID -->
+                                                    <input type="hidden" name="section_id"
+                                                        value="<?php echo $_GET['section_id']; ?>" />
+                                                    <div class="flex gap-3">
+                                                        <button class="btn btn-error btn-block" type="submit">Archive</button>
+                                                        <label for="modal-1-<?php echo $student['student_id']; ?>"
+                                                            class="btn btn-block">Cancel</label>
+                                                    </div>
+                                                </form>
+                                            </div>
+
+
+                                        </td>
+                                    </tr>
+                                <?php endwhile; ?>
+                            </tbody>
+                        <?php else: ?>
+                            <tr>
+                                <td colspan="8">No students found in this section.</td>
+                            </tr>
+                        <?php endif; ?>
+                        <?php
                         } else {
                             echo "<p>No section selected.</p>";
                         }
                         ?>
-                        <!-- <tr>
+
+                    <!-- <tr>
                             <th>13777577575</th>
                             <th>Roberto</th>
                             <td>Dimagiba</td>

@@ -64,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         <span>Faculty</span>
                                     </li>
                                 </a>
-                                <a href="sections.html">
+                                <a href="sections.php">
                                     <li class="menu-item">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-75" fill="none"
                                             viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -74,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         <span>Students</span>
                                     </li>
                                 </a>
-                                <a href="reports.html">
+                                <a href="reports.php">
                                     <li class="menu-item">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-75" fill="none"
                                             viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -105,7 +105,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
                         </label>
                         <div class="dropdown-menu-right-top dropdown-menu ml-2">
-                            <a href="settings.html" tabindex="-1" class="dropdown-item text-sm">Account settings</a>
+                            <a href="settings.php" tabindex="-1" class="dropdown-item text-sm">Account settings</a>
                             <a href="../../connection/logout.php" tabindex="-1" class="dropdown-item text-sm">Logout</a>
                         </div>
                     </div>
@@ -132,7 +132,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <div>
                             <h2 class="text-xl font-medium">Add Department</h2>
                             <form action="departments.php" method="post">
-                            <input class="input py-1.5 my-3" name="department_name" placeholder="Department Name" />
+                                <input class="input py-1.5 my-3" name="department_name" placeholder="Department Name" />
                         </div>
                         <div class="h-full flex flex-row justify-end items-end gap-2">
                             <button class="btn btn-ghost">Cancel</button>
@@ -155,12 +155,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </thead>
                     <tbody>
                         <?php
-                    if ($result->num_rows > 0) {
-                        while ($row = $result->fetch_assoc()) {
-                        echo "<tr>";
-                        echo "<td>" . $row['department_name'] . "</td>";
-                        echo "<td>20</td>"; // Replace with actual teacher count
-                        echo "<td><a href='teachers.html'><button class='btn btn-secondary'>View</button></a> 
+                        if ($result->num_rows > 0) {
+                            while ($row = $result->fetch_assoc()) {
+                                echo "<tr>";
+                                echo "<td>" . $row['department_name'] . "</td>";
+                                echo "<td>20</td>"; // Replace with actual teacher count
+                                echo "<td><a href='teachers.php'><button class='btn btn-secondary'>View</button></a> 
                               <label class='btn btn-error' for='modal-1'>Archive</label>
                               <input class='modal-state' id='modal-1' type='checkbox' />
                               <div class='modal'>
@@ -177,13 +177,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                               </div>
                               </td>";
                                 echo "</tr>";
-                                }
-                            } else {
-                                echo "0 results";
                             }
-                            $conn->close();
-                            ?>
-             
+                        } else {
+                            echo "0 results";
+                        }
+                        $conn->close();
+                        ?>
+
                     </tbody>
                 </table>
             </div>

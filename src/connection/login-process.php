@@ -72,6 +72,7 @@ if (isset($_POST['login'])) {
             }
         } else {
             echo '<script>alert("No such user found.");</script>';
+            echo '<script>window.location.href = "../index.php";</script>';
         }
     }
 }

@@ -42,7 +42,7 @@
                                         <span>Faculty</span>
                                     </li>
                                 </a>
-                                <a href="sections.html">
+                                <a href="sections.php">
                                     <li class="menu-item">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-75" fill="none"
                                             viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -52,7 +52,7 @@
                                         <span>Students</span>
                                     </li>
                                 </a>
-                                <a href="reports.html">
+                                <a href="reports.php">
                                     <li class="menu-item">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-75" fill="none"
                                             viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">

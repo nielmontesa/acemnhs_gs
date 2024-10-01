@@ -42,7 +42,7 @@
                                         <span>Faculty</span>
                                     </li>
                                 </a>
-                                <a href="sections.html">
+                                <a href="sections.php">
                                     <li class="menu-item">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-75" fill="none"
                                             viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -52,7 +52,7 @@
                                         <span>Students</span>
                                     </li>
                                 </a>
-                                <a href="reports.html">
+                                <a href="reports.php">
                                     <li class="menu-item">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-75" fill="none"
                                             viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -83,7 +83,7 @@
                             </div>
                         </label>
                         <div class="dropdown-menu-right-top dropdown-menu ml-2">
-                            <a href="settings.html" tabindex="-1" class="dropdown-item text-sm">Account settings</a>
+                            <a href="settings.php" tabindex="-1" class="dropdown-item text-sm">Account settings</a>
                             <a href="../../connection/logout.php" tabindex="-1" class="dropdown-item text-sm">Logout</a>
                         </div>
                     </div>
@@ -95,13 +95,12 @@
                 <label for="sidebar-mobile-fixed" class="btn-primary btn sm:hidden">Open Sidebar</label>
             </div>
 
-            <h1 class="text-xl font-bold">All Teachers</h1>
-            <p class="pt-2">This is all the Teachers of the school.</p>
+            <h1 class="text-xl font-bold">English Department</h1>
+            <p class="pt-2">This is the English department of the school.</p>
 
 
-            <div class="mt-8">
+            <form class="mt-8">
                 <input type="checkbox" id="drawer-right" class="drawer-toggle" />
-
                 <label for="drawer-right" class="btn btn-primary">Add Teacher</label>
                 <label class="overlay" for="drawer-right"></label>
                 <div class="drawer drawer-right">
@@ -138,35 +137,6 @@
                                     name="password" type="password" />
                             </label>
 
-                            <div class="mt-2 flex flex-col gap-2">
-                                <span>Sections Handled</span>
-                                <label class="flex cursor-pointer gap-2">
-                                    <input type="checkbox" class="checkbox" />
-                                    <span>Section 1</span>
-                                </label>
-                                <label class="flex cursor-pointer gap-2">
-                                    <input type="checkbox" class="checkbox" />
-                                    <span>Section 1</span>
-                                </label>
-                                <label class="flex cursor-pointer gap-2">
-                                    <input type="checkbox" class="checkbox" />
-                                    <span>Section 1</span>
-                                </label>
-                                <label class="flex cursor-pointer gap-2">
-                                    <input type="checkbox" class="checkbox" />
-                                    <span>Section 1</span>
-                                </label>
-                                <label class="flex cursor-pointer gap-2">
-                                    <input type="checkbox" class="checkbox" />
-                                    <span>Section 1</span>
-                                </label>
-                                <label class="flex cursor-pointer gap-2">
-                                    <input type="checkbox" class="checkbox" />
-                                    <span>Section 1</span>
-                                </label>
-                            </div>
-
-
                         </div>
                         <div class="h-full flex flex-row justify-end items-end gap-2">
                             <button class="btn btn-ghost">Cancel</button>
@@ -174,7 +144,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </form>
             <div class="flex w-full overflow-x-auto pt-8">
                 <div class="flex w-full overflow-x-auto">
                     <table class="table-hover table">
@@ -195,10 +165,9 @@
                                 <td>rdimagiba</td>
                                 <td>
                                     <input type="checkbox" id="drawer-right-2" class="drawer-toggle" />
-
                                     <label for="drawer-right-2" class="btn btn-secondary">Edit</label>
                                     <label class="overlay" for="drawer-right-2"></label>
-                                    <div class="drawer drawer-right">
+                                    <form class="drawer drawer-right">
                                         <div class="drawer-content pt-10 flex flex-col h-full">
                                             <label for="drawer-right-2"
                                                 class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
@@ -254,7 +223,8 @@
                                                 <button class="btn btn-primary">Create</button>
                                             </div>
                                         </div>
-                                    </div>
+                                    </form>
+
                                     <label class="btn btn-error" for="modal-1">Archive</label>
                                     <input class="modal-state" id="modal-1" type="checkbox" />
                                     <div class="modal">
@@ -272,7 +242,6 @@
                                         </div>
                                 </td>
                             </tr>
-
                         </tbody>
                     </table>
                 </div>

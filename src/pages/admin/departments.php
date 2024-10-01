@@ -46,7 +46,7 @@ session_start();
                                         <span>Faculty</span>
                                     </li>
                                 </a>
-                                <a href="sections.html">
+                                <a href="sections.php">
                                     <li class="menu-item">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-75" fill="none"
                                             viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -56,7 +56,7 @@ session_start();
                                         <span>Students</span>
                                     </li>
                                 </a>
-                                <a href="reports.html">
+                                <a href="reports.php">
                                     <li class="menu-item">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-75" fill="none"
                                             viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -87,7 +87,7 @@ session_start();
                             </div>
                         </label>
                         <div class="dropdown-menu-right-top dropdown-menu ml-2">
-                            <a href="settings.html" tabindex="-1" class="dropdown-item text-sm">Account settings</a>
+                            <a href="settings.php" tabindex="-1" class="dropdown-item text-sm">Account settings</a>
                             <a href="../../connection/logout.php" tabindex="-1" class="dropdown-item text-sm">Logout</a>
                         </div>
                     </div>
@@ -121,7 +121,7 @@ session_start();
                         </div>
                     </div>
                 </div>
-                <a href="all_teachers.html">
+                <a href="all_teachers.php">
                     <button class="btn btn-outline-primary">View All Teachers</button></a>
             </form>
             <div class="flex w-full overflow-x-auto pt-8">
@@ -137,7 +137,7 @@ session_start();
                         <tr>
                             <th>English</th>
                             <td>20</td>
-                            <td><a href="teachers.html"><button class="btn btn-secondary">View</button></a> <label
+                            <td><a href="teachers.php"><button class="btn btn-secondary">View</button></a> <label
                                     class="btn btn-error" for="modal-1">Archive</label>
                                 <input class="modal-state" id="modal-1" type="checkbox" />
                                 <form class="modal">
@@ -157,7 +157,7 @@ session_start();
                         <tr>
                             <th>Filipino</th>
                             <td>20</td>
-                            <td><a href="teachers.html"><button class="btn btn-secondary">View</button></a> <label
+                            <td><a href="teachers.php"><button class="btn btn-secondary">View</button></a> <label
                                     class="btn btn-error" for="modal-1">Archive</label>
                                 <input class="modal-state" id="modal-1" type="checkbox" />
                                 <form class="modal">
@@ -178,7 +178,7 @@ session_start();
                         <tr>
                             <th>Mathematics</th>
                             <td>20</td>
-                            <td><a href="teachers.html"><button class="btn btn-secondary">View</button></a> <label
+                            <td><a href="teachers.php"><button class="btn btn-secondary">View</button></a> <label
                                     class="btn btn-error" for="modal-1">Archive</label>
                                 <input class="modal-state" id="modal-1" type="checkbox" />
                                 <form class="modal">
@@ -199,7 +199,7 @@ session_start();
                         <tr>
                             <th>Science</th>
                             <td>20</td>
-                            <td><a href="teachers.html"><button class="btn btn-secondary">View</button></a> <label
+                            <td><a href="teachers.php"><button class="btn btn-secondary">View</button></a> <label
                                     class="btn btn-error" for="modal-1">Archive</label>
                                 <input class="modal-state" id="modal-1" type="checkbox" />
                                 <form class="modal">
@@ -220,7 +220,7 @@ session_start();
                         <tr>
                             <th>Home Economics</th>
                             <td>20</td>
-                            <td><a href="teachers.html"><button class="btn btn-secondary">View</button></a> <label
+                            <td><a href="teachers.php"><button class="btn btn-secondary">View</button></a> <label
                                     class="btn btn-error" for="modal-1">Archive</label>
                                 <input class="modal-state" id="modal-1" type="checkbox" />
                                 <form class="modal">
@@ -241,7 +241,7 @@ session_start();
                         <tr>
                             <th>Araling Panlipunan</th>
                             <td>20</td>
-                            <td><a href="teachers.html"><button class="btn btn-secondary">View</button></a> <label
+                            <td><a href="teachers.php"><button class="btn btn-secondary">View</button></a> <label
                                     class="btn btn-error" for="modal-1">Archive</label>
                                 <input class="modal-state" id="modal-1" type="checkbox" />
                                 <form class="modal">
@@ -262,7 +262,7 @@ session_start();
                         <tr>
                             <th>Edukasyon sa Pagpapakatao</th>
                             <td>20</td>
-                            <td><a href="teachers.html"><button class="btn btn-secondary">View</button></a> <label
+                            <td><a href="teachers.php"><button class="btn btn-secondary">View</button></a> <label
                                     class="btn btn-error" for="modal-1">Archive</label>
                                 <input class="modal-state" id="modal-1" type="checkbox" />
                                 <form class="modal">
@@ -282,7 +282,7 @@ session_start();
                         <tr>
                             <th>TLE</th>
                             <td>20</td>
-                            <td><a href="teachers.html"><button class="btn btn-secondary">View</button></a> <label
+                            <td><a href="teachers.php"><button class="btn btn-secondary">View</button></a> <label
                                     class="btn btn-error" for="modal-1">Archive</label>
                                 <input class="modal-state" id="modal-1" type="checkbox" />
                                 <form class="modal">
@@ -303,7 +303,7 @@ session_start();
                         <tr>
                             <th>MAPEH</th>
                             <td>20</td>
-                            <td><a href="teachers.html"><button class="btn btn-secondary">View</button></a> <label
+                            <td><a href="teachers.php"><button class="btn btn-secondary">View</button></a> <label
                                     class="btn btn-error" for="modal-1">Archive</label>
                                 <input class="modal-state" id="modal-1" type="checkbox" />
                                 <form class="modal">

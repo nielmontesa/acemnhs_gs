@@ -111,11 +111,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         });
 
     </script>
-
-
-
-
-
 </head>
 
 <body>
@@ -310,7 +305,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <a href="#" class="btn btn-outline-primary">Gradesheets</a>
                 </form>
 
-                <div class="flex gap-4">
+                <div class="flex gap-4 items-center content-center">
                     <div class="flex gap-4 items-center">
                         <span class="text-sm">Filter Gender:</span>
                         <form id="gender-filter-form">
@@ -821,13 +816,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         <td><?php echo $student['gender']; ?></td>
                                         <td><?php echo $student['akap_status']; ?></td>
                                         <td>
-                                            <input type="checkbox" id="drawer-right-2" class="drawer-toggle" />
-                                            <label for="drawer-right-2" class="btn btn-secondary">Edit</label>
-                                            <label class="overlay" for="drawer-right-2"></label>
+                                            <input type="checkbox" id="drawer-right-3" class="drawer-toggle" />
+                                            <label for="drawer-right-3" class="btn btn-secondary">Edit</label>
+                                            <label class="overlay" for="drawer-right-3"></label>
                                             <div class="drawer drawer-right">
                                                 <form method="POST" action="../../connection/update_student.php"
                                                     class="drawer-content pt-10 flex flex-col h-full">
-                                                    <label for="drawer-right-2"
+                                                    <label for="drawer-right-3"
                                                         class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
                                                     <div>
                                                         <h2 class="text-xl font-medium">Edit Student</h2>
@@ -899,7 +894,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                             <div class="h-full flex flex-row justify-end items-end gap-2">
                                                                 <button type="button" class="btn btn-ghost"
-                                                                    onclick="document.getElementById('drawer-right-2').checked = false;">Cancel</button>
+                                                                    onclick="document.getElementById('drawer-right-3').checked = false;">Cancel</button>
                                                                 <button type="submit" class="btn btn-primary">Update</button>
                                                                 <input type="hidden" name="student_id"
                                                                     value="<?php echo htmlspecialchars($student['student_id']); ?>" />
@@ -911,15 +906,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                             </div>
 
                                             <label class="btn btn-error"
-                                                for="modal-1-<?php echo $student['student_id']; ?>">Archive</label>
-                                            <input class="modal-state" id="modal-1-<?php echo $student['student_id']; ?>"
+                                                for="modal-2-<?php echo $student['student_id']; ?>">Archive</label>
+                                            <input class="modal-state" id="modal-2-<?php echo $student['student_id']; ?>"
                                                 type="checkbox" />
                                             <div class="modal">
                                                 <label class="modal-overlay"
-                                                    for="modal-1-<?php echo $student['student_id']; ?>"></label>
+                                                    for="modal-2-<?php echo $student['student_id']; ?>"></label>
                                                 <form method="POST" action="../../connection/archive_student.php"
                                                     class="modal-content flex flex-col gap-5">
-                                                    <label for="modal-1-<?php echo $student['student_id']; ?>"
+                                                    <label for="modal-2-<?php echo $student['student_id']; ?>"
                                                         class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
                                                     <h2 class="text-xl">Archive Student?</h2>
                                                     <span>Are you sure you want to archive this student?</span>
@@ -933,7 +928,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                         value="<?php echo $_GET['section_id']; ?>" />
                                                     <div class="flex gap-3">
                                                         <button class="btn btn-error btn-block" type="submit">Archive</button>
-                                                        <label for="modal-1-<?php echo $student['student_id']; ?>"
+                                                        <label for="modal-2-<?php echo $student['student_id']; ?>"
                                                             class="btn btn-block">Cancel</label>
                                                     </div>
                                                 </form>
@@ -970,13 +965,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         <td><?php echo $student['gender']; ?></td>
                                         <td><?php echo $student['akap_status']; ?></td>
                                         <td>
-                                            <input type="checkbox" id="drawer-right-2" class="drawer-toggle" />
-                                            <label for="drawer-right-2" class="btn btn-secondary">Edit</label>
-                                            <label class="overlay" for="drawer-right-2"></label>
+                                            <input type="checkbox" id="drawer-right-3" class="drawer-toggle" />
+                                            <label for="drawer-right-3" class="btn btn-secondary">Edit</label>
+                                            <label class="overlay" for="drawer-right-3"></label>
                                             <div class="drawer drawer-right">
                                                 <form method="POST" action="../../connection/update_student.php"
                                                     class="drawer-content pt-10 flex flex-col h-full">
-                                                    <label for="drawer-right-2"
+                                                    <label for="drawer-right-3"
                                                         class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
                                                     <div>
                                                         <h2 class="text-xl font-medium">Edit Student</h2>
@@ -1048,7 +1043,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                             <div class="h-full flex flex-row justify-end items-end gap-2">
                                                                 <button type="button" class="btn btn-ghost"
-                                                                    onclick="document.getElementById('drawer-right-2').checked = false;">Cancel</button>
+                                                                    onclick="document.getElementById('drawer-right-3').checked = false;">Cancel</button>
                                                                 <button type="submit" class="btn btn-primary">Update</button>
                                                                 <input type="hidden" name="student_id"
                                                                     value="<?php echo htmlspecialchars($student['student_id']); ?>" />
@@ -1060,15 +1055,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                             </div>
 
                                             <label class="btn btn-error"
-                                                for="modal-1-<?php echo $student['student_id']; ?>">Archive</label>
-                                            <input class="modal-state" id="modal-1-<?php echo $student['student_id']; ?>"
+                                                for="modal-2-<?php echo $student['student_id']; ?>">Archive</label>
+                                            <input class="modal-state" id="modal-2-<?php echo $student['student_id']; ?>"
                                                 type="checkbox" />
                                             <div class="modal">
                                                 <label class="modal-overlay"
-                                                    for="modal-1-<?php echo $student['student_id']; ?>"></label>
+                                                    for="modal-2-<?php echo $student['student_id']; ?>"></label>
                                                 <form method="POST" action="../../connection/archive_student.php"
                                                     class="modal-content flex flex-col gap-5">
-                                                    <label for="modal-1-<?php echo $student['student_id']; ?>"
+                                                    <label for="modal-2-<?php echo $student['student_id']; ?>"
                                                         class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
                                                     <h2 class="text-xl">Archive Student?</h2>
                                                     <span>Are you sure you want to archive this student?</span>
@@ -1082,7 +1077,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                         value="<?php echo $_GET['section_id']; ?>" />
                                                     <div class="flex gap-3">
                                                         <button class="btn btn-error btn-block" type="submit">Archive</button>
-                                                        <label for="modal-1-<?php echo $student['student_id']; ?>"
+                                                        <label for="modal-2-<?php echo $student['student_id']; ?>"
                                                             class="btn btn-block">Cancel</label>
                                                     </div>
                                                 </form>
@@ -1119,13 +1114,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         <td><?php echo $student['gender']; ?></td>
                                         <td><?php echo $student['akap_status']; ?></td>
                                         <td>
-                                            <input type="checkbox" id="drawer-right-2" class="drawer-toggle" />
-                                            <label for="drawer-right-2" class="btn btn-secondary">Edit</label>
-                                            <label class="overlay" for="drawer-right-2"></label>
+                                            <input type="checkbox" id="drawer-right-3" class="drawer-toggle" />
+                                            <label for="drawer-right-3" class="btn btn-secondary">Edit</label>
+                                            <label class="overlay" for="drawer-right-3"></label>
                                             <div class="drawer drawer-right">
                                                 <form method="POST" action="../../connection/update_student.php"
                                                     class="drawer-content pt-10 flex flex-col h-full">
-                                                    <label for="drawer-right-2"
+                                                    <label for="drawer-right-3"
                                                         class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
                                                     <div>
                                                         <h2 class="text-xl font-medium">Edit Student</h2>
@@ -1197,7 +1192,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                             <div class="h-full flex flex-row justify-end items-end gap-2">
                                                                 <button type="button" class="btn btn-ghost"
-                                                                    onclick="document.getElementById('drawer-right-2').checked = false;">Cancel</button>
+                                                                    onclick="document.getElementById('drawer-right-3').checked = false;">Cancel</button>
                                                                 <button type="submit" class="btn btn-primary">Update</button>
                                                                 <input type="hidden" name="student_id"
                                                                     value="<?php echo htmlspecialchars($student['student_id']); ?>" />
@@ -1209,15 +1204,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                             </div>
 
                                             <label class="btn btn-error"
-                                                for="modal-1-<?php echo $student['student_id']; ?>">Archive</label>
-                                            <input class="modal-state" id="modal-1-<?php echo $student['student_id']; ?>"
+                                                for="modal-2-<?php echo $student['student_id']; ?>">Archive</label>
+                                            <input class="modal-state" id="modal-2-<?php echo $student['student_id']; ?>"
                                                 type="checkbox" />
                                             <div class="modal">
                                                 <label class="modal-overlay"
-                                                    for="modal-1-<?php echo $student['student_id']; ?>"></label>
+                                                    for="modal-2-<?php echo $student['student_id']; ?>"></label>
                                                 <form method="POST" action="../../connection/archive_student.php"
                                                     class="modal-content flex flex-col gap-5">
-                                                    <label for="modal-1-<?php echo $student['student_id']; ?>"
+                                                    <label for="modal-2-<?php echo $student['student_id']; ?>"
                                                         class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
                                                     <h2 class="text-xl">Archive Student?</h2>
                                                     <span>Are you sure you want to archive this student?</span>
@@ -1231,7 +1226,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                         value="<?php echo $_GET['section_id']; ?>" />
                                                     <div class="flex gap-3">
                                                         <button class="btn btn-error btn-block" type="submit">Archive</button>
-                                                        <label for="modal-1-<?php echo $student['student_id']; ?>"
+                                                        <label for="modal-2-<?php echo $student['student_id']; ?>"
                                                             class="btn btn-block">Cancel</label>
                                                     </div>
                                                 </form>
@@ -1268,13 +1263,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         <td><?php echo $student['gender']; ?></td>
                                         <td><?php echo $student['akap_status']; ?></td>
                                         <td>
-                                            <input type="checkbox" id="drawer-right-2" class="drawer-toggle" />
-                                            <label for="drawer-right-2" class="btn btn-secondary">Edit</label>
-                                            <label class="overlay" for="drawer-right-2"></label>
+                                            <input type="checkbox" id="drawer-right-4" class="drawer-toggle" />
+                                            <label for="drawer-right-4" class="btn btn-secondary">Edit</label>
+                                            <label class="overlay" for="drawer-right-4"></label>
                                             <div class="drawer drawer-right">
                                                 <form method="POST" action="../../connection/update_student.php"
                                                     class="drawer-content pt-10 flex flex-col h-full">
-                                                    <label for="drawer-right-2"
+                                                    <label for="drawer-right-4"
                                                         class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
                                                     <div>
                                                         <h2 class="text-xl font-medium">Edit Student</h2>
@@ -1346,7 +1341,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                             <div class="h-full flex flex-row justify-end items-end gap-2">
                                                                 <button type="button" class="btn btn-ghost"
-                                                                    onclick="document.getElementById('drawer-right-2').checked = false;">Cancel</button>
+                                                                    onclick="document.getElementById('drawer-right-4').checked = false;">Cancel</button>
                                                                 <button type="submit" class="btn btn-primary">Update</button>
                                                                 <input type="hidden" name="student_id"
                                                                     value="<?php echo htmlspecialchars($student['student_id']); ?>" />
@@ -1358,15 +1353,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                             </div>
 
                                             <label class="btn btn-error"
-                                                for="modal-1-<?php echo $student['student_id']; ?>">Archive</label>
-                                            <input class="modal-state" id="modal-1-<?php echo $student['student_id']; ?>"
+                                                for="modal-4-<?php echo $student['student_id']; ?>">Archive</label>
+                                            <input class="modal-state" id="modal-4-<?php echo $student['student_id']; ?>"
                                                 type="checkbox" />
                                             <div class="modal">
                                                 <label class="modal-overlay"
-                                                    for="modal-1-<?php echo $student['student_id']; ?>"></label>
+                                                    for="modal-4-<?php echo $student['student_id']; ?>"></label>
                                                 <form method="POST" action="../../connection/archive_student.php"
                                                     class="modal-content flex flex-col gap-5">
-                                                    <label for="modal-1-<?php echo $student['student_id']; ?>"
+                                                    <label for="modal-4-<?php echo $student['student_id']; ?>"
                                                         class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
                                                     <h2 class="text-xl">Archive Student?</h2>
                                                     <span>Are you sure you want to archive this student?</span>
@@ -1380,7 +1375,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                         value="<?php echo $_GET['section_id']; ?>" />
                                                     <div class="flex gap-3">
                                                         <button class="btn btn-error btn-block" type="submit">Archive</button>
-                                                        <label for="modal-1-<?php echo $student['student_id']; ?>"
+                                                        <label for="modal-4-<?php echo $student['student_id']; ?>"
                                                             class="btn btn-block">Cancel</label>
                                                     </div>
                                                 </form>
@@ -1417,13 +1412,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         <td><?php echo $student['gender']; ?></td>
                                         <td><?php echo $student['akap_status']; ?></td>
                                         <td>
-                                            <input type="checkbox" id="drawer-right-2" class="drawer-toggle" />
-                                            <label for="drawer-right-2" class="btn btn-secondary">Edit</label>
-                                            <label class="overlay" for="drawer-right-2"></label>
+                                            <input type="checkbox" id="drawer-right-4" class="drawer-toggle" />
+                                            <label for="drawer-right-4" class="btn btn-secondary">Edit</label>
+                                            <label class="overlay" for="drawer-right-4"></label>
                                             <div class="drawer drawer-right">
                                                 <form method="POST" action="../../connection/update_student.php"
                                                     class="drawer-content pt-10 flex flex-col h-full">
-                                                    <label for="drawer-right-2"
+                                                    <label for="drawer-right-4"
                                                         class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
                                                     <div>
                                                         <h2 class="text-xl font-medium">Edit Student</h2>
@@ -1495,7 +1490,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                             <div class="h-full flex flex-row justify-end items-end gap-2">
                                                                 <button type="button" class="btn btn-ghost"
-                                                                    onclick="document.getElementById('drawer-right-2').checked = false;">Cancel</button>
+                                                                    onclick="document.getElementById('drawer-right-4').checked = false;">Cancel</button>
                                                                 <button type="submit" class="btn btn-primary">Update</button>
                                                                 <input type="hidden" name="student_id"
                                                                     value="<?php echo htmlspecialchars($student['student_id']); ?>" />
@@ -1507,15 +1502,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                             </div>
 
                                             <label class="btn btn-error"
-                                                for="modal-1-<?php echo $student['student_id']; ?>">Archive</label>
-                                            <input class="modal-state" id="modal-1-<?php echo $student['student_id']; ?>"
+                                                for="modal-4-<?php echo $student['student_id']; ?>">Archive</label>
+                                            <input class="modal-state" id="modal-4-<?php echo $student['student_id']; ?>"
                                                 type="checkbox" />
                                             <div class="modal">
                                                 <label class="modal-overlay"
-                                                    for="modal-1-<?php echo $student['student_id']; ?>"></label>
+                                                    for="modal-4-<?php echo $student['student_id']; ?>"></label>
                                                 <form method="POST" action="../../connection/archive_student.php"
                                                     class="modal-content flex flex-col gap-5">
-                                                    <label for="modal-1-<?php echo $student['student_id']; ?>"
+                                                    <label for="modal-4-<?php echo $student['student_id']; ?>"
                                                         class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
                                                     <h2 class="text-xl">Archive Student?</h2>
                                                     <span>Are you sure you want to archive this student?</span>
@@ -1529,7 +1524,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                         value="<?php echo $_GET['section_id']; ?>" />
                                                     <div class="flex gap-3">
                                                         <button class="btn btn-error btn-block" type="submit">Archive</button>
-                                                        <label for="modal-1-<?php echo $student['student_id']; ?>"
+                                                        <label for="modal-4-<?php echo $student['student_id']; ?>"
                                                             class="btn btn-block">Cancel</label>
                                                     </div>
                                                 </form>
@@ -1566,13 +1561,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         <td><?php echo $student['gender']; ?></td>
                                         <td><?php echo $student['akap_status']; ?></td>
                                         <td>
-                                            <input type="checkbox" id="drawer-right-2" class="drawer-toggle" />
-                                            <label for="drawer-right-2" class="btn btn-secondary">Edit</label>
-                                            <label class="overlay" for="drawer-right-2"></label>
+                                            <input type="checkbox" id="drawer-right-4" class="drawer-toggle" />
+                                            <label for="drawer-right-4" class="btn btn-secondary">Edit</label>
+                                            <label class="overlay" for="drawer-right-4"></label>
                                             <div class="drawer drawer-right">
                                                 <form method="POST" action="../../connection/update_student.php"
                                                     class="drawer-content pt-10 flex flex-col h-full">
-                                                    <label for="drawer-right-2"
+                                                    <label for="drawer-right-4"
                                                         class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
                                                     <div>
                                                         <h2 class="text-xl font-medium">Edit Student</h2>
@@ -1644,7 +1639,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                             <div class="h-full flex flex-row justify-end items-end gap-2">
                                                                 <button type="button" class="btn btn-ghost"
-                                                                    onclick="document.getElementById('drawer-right-2').checked = false;">Cancel</button>
+                                                                    onclick="document.getElementById('drawer-right-4').checked = false;">Cancel</button>
                                                                 <button type="submit" class="btn btn-primary">Update</button>
                                                                 <input type="hidden" name="student_id"
                                                                     value="<?php echo htmlspecialchars($student['student_id']); ?>" />
@@ -1656,15 +1651,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                             </div>
 
                                             <label class="btn btn-error"
-                                                for="modal-1-<?php echo $student['student_id']; ?>">Archive</label>
+                                                for="modal-4-<?php echo $student['student_id']; ?>">Archive</label>
                                             <input class="modal-state" id="modal-1-<?php echo $student['student_id']; ?>"
                                                 type="checkbox" />
                                             <div class="modal">
                                                 <label class="modal-overlay"
-                                                    for="modal-1-<?php echo $student['student_id']; ?>"></label>
+                                                    for="modal-4-<?php echo $student['student_id']; ?>"></label>
                                                 <form method="POST" action="../../connection/archive_student.php"
                                                     class="modal-content flex flex-col gap-5">
-                                                    <label for="modal-1-<?php echo $student['student_id']; ?>"
+                                                    <label for="modal-4-<?php echo $student['student_id']; ?>"
                                                         class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
                                                     <h2 class="text-xl">Archive Student?</h2>
                                                     <span>Are you sure you want to archive this student?</span>
@@ -1678,7 +1673,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                         value="<?php echo $_GET['section_id']; ?>" />
                                                     <div class="flex gap-3">
                                                         <button class="btn btn-error btn-block" type="submit">Archive</button>
-                                                        <label for="modal-1-<?php echo $student['student_id']; ?>"
+                                                        <label for="modal-4-<?php echo $student['student_id']; ?>"
                                                             class="btn btn-block">Cancel</label>
                                                     </div>
                                                 </form>

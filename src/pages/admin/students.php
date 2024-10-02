@@ -11,6 +11,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $parent_email = $_POST['email'];
     $gender = $_POST['gender'];
     $akap_status = $_POST['akap_status']; // Get the Akap Status from the form
+    unset($_SESSION['section_id']);
+    unset($_SESSION['gradesheet_id']);
 
     // Use the section ID from the session
     $section_id = $_GET['section_id'] ?? null;
@@ -51,7 +53,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             const sections = document.querySelectorAll('#student-table > tbody');
             const emptyStateMessage = document.createElement('tbody'); // Create an empty state message element
             emptyStateMessage.innerHTML = "<tr><td colspan='8'>No students found in this view</td></tr>";
-            emptyStateMessage.style.display = 'none'; // Hide it initially
             emptyStateMessage.style.color = 'red'; // Change color for visibility
             emptyStateMessage.style.margin = '10px 0'; // Add margin for spacing
 
@@ -108,9 +109,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // Add event listener to AKAP dropdown
             akapDropdown.addEventListener('change', filterSections);
-        });
 
+            // Initial call to filterSections to handle the case where no students are visible at page load
+            filterSections();
+        });
     </script>
+
 </head>
 
 <body>
@@ -302,7 +306,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
                         </div>
                     </div>
-                    <a href="#" class="btn btn-outline-primary">Gradesheets</a>
+                    <a href="gradesheet.php?section_id=<?php echo $section_id; ?>"
+                        class="btn btn-outline-primary">Gradesheets</a>
                 </form>
 
                 <div class="flex gap-4 items-center content-center">

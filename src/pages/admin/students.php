@@ -196,7 +196,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </section>
             </aside>
         </div>
-        <main class="main-content flex-1 p-8">
+        <main class="main-content flex-1 p-8 overflow-x-auto">
             <div class="w-fit">
                 <label for="sidebar-mobile-fixed" class="btn-primary btn sm:hidden">Open Sidebar</label>
             </div>
@@ -340,7 +340,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
 
             <div class="flex w-full overflow-x-auto pt-8">
-                <table class="table-hover table" id="student-table">
+                <table class="table-compact table" id="student-table">
                     <thead>
                         <tr>
                             <th>LRN</th>

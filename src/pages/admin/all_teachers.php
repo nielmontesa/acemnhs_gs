@@ -90,7 +90,7 @@
                 </section>
             </aside>
         </div>
-        <main class="main-content flex-1 p-8">
+        <main class="main-content flex-1 p-8 overflow-x-auto">
             <div class="w-fit">
                 <label for="sidebar-mobile-fixed" class="btn-primary btn sm:hidden">Open Sidebar</label>
             </div>

@@ -90,10 +90,8 @@
                 </section>
             </aside>
         </div>
-        <main class="main-content flex-1 p-8">
-            <div class="w-fit">
-                <label for="sidebar-mobile-fixed" class="btn-primary btn sm:hidden">Open Sidebar</label>
-            </div>
+        <main class="main-content flex-1 p-8 w-fit overflow-x-auto">
+            <label for="sidebar-mobile-fixed" class="btn-primary btn sm:hidden">Open Sidebar</label>
 
             <?php
             // Include your database connection
@@ -128,19 +126,25 @@
                                 <div>
                                     <h2 class="text-xl font-medium">Add Activity</h2>
                                     <label for="activity_name">
-                                        <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Activity Name</span>
+                                        <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Activity
+                                            Name</span>
                                         <input class="input-block input" placeholder="Please enter the activity name."
                                             name="activity_name" type="text" required />
                                     </label>
                                     <label for="total_score">
-                                        <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Total Score</span>
+                                        <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Total
+                                            Score</span>
                                         <input class="input-block input" placeholder="Please enter total score."
                                             name="total_score" type="number" required />
                                     </label>
                                     <label for="activity_type">
-                                        <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Activity Type</span>
-                                        <input class="input-block input" placeholder="Please enter activity type."
-                                            name="activity_type" type="text" required />
+                                        <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium for="
+                                            activity_type">Activity Type</span>
+                                        <select class="select" name="activity_type">
+                                            <option value="Written Work">Written Work</option>
+                                            <option value="Performance Task">Performance Task</option>
+                                            <option value="Quarterly Assessment">Quarterly Assessment</option>
+                                        </select>
                                     </label>
                                 </div>
                                 <div class="h-full flex flex-row justify-end items-end gap-2">
@@ -183,129 +187,181 @@
             ?>
 
 
+            <div class="overflow-x-auto pt-8 max-w-3xl lg:max-w-none">
+                <table class="table-compact table w-full" id="student-table">
+                    <thead>
+                        <tr>
+                            <th>LRN</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <?php
+                            include "../../connection/connection.php";
+                            if (isset($_GET['section_id']) && isset($_GET['gradesheet_id'])) {
 
-            <table class="table-hover table" id="student-table">
-                <thead>
-                    <tr>
-                        <th>LRN</th>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <?php
-                        include "../../connection/connection.php";
-                        // Check if section_id and gradesheet_id are passed in the URL
-                        if (isset($_GET['section_id']) && isset($_GET['gradesheet_id'])) {
+                                $section_id = $_GET['section_id'];
+                                $gradesheet_id = $_GET['gradesheet_id'];
 
-                            $section_id = $_GET['section_id'];
-                            $gradesheet_id = $_GET['gradesheet_id'];
+                                $activity_sql = "SELECT * FROM activity WHERE gradesheet_id = $gradesheet_id";
+                                $activity_result = $conn->query($activity_sql);
 
-                            // Query to get activities associated with the gradesheet
-                            $activity_sql = "SELECT * FROM activity WHERE gradesheet_id = $gradesheet_id";
-                            $activity_result = $conn->query($activity_sql);
-
-                            // Generate table headers for each activity
-                            if ($activity_result->num_rows > 0) {
-                                while ($activity = $activity_result->fetch_assoc()) {
-                                    echo "<th>" . htmlspecialchars($activity['activity_name']) . "</th>";
-                                }
-                            }
-                        }
-                        ?>
-                    </tr>
-                </thead>
-                <tbody data-type="all" data-akap="inactive">
-                    <?php
-                    // Query the database for students in this section
-                    if (isset($section_id)) {
-                        $sql = "SELECT * FROM students WHERE section_ID = $section_id AND is_archived = 0";
-                        $result = $conn->query($sql);
-
-                        if ($result->num_rows > 0) {
-                            while ($student = $result->fetch_assoc()) {
-                                echo "<tr>";
-                                echo "<th>" . htmlspecialchars($student['LRN']) . "</th>";
-                                echo "<th>" . htmlspecialchars($student['first_name']) . "</th>";
-                                echo "<td>" . htmlspecialchars($student['last_name']) . "</td>";
-
-                                // Fetch the total score for each activity for this student
-                                if (isset($gradesheet_id)) {
-                                    // Reset the pointer of the activity result to loop through it again
-                                    $activity_result->data_seek(0);
+                                if ($activity_result->num_rows > 0) {
                                     while ($activity = $activity_result->fetch_assoc()) {
-                                        $activity_id = $activity['activity_id'];
-                                        $total_score = $activity['total_score'];
-
-                                        // Fetch the student's score for the current activity
-                                        $sql_score = "SELECT score FROM student_activity_score WHERE student_id = ? AND activity_id = ?";
-                                        $stmt = $conn->prepare($sql_score);
-                                        $stmt->bind_param("ii", $student['student_id'], $activity_id);
-                                        $stmt->execute();
-                                        $score_result = $stmt->get_result();
-                                        $student_score_row = $score_result->fetch_assoc();
-
-                                        // Determine the score to display
-                                        $student_score = $student_score_row ? $student_score_row['score'] : 0;
-
-                                        // Display the score in the desired format
-                                        echo "<td class='score-cell' data-student-id='" . $student['student_id'] . "' data-activity-id='$activity_id' data-max-score='$total_score' onclick='openDrawer(this)'>" . htmlspecialchars($student_score) . " / " . htmlspecialchars($total_score) . "</td>";
+                                        echo "<th class='activity-header' data-activity-id='" . $activity['activity_id'] . "' data-activity-name='" . htmlspecialchars($activity['activity_name']) . "' data-total-score='" . $activity['total_score'] . "' onclick='openActivityDrawer(this)'>" . htmlspecialchars($activity['activity_name']) . "</th>";
                                     }
                                 }
-                                echo "</tr>";
+                            }
+                            ?>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        // Query the database for students in this section
+                        if (isset($section_id)) {
+                            $sql = "SELECT * FROM students WHERE section_ID = $section_id AND is_archived = 0";
+                            $result = $conn->query($sql);
+
+                            if ($result->num_rows > 0) {
+                                while ($student = $result->fetch_assoc()) {
+                                    echo "<tr>";
+                                    echo "<th>" . htmlspecialchars($student['LRN']) . "</th>";
+                                    echo "<th>" . htmlspecialchars($student['first_name']) . "</th>";
+                                    echo "<td>" . htmlspecialchars($student['last_name']) . "</td>";
+
+                                    // Fetch the total score for each activity for this student
+                                    if (isset($gradesheet_id)) {
+                                        // Reset the pointer of the activity result to loop through it again
+                                        $activity_result->data_seek(0);
+                                        while ($activity = $activity_result->fetch_assoc()) {
+                                            $activity_id = $activity['activity_id'];
+                                            $total_score = $activity['total_score'];
+
+                                            // Fetch the student's score for the current activity
+                                            $sql_score = "SELECT score FROM student_activity_score WHERE student_id = ? AND activity_id = ?";
+                                            $stmt = $conn->prepare($sql_score);
+                                            $stmt->bind_param("ii", $student['student_id'], $activity_id);
+                                            $stmt->execute();
+                                            $score_result = $stmt->get_result();
+                                            $student_score_row = $score_result->fetch_assoc();
+
+                                            // Determine the score to display
+                                            $student_score = $student_score_row ? $student_score_row['score'] : 0;
+
+                                            // Display the score in the desired format
+                                            echo "<td class='score-cell' data-student-id='" . $student['student_id'] . "' data-activity-id='$activity_id' data-max-score='$total_score' onclick='openDrawer(this)'>" . htmlspecialchars($student_score) . " / " . htmlspecialchars($total_score) . "</td>";
+                                        }
+                                    }
+                                    echo "</tr>";
+                                }
+                            } else {
+                                echo "<tr><td colspan='7'>No students found in this section.</td></tr>";
                             }
                         } else {
-                            echo "<tr><td colspan='7'>No students found in this section.</td></tr>";
+                            echo "<tr><td colspan='7'>No section selected.</td></tr>";
                         }
-                    } else {
-                        echo "<tr><td colspan='7'>No section selected.</td></tr>";
-                    }
-                    ?>
-                </tbody>
-
-
-                <!-- Drawer Modal -->
-                <input type="checkbox" id="drawer-right-1" class="drawer-toggle" />
-                <label class="overlay" for="drawer-right-1"></label>
-                <div class="drawer drawer-right">
-                    <div class="drawer-content pt-10 h-full">
-                        <label for="drawer-right-1"
-                            class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
-                        <div class="flex flex-col content-between h-full">
-                            <div>
-                                <h2 class="text-xl font-medium">Enter Student Score</h2>
-                                <p id="max_score_display"></p>
+                        ?>
+                    </tbody>
+                    <!-- Drawer Modal -->
+                    <input type="checkbox" id="drawer-right-1" class="drawer-toggle" />
+                    <label class="overlay" for="drawer-right-1"></label>
+                    <div class="drawer drawer-right">
+                        <div class="drawer-content pt-10 h-full">
+                            <label for="drawer-right-1"
+                                class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
+                            <div class="flex flex-col content-between h-full">
                                 <div>
-                                    <form method="POST" action="submit_score.php" class="flex"></form>
-                                    <input id="student-score" class="input py-1.5 my-3" placeholder="Type score here..."
-                                        name="score" type="number" required />
-                                    <input type="hidden" id="activity-id" name="activity_id" />
-                                    <input type="hidden" id="student-id" name="student_id" />
-                                    <input type="hidden" name="redirect_url"
-                                        value="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>" />
-                                    <input type="hidden" id="max-score" />
+                                    <h2 class="text-xl font-medium">Enter Student Score</h2>
+                                    <p id="max_score_display"></p>
+                                    <div>
+                                        <form method="POST" action="../../connection/submit_score.php" class="flex">
+                                            <input id="student-score" class="input py-1.5 my-3"
+                                                placeholder="Type score here..." name="score" type="number" required />
+                                            <input type="hidden" id="activity-id" name="activity_id" />
+                                            <input type="hidden" id="student-id" name="student_id" />
+                                            <input type="hidden" name="redirect_url"
+                                                value="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>" />
+                                            <input type="hidden" id="max-score" />
+                                    </div>
                                 </div>
+                                <!-- Change the action to your PHP file -->
+                                <div class="h-full flex flex-row justify-end items-end gap-2">
+                                    <button type="button" class="btn btn-ghost" onclick="closeDrawer()">Cancel</button>
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </div>
+                                </form>
                             </div>
-
-                            <!-- Change the action to your PHP file -->
-                            <div class="h-full flex flex-row justify-end items-end gap-2">
-                                <button type="button" class="btn btn-ghost" onclick="closeDrawer()">Cancel</button>
-                                <button type="submit" class="btn btn-primary">Submit</button>
-                            </div>
-                            </form>
                         </div>
                     </div>
-                </div>
 
-            </table>
-
+                </table>
+            </div>
 
         </main>
     </div>
+
+    <!-- Drawer Modal for Editing Activity -->
+    <input type="checkbox" id="activity-drawer" class="drawer-toggle" />
+    <label class="overlay" for="activity-drawer"></label>
+    <div class="drawer drawer-right">
+        <div class="drawer-content pt-10 h-full">
+            <label for="activity-drawer" class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
+            <div class="flex flex-col content-between h-full">
+                <div>
+                    <h2 class="text-xl font-medium">Edit Activity</h2>
+                    <form method="POST" action="../../connection/edit_activity.php">
+                        <div>
+                            <label for="activity-name" class="block">Activity Name</label>
+                            <input type="text" id="activity-name" name="activity_name" class="input w-full" required>
+                        </div>
+                        <div>
+                            <label for="total-score" class="block">Total Score</label>
+                            <input type="number" id="total-score" name="total_score" class="input w-full" required>
+                        </div>
+                        <input type="hidden" name="redirect_url"
+                            value="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>" />
+                        <input type="hidden" id="activity-id-edit" name="activity_id">
+
+                        <!-- Buttons for saving changes and archiving -->
+                        <div class="flex flex-row justify-end items-end gap-2 mt-4">
+                            <input type="hidden" id="archive-activity-id" name="activity_id"
+                                value="<?php echo htmlspecialchars($activity_id); ?>" />
+                            <button type="submit" name="action" value="archive" class="btn btn-error">Delete</button>
+                            <button type="submit" name="action" value="save" class="btn btn-primary">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
+
 <script>
-    function openDrawer(cell) {
+    // Function to open the activity drawer
+    function openActivityDrawer(headerElement) {
+        const activityId = headerElement.getAttribute('data-activity-id');
+        const activityName = headerElement.getAttribute('data-activity-name');
+        const totalScore = headerElement.getAttribute('data-total-score');
+
+        // Update to the new ID
+        document.getElementById('activity-id-edit').value = activityId;
+        document.getElementById('activity-name').value = activityName;
+        document.getElementById('total-score').value = totalScore;
+
+        // Set value for archiving
+        document.getElementById('archive-activity-id').value = activityId;
+
+        // Show the activity drawer
+        document.getElementById('activity-drawer').checked = true;
+    }
+
+    // Function to open the score drawer
+    function openScoreDrawer(cell) {
         // Get data attributes from the clicked cell
         const studentId = cell.getAttribute('data-student-id');
         const activityId = cell.getAttribute('data-activity-id');
         const maxScore = cell.getAttribute('data-max-score');
+
+        // Get the current score from the cell's innerText (split by '/')
+        const score = cell.textContent.split(' / ')[0].trim();
 
         // Set the hidden input fields in the drawer
         document.getElementById('student-id').value = studentId;
@@ -313,13 +369,37 @@
         document.getElementById('max-score').value = maxScore;
         document.getElementById('max_score_display').textContent = "Max Score: " + maxScore;
 
-        // Open the drawer
+        // Set the score input with the current score
+        document.getElementById('student-score').value = score;
+
+        // Open the score drawer
         document.getElementById('drawer-right-1').checked = true;
     }
 
+    // Close all drawers
     function closeDrawer() {
-        document.getElementById('drawer-right-1').checked = false;
+        document.getElementById('drawer-right-1').checked = false; // Score drawer
+        document.getElementById('activity-drawer').checked = false; // Activity drawer
     }
+
+    // Set up click listeners for activity headers
+    document.querySelectorAll('.activity-header').forEach(header => {
+        header.addEventListener('click', function (event) {
+            event.stopPropagation(); // Prevent propagation
+            openActivityDrawer(this);
+        });
+    });
+
+    // Set up click listeners for score cells
+    document.querySelectorAll('.score-cell').forEach(cell => {
+        cell.addEventListener('click', function (event) {
+            event.stopPropagation(); // Prevent propagation
+            openScoreDrawer(this);
+        });
+    });
 </script>
+
+
+
 
 </html>

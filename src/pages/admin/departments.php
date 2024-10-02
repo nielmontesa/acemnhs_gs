@@ -112,7 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </section>
             </aside>
         </div>
-        <main class="main-content flex-1 p-8">
+        <main class="main-content flex-1 p-8 overflow-x-auto">
             <div class="w-fit">
                 <label for="sidebar-mobile-fixed" class="btn-primary btn sm:hidden">Open Sidebar</label>
             </div>
@@ -158,34 +158,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
                                 echo "<tr>";
-                                echo "<td>" . $row['department_name'] . "</td>";
+                                echo "<td>" . htmlspecialchars($row['department_name']) . "</td>";
                                 echo "<td>20</td>"; // Replace with actual teacher count
-                                echo "<td><a href='teachers.php'><button class='btn btn-secondary'>View</button></a> 
-                              <label class='btn btn-error' for='modal-1'>Archive</label>
-                              <input class='modal-state' id='modal-1' type='checkbox' />
-                              <div class='modal'>
-                                  <label class='modal-overlay' for='modal-1'></label>
-                                  <div class='modal-content flex flex-col gap-5'>
-                                      <label for='modal-1' class='btn btn-sm btn-circle btn-ghost absolute right-2 top-2'>✕</label>
-                                      <h2 class='text-xl'>Archive department?</h2>
-                                      <span>Are you sure you want to Archive this department?</span>
-                                      <div class='flex gap-3'>
-                                          <button class='btn btn-error btn-block'>Archive</button>
-                                          <label for='modal-1' class='btn btn-block'>Cancel</label>
-                                      </div>
-                                  </div>
-                              </div>
-                              </td>";
+                                echo "<td>
+                        <a href='teachers.php'><button class='btn btn-secondary'>View</button></a>
+                        <label class='btn btn-error' for='modal-" . $row['department_id'] . "'>Archive</label>
+                        <input class='modal-state' id='modal-" . $row['department_id'] . "' type='checkbox' />
+                        <div class='modal'>
+                            <label class='modal-overlay' for='modal-" . $row['department_id'] . "'></label>
+                            <div class='modal-content flex flex-col gap-5'>
+                                <label for='modal-" . $row['department_id'] . "' class='btn btn-sm btn-circle btn-ghost absolute right-2 top-2'>✕</label>
+                                <h2 class='text-xl'>Archive department?</h2>
+                                <span>Are you sure you want to Archive this department?</span>
+                                <form method='POST' action='../../connection/archive_department.php'>
+                                    <input type='hidden' name='department_id' value='" . $row['department_id'] . "' />
+                                    <div class='flex gap-3'>
+                                        <button type='submit' class='btn btn-error btn-block'>Archive</button>
+                                        <label for='modal-" . $row['department_id'] . "' class='btn btn-block'>Cancel</label>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                      </td>";
                                 echo "</tr>";
                             }
                         } else {
-                            echo "0 results";
+                            echo "<tr><td colspan='3'>0 results</td></tr>";
                         }
                         $conn->close();
                         ?>
-
                     </tbody>
                 </table>
+
             </div>
         </main>
     </div>

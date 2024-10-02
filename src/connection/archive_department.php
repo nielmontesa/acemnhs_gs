@@ -11,7 +11,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($conn->query($sql) === TRUE) {
         // Archive all students in the department
-        $update_students_sql = "UPDATE students SET is_archived = 1 WHERE department_id = '$department_id'";
+        $update_students_sql = "UPDATE department SET is_archived = 1 WHERE department_id = '$department_id'";
 
         if ($conn->query($update_students_sql) === TRUE) {
             echo "Department and associated students archived successfully!";

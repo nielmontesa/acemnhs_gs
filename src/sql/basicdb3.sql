@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 01, 2024 at 01:53 PM
+-- Generation Time: Oct 02, 2024 at 12:42 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -24,6 +24,20 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `activity`
+--
+
+CREATE TABLE `activity` (
+  `activity_id` int(11) NOT NULL,
+  `gradesheet_id` int(11) DEFAULT NULL,
+  `activity_name` varchar(255) NOT NULL,
+  `total_score` int(11) NOT NULL,
+  `activity_type` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `admin`
 --
 
@@ -38,7 +52,6 @@ CREATE TABLE `admin` (
 --
 
 INSERT INTO `admin` (`admin_id`, `username`, `password`) VALUES
-(1, 'nmontesa', 'bruh'),
 (2, 'raymart', '$2y$10$kBjc2MNVXwhUcFyHi6jPDexKDcz40jKzV2XRMq48nXcFO.7wGynGa');
 
 -- --------------------------------------------------------
@@ -61,7 +74,8 @@ CREATE TABLE `attendance` (
 CREATE TABLE `department` (
   `department_id` int(11) NOT NULL,
   `department_name` varchar(255) DEFAULT NULL,
-  `teacher_id` int(11) DEFAULT NULL
+  `teacher_id` int(11) DEFAULT NULL,
+  `is_archived` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -72,15 +86,51 @@ CREATE TABLE `department` (
 
 CREATE TABLE `gradesheet` (
   `gradesheet_id` int(11) NOT NULL,
-  `student_id` int(11) DEFAULT NULL,
   `section_id` int(11) DEFAULT NULL,
-  `department_id` int(11) DEFAULT NULL,
-  `written_work_id` int(11) DEFAULT NULL,
-  `performance_task_id` int(11) DEFAULT NULL,
-  `quaterassessment_id` int(11) DEFAULT NULL,
-  `attendance_id` int(11) DEFAULT NULL,
-  `quarter_status` varchar(255) DEFAULT NULL
+  `subject` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `gradesheet`
+--
+
+INSERT INTO `gradesheet` (`gradesheet_id`, `section_id`, `subject`) VALUES
+(1, 26, 'Filipino'),
+(2, 26, 'English'),
+(3, 26, 'Mathematics'),
+(4, 26, 'Science'),
+(5, 26, 'Home Economics'),
+(6, 26, 'Araling Panlipunan'),
+(7, 26, 'Edukasyon sa Pagpapakatao'),
+(8, 26, 'TLE'),
+(9, 26, 'Music'),
+(10, 26, 'Arts'),
+(11, 26, 'PE'),
+(12, 26, 'Health'),
+(13, 27, 'Filipino'),
+(14, 27, 'English'),
+(15, 27, 'Mathematics'),
+(16, 27, 'Science'),
+(17, 27, 'Home Economics'),
+(18, 27, 'Araling Panlipunan'),
+(19, 27, 'Edukasyon sa Pagpapakatao'),
+(20, 27, 'TLE'),
+(21, 27, 'Music'),
+(22, 27, 'Arts'),
+(23, 27, 'PE'),
+(24, 27, 'Health'),
+(25, 28, 'Filipino'),
+(26, 28, 'English'),
+(27, 28, 'Mathematics'),
+(28, 28, 'Science'),
+(29, 28, 'Home Economics'),
+(30, 28, 'Araling Panlipunan'),
+(31, 28, 'Edukasyon sa Pagpapakatao'),
+(32, 28, 'TLE'),
+(33, 28, 'Music'),
+(34, 28, 'Arts'),
+(35, 28, 'PE'),
+(36, 28, 'Health');
 
 -- --------------------------------------------------------
 
@@ -107,58 +157,6 @@ INSERT INTO `parents` (`parent_id`, `username`, `password`, `first_name`, `last_
 (1, 'nmontesa', 'bruh', NULL, NULL, NULL, NULL, NULL),
 (2, 'nielmontesa', 'burat', NULL, NULL, NULL, NULL, NULL),
 (3, 'bruh', 'bruh', NULL, NULL, NULL, NULL, NULL);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `performancetask`
---
-
-CREATE TABLE `performancetask` (
-  `performance_task_id` int(11) NOT NULL,
-  `student_id` int(11) DEFAULT NULL,
-  `department_id` int(11) DEFAULT NULL,
-  `gradesheet_id` int(11) DEFAULT NULL,
-  `score` int(11) DEFAULT NULL,
-  `max_score` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `performancetask_final`
---
-
-CREATE TABLE `performancetask_final` (
-  `pfinal_id` int(11) NOT NULL,
-  `student_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `quarterassessment`
---
-
-CREATE TABLE `quarterassessment` (
-  `quaterassessment_id` int(11) NOT NULL,
-  `student_id` int(11) DEFAULT NULL,
-  `department_id` int(11) DEFAULT NULL,
-  `gradesheet_id` int(11) DEFAULT NULL,
-  `score` int(11) DEFAULT NULL,
-  `max_score` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `quarterassessment_final`
---
-
-CREATE TABLE `quarterassessment_final` (
-  `qafinal_id` int(11) NOT NULL,
-  `student_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -191,22 +189,13 @@ CREATE TABLE `section` (
 --
 
 INSERT INTO `section` (`section_id`, `grade_level`, `section_name`, `is_archived`) VALUES
-(6, 7, 'Rizal', 1),
-(7, 8, 'Bonifacio', 1),
-(8, 9, 'Luna', 1),
-(9, 10, 'Lapu-lapu', 1),
-(10, 10, 'Lapu-lapu', 1),
-(11, 7, 'Gomez', 1),
-(12, 7, 'Rizal', 1),
-(13, 7, 'Gomez', 1),
-(14, 7, 'Rizal', 1),
-(15, 8, 'Rizal', 1),
-(16, 7, 'Gomez', 1),
-(17, 9, 'Lapu-lapu', 1),
-(18, 10, 'Bonifacio', 1),
-(19, 7, 'Rizal', 0),
-(20, 7, 'Bonifacio', 0),
-(21, 8, 'Rizal', 0);
+(22, 7, 'Bonifacio', 1),
+(23, 7, 'Rizal', 1),
+(24, 10, 'Lapu-lapu', 1),
+(25, 8, 'Bonifacio', 1),
+(26, 7, 'Rizal', 1),
+(27, 8, 'Lapu-lapu', 0),
+(28, 10, 'Gomez', 0);
 
 -- --------------------------------------------------------
 
@@ -223,7 +212,7 @@ CREATE TABLE `students` (
   `email` varchar(255) NOT NULL,
   `gender` varchar(255) NOT NULL,
   `is_archived` tinyint(1) NOT NULL,
-  `LRN` int(12) NOT NULL
+  `LRN` varchar(12) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -231,9 +220,26 @@ CREATE TABLE `students` (
 --
 
 INSERT INTO `students` (`student_id`, `first_name`, `last_name`, `section_ID`, `akap_status`, `email`, `gender`, `is_archived`, `LRN`) VALUES
-(12345, 'Niel Ivan', 'Montesa', 13, 'Active', 'nirumontesa@gmail.com', 'Male', 1, 0),
-(1335789490, 'Alexander', 'Berdera', 19, 'Inactive', 'aberdera@gmail.com', 'Female', 0, 0),
-(2021102643, 'Niel Ivan', 'Montesa', 12, 'Active', 'nirumontesa@gmail.com', 'Male', 1, 0);
+(23, 'Niel Ivan', 'Montesa', 24, 'Inactive', 'nmontesa@gmail.com', 'Male', 1, '543543543543'),
+(24, 'Fran', 'Custodio', 24, 'Solved', 'fcustodio@gmail.com', 'Female', 1, '123772136127'),
+(25, 'Alex', 'Berdera', 24, 'Solved', 'aberdera@gmail.com', 'Male', 1, '132123213213'),
+(27, 'Marco', 'Montesa', 24, 'Solved', 'mmontesa@gmail.com', 'Male', 1, '348237523423'),
+(28, 'Noemi', 'Montesa', 24, 'Inactive', 'nmontesa@gmail.com', 'Female', 1, '242342342342'),
+(29, 'Noemi', 'Montesa', 24, 'Inactive', 'nmontesa@gmail.com', 'Female', 1, '242342342342'),
+(30, 'Niel', 'Montesa', 27, 'Active', 'nmontesa@gmail.com', 'Male', 0, '141313221321');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `student_activity_score`
+--
+
+CREATE TABLE `student_activity_score` (
+  `score_id` int(11) NOT NULL,
+  `student_id` int(11) DEFAULT NULL,
+  `activity_id` int(11) DEFAULT NULL,
+  `score` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -259,36 +265,16 @@ INSERT INTO `teachers` (`teacher_id`, `username`, `password`, `first_name`, `las
 (1, 'aberdera', 'bruh', NULL, NULL, NULL, NULL),
 (2, 'nmontesa', 'bruh', NULL, NULL, NULL, NULL);
 
--- --------------------------------------------------------
-
---
--- Table structure for table `writtenwork`
---
-
-CREATE TABLE `writtenwork` (
-  `written_work_id` int(11) NOT NULL,
-  `student_id` int(11) DEFAULT NULL,
-  `department_id` int(11) DEFAULT NULL,
-  `gradesheet_id` int(11) DEFAULT NULL,
-  `score` int(11) DEFAULT NULL,
-  `max_score` int(11) DEFAULT NULL,
-  `final_score` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `writtenwork_final`
---
-
-CREATE TABLE `writtenwork_final` (
-  `wwfinal_id` int(11) NOT NULL,
-  `student_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `activity`
+--
+ALTER TABLE `activity`
+  ADD PRIMARY KEY (`activity_id`),
+  ADD KEY `gradesheet_id` (`gradesheet_id`);
 
 --
 -- Indexes for table `admin`
@@ -315,13 +301,7 @@ ALTER TABLE `department`
 --
 ALTER TABLE `gradesheet`
   ADD PRIMARY KEY (`gradesheet_id`),
-  ADD KEY `student_id` (`student_id`),
-  ADD KEY `section_id` (`section_id`),
-  ADD KEY `department_id` (`department_id`),
-  ADD KEY `written_work_id` (`written_work_id`),
-  ADD KEY `performance_task_id` (`performance_task_id`),
-  ADD KEY `quaterassessment_id` (`quaterassessment_id`),
-  ADD KEY `attendance_id` (`attendance_id`);
+  ADD KEY `section_id` (`section_id`);
 
 --
 -- Indexes for table `parents`
@@ -329,38 +309,6 @@ ALTER TABLE `gradesheet`
 ALTER TABLE `parents`
   ADD PRIMARY KEY (`parent_id`),
   ADD KEY `fk_students` (`student_id`);
-
---
--- Indexes for table `performancetask`
---
-ALTER TABLE `performancetask`
-  ADD PRIMARY KEY (`performance_task_id`),
-  ADD KEY `student_id` (`student_id`),
-  ADD KEY `department_id` (`department_id`),
-  ADD KEY `gradesheet_id` (`gradesheet_id`);
-
---
--- Indexes for table `performancetask_final`
---
-ALTER TABLE `performancetask_final`
-  ADD PRIMARY KEY (`pfinal_id`),
-  ADD KEY `student_id` (`student_id`);
-
---
--- Indexes for table `quarterassessment`
---
-ALTER TABLE `quarterassessment`
-  ADD PRIMARY KEY (`quaterassessment_id`),
-  ADD KEY `student_id` (`student_id`),
-  ADD KEY `department_id` (`department_id`),
-  ADD KEY `gradesheet_id` (`gradesheet_id`);
-
---
--- Indexes for table `quarterassessment_final`
---
-ALTER TABLE `quarterassessment_final`
-  ADD PRIMARY KEY (`qafinal_id`),
-  ADD KEY `student_id` (`student_id`);
 
 --
 -- Indexes for table `report_card`
@@ -384,6 +332,14 @@ ALTER TABLE `students`
   ADD KEY `fk_sections` (`section_ID`);
 
 --
+-- Indexes for table `student_activity_score`
+--
+ALTER TABLE `student_activity_score`
+  ADD PRIMARY KEY (`score_id`),
+  ADD UNIQUE KEY `student_id` (`student_id`,`activity_id`),
+  ADD KEY `activity_id` (`activity_id`);
+
+--
 -- Indexes for table `teachers`
 --
 ALTER TABLE `teachers`
@@ -391,24 +347,14 @@ ALTER TABLE `teachers`
   ADD KEY `fk_departments` (`department_id`);
 
 --
--- Indexes for table `writtenwork`
---
-ALTER TABLE `writtenwork`
-  ADD PRIMARY KEY (`written_work_id`),
-  ADD KEY `student_id` (`student_id`),
-  ADD KEY `department_id` (`department_id`),
-  ADD KEY `gradesheet_id` (`gradesheet_id`);
-
---
--- Indexes for table `writtenwork_final`
---
-ALTER TABLE `writtenwork_final`
-  ADD PRIMARY KEY (`wwfinal_id`),
-  ADD KEY `student_id` (`student_id`);
-
---
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `activity`
+--
+ALTER TABLE `activity`
+  MODIFY `activity_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
 
 --
 -- AUTO_INCREMENT for table `admin`
@@ -426,43 +372,19 @@ ALTER TABLE `attendance`
 -- AUTO_INCREMENT for table `department`
 --
 ALTER TABLE `department`
-  MODIFY `department_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `department_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `gradesheet`
 --
 ALTER TABLE `gradesheet`
-  MODIFY `gradesheet_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `gradesheet_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT for table `parents`
 --
 ALTER TABLE `parents`
   MODIFY `parent_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
---
--- AUTO_INCREMENT for table `performancetask`
---
-ALTER TABLE `performancetask`
-  MODIFY `performance_task_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `performancetask_final`
---
-ALTER TABLE `performancetask_final`
-  MODIFY `pfinal_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `quarterassessment`
---
-ALTER TABLE `quarterassessment`
-  MODIFY `quaterassessment_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `quarterassessment_final`
---
-ALTER TABLE `quarterassessment_final`
-  MODIFY `qafinal_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `report_card`
@@ -474,7 +396,19 @@ ALTER TABLE `report_card`
 -- AUTO_INCREMENT for table `section`
 --
 ALTER TABLE `section`
-  MODIFY `section_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `section_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+
+--
+-- AUTO_INCREMENT for table `students`
+--
+ALTER TABLE `students`
+  MODIFY `student_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+
+--
+-- AUTO_INCREMENT for table `student_activity_score`
+--
+ALTER TABLE `student_activity_score`
+  MODIFY `score_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `teachers`
@@ -483,26 +417,27 @@ ALTER TABLE `teachers`
   MODIFY `teacher_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT for table `writtenwork`
---
-ALTER TABLE `writtenwork`
-  MODIFY `written_work_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `writtenwork_final`
---
-ALTER TABLE `writtenwork_final`
-  MODIFY `wwfinal_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `activity`
+--
+ALTER TABLE `activity`
+  ADD CONSTRAINT `activity_ibfk_1` FOREIGN KEY (`gradesheet_id`) REFERENCES `gradesheet` (`gradesheet_id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `parents`
 --
 ALTER TABLE `parents`
   ADD CONSTRAINT `fk_students` FOREIGN KEY (`student_id`) REFERENCES `students` (`student_id`);
+
+--
+-- Constraints for table `student_activity_score`
+--
+ALTER TABLE `student_activity_score`
+  ADD CONSTRAINT `student_activity_score_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `students` (`student_id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `student_activity_score_ibfk_2` FOREIGN KEY (`activity_id`) REFERENCES `activity` (`activity_id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

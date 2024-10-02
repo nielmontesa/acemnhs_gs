@@ -2563,6 +2563,10 @@ html:has(.drawer-toggle:checked) {
   outline-width: 2px;
 }
 
+.visible {
+  visibility: visible;
+}
+
 .absolute {
   position: absolute;
 }
@@ -2922,6 +2926,19 @@ html:has(.drawer-toggle:checked) {
   font-family: "Inter", sans-serif;
   font-optical-sizing: auto;
   font-style: normal;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  /* display: none; <- Crashes Chrome on hover */
+  -webkit-appearance: none;
+  margin: 0;
+  /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+input[type=number] {
+  -moz-appearance:textfield;
+  /* Firefox */
 }
 
 .hover\:bg-gray-4:hover {

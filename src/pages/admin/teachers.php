@@ -147,7 +147,7 @@
             </form>
             <div class="flex w-full overflow-x-auto pt-8">
                 <div class="flex w-full overflow-x-auto">
-                    <table class="table-hover table">
+                    <table class="table-compact table-zebra table">
                         <thead>
                             <tr>
                                 <th>First Name</th>

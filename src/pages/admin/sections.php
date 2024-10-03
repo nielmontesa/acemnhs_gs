@@ -196,7 +196,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
             <div id="grade-sections">
                 <div class="flex w-full overflow-x-auto pt-8" data-grade="Grade 7">
-                    <table class="table-hover table w-full">
+                    <table class="table-compact table-zebra table w-full">
                         <thead>
                             <tr>
                                 <th>Grade Level</th>

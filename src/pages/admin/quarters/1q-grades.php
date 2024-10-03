@@ -11,6 +11,72 @@
     <link rel="icon" href="../../../assets/acemnhs_logo.png">
 </head>
 
+<style>
+    /* Ensure the table header is sticky */
+    #student-table thead {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        /* Ensure it stays above other content */
+        background-color: white;
+        /* Or any background color you prefer */
+    }
+
+    /* Style the first three columns to be sticky */
+    #student-table th:first-child,
+    #student-table th:nth-child(2),
+    #student-table th:nth-child(3),
+    #student-table td:first-child,
+    #student-table td:nth-child(2),
+    #student-table td:nth-child(3) {
+        min-width: 124px;
+        max-width: 124px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        position: sticky;
+        left: 0;
+        /* Stick to the left */
+        background-color: white;
+        /* Match the header background */
+        z-index: 5;
+        /* Lower than the header but above other table content */
+    }
+
+    /* Add a slight shadow effect to distinguish sticky columns */
+    #student-table th:first-child,
+    #student-table th:nth-child(2),
+    #student-table th:nth-child(3) {
+        box-shadow: 1px 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Ensure the sticky columns do not overlap */
+    #student-table td:first-child,
+    #student-table td:nth-child(2),
+    #student-table td:nth-child(3) {
+        box-shadow: 1px 0 5px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Set a fixed width for the first three columns to avoid collapsing */
+    #student-table th:first-child,
+    #student-table td:first-child {
+        width: 100px;
+        /* Adjust as needed */
+    }
+
+    #student-table th:nth-child(2),
+    #student-table td:nth-child(2) {
+        width: 150px;
+        /* Adjust as needed */
+    }
+
+    #student-table th:nth-child(3),
+    #student-table td:nth-child(3) {
+        width: 150px;
+        /* Adjust as needed */
+    }
+</style>
+
 <body>
     <div class="flex flex-row sm:gap-5">
         <div class="sm:w-full sm:max-w-[18rem]">
@@ -221,7 +287,7 @@
 
 
             <div class="overflow-x-auto max-w-3xl lg:max-w-none" style="padding-top: 1rem">
-                <table class="table-compact table w-full" id="student-table">
+                <table class="table-compact table-zebra table w-full" id="student-table">
                     <thead>
                         <tr>
                             <th>LRN</th>
@@ -234,18 +300,39 @@
                                 $section_id = $_GET['section_id'];
                                 $gradesheet_id = $_GET['gradesheet_id'];
 
-                                $activity_sql = "SELECT * FROM activity WHERE gradesheet_id = $gradesheet_id";
+                                // Updated SQL query with ORDER BY to sort activity types
+                                $activity_sql = "SELECT * FROM activity WHERE gradesheet_id = $gradesheet_id ORDER BY 
+                             CASE activity_type 
+                                 WHEN 'Written Work' THEN 1 
+                                 WHEN 'Performance Task' THEN 2 
+                                 WHEN 'Quarterly Assessment' THEN 3 
+                             END";
                                 $activity_result = $conn->query($activity_sql);
 
                                 if ($activity_result->num_rows > 0) {
                                     while ($activity = $activity_result->fetch_assoc()) {
-                                        echo "<th class='activity-header cursor-pointer underline' data-activity-id='" . $activity['activity_id'] . "'data-activity-type='" . $activity['activity_type'] . "' data-activity-name='" . htmlspecialchars($activity['activity_name']) . "' data-total-score='" . $activity['total_score'] . "' onclick='openActivityDrawer(this)'>" . htmlspecialchars($activity['activity_name']) . "</th>";
+                                        // Determine the activity type abbreviation
+                                        $activity_type_abbr = '';
+                                        switch ($activity['activity_type']) {
+                                            case 'Written Work':
+                                                $activity_type_abbr = '(WW)';
+                                                break;
+                                            case 'Performance Task':
+                                                $activity_type_abbr = '(PT)';
+                                                break;
+                                            case 'Quarterly Assessment':
+                                                $activity_type_abbr = '(QA)';
+                                                break;
+                                        }
+
+                                        echo "<th class='activity-header cursor-pointer underline' data-activity-id='" . $activity['activity_id'] . "' data-activity-type='" . $activity['activity_type'] . "' data-activity-name='" . htmlspecialchars($activity['activity_name']) . "' data-total-score='" . $activity['total_score'] . "' onclick='openActivityDrawer(this)'>" . htmlspecialchars($activity['activity_name']) . " $activity_type_abbr</th>";
                                     }
                                 }
                             }
                             ?>
                         </tr>
                     </thead>
+
                     <tbody>
                         <?php
                         // Query the database for students in this section
@@ -258,11 +345,10 @@
                                     echo "<tr>";
                                     echo "<th>" . htmlspecialchars($student['LRN']) . "</th>";
                                     echo "<th>" . htmlspecialchars($student['first_name']) . "</th>";
-                                    echo "<td>" . htmlspecialchars($student['last_name']) . "</td>";
+                                    echo "<th>" . htmlspecialchars($student['last_name']) . "</td>";
 
                                     // Fetch the total score for each activity for this student
                                     if (isset($gradesheet_id)) {
-                                        // Reset the pointer of the activity result to loop through it again
                                         $activity_result->data_seek(0);
                                         while ($activity = $activity_result->fetch_assoc()) {
                                             $activity_id = $activity['activity_id'];
@@ -276,11 +362,10 @@
                                             $score_result = $stmt->get_result();
                                             $student_score_row = $score_result->fetch_assoc();
 
-                                            // Determine the score to display
                                             $student_score = $student_score_row ? $student_score_row['score'] : 0;
 
-                                            // Display the score in the desired format
-                                            echo "<td class='score-cell underline cursor-pointer' data-student-id='" . $student['student_id'] . "' data-activity-id='$activity_id' data-max-score='$total_score' onclick='openDrawer(this)'>" . htmlspecialchars($student_score) . " / " . htmlspecialchars($total_score) . "</td>";
+                                            // Display the score in a contenteditable <td>
+                                            echo "<td class='editable' contenteditable='true' data-student-id='" . $student['student_id'] . "' data-activity-id='$activity_id' data-max-score='$total_score'>" . htmlspecialchars($student_score) . " / " . htmlspecialchars($total_score) . "</td>";
                                         }
                                     }
                                     echo "</tr>";
@@ -373,11 +458,12 @@
                         <input type="hidden" id="activity-id-edit" name="activity_id">
 
                         <!-- Buttons for saving changes and archiving -->
-                        <div class="flex flex-row justify-end items-end gap-2 mt-4">
+                        <div class="flex flex-row-reverse justify-end items-end gap-2 mt-4">
                             <input type="hidden" id="archive-activity-id" name="activity_id"
                                 value="<?php echo htmlspecialchars($activity_id); ?>" />
-                            <button type="submit" name="action" value="archive" class="btn btn-error">Delete</button>
                             <button type="submit" name="action" value="save" class="btn btn-primary">Save</button>
+                            <button type="submit" name="action" value="archive" class="btn btn-error">Delete</button>
+
                         </div>
                     </form>
                 </div>
@@ -454,6 +540,74 @@
             openScoreDrawer(this);
         });
     });
+
+    document.querySelectorAll('.editable').forEach(cell => {
+        let originalContent = '';
+
+        // Handle cell click
+        cell.addEventListener('focus', function () {
+            // Save the original content in case the user cancels the edit
+            originalContent = this.textContent;
+            // Clear the score so the user can start fresh
+            this.textContent = '';
+        });
+
+        // Handle cell losing focus (blur event)
+        cell.addEventListener('blur', function () {
+            const studentId = this.getAttribute('data-student-id');
+            const activityId = this.getAttribute('data-activity-id');
+            const maxScore = parseFloat(this.getAttribute('data-max-score'));
+
+            let newScore = this.textContent.trim();
+
+            // If the user leaves the field empty, reset to the original value
+            if (newScore === '') {
+                this.textContent = originalContent;
+                return;
+            }
+
+            let numericScore = parseFloat(newScore);
+
+            // Validate if the input is a valid number and within the max score range
+            if (isNaN(numericScore) || numericScore < 0 || numericScore > maxScore) {
+                alert(`Please enter a valid score between 0 and ${maxScore}`);
+                this.textContent = originalContent;
+                return;
+            }
+
+            // Prepare data to send
+            const formData = new FormData();
+            formData.append('student_id', studentId);
+            formData.append('activity_id', activityId);
+            formData.append('score', numericScore);
+
+            // Send the data to the PHP script via AJAX
+            fetch('../update_score.php', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Update the content with the new score and max score
+                        this.textContent = `${numericScore} / ${maxScore}`;
+                    } else {
+                        // Reset the content if there was an error
+                        this.textContent = originalContent;
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        });
+
+        // Handle pressing Enter to submit the score
+        cell.addEventListener('keydown', function (event) {
+            if (event.key === 'Enter') {
+                event.preventDefault(); // Prevent the default newline behavior
+                this.blur(); // Trigger the blur event to save the score
+            }
+        });
+    });
+
 </script>
 
 

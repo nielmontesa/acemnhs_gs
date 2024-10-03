@@ -151,7 +151,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <button class="btn btn-outline-primary">View All Teachers</button></a>
             </div>
             <div class="flex w-full overflow-x-auto pt-8">
-                <table class="table-hover table w-full">
+                <table class="table-compact table-zebra table w-full">
                     <thead>
                         <tr>
                             <th>Department</th>

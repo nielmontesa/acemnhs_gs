@@ -171,7 +171,7 @@ if (isset($_GET['gradesheet_id'])) {
             ?>
             </p>
             <br>
-            <table class="table-hover table w-full">
+            <table class="table-compact table-zebra table w-full">
                 <thead>
                     <tr>
                         <th>Subject</th>

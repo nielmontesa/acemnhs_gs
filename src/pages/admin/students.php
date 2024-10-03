@@ -273,7 +273,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
 
             <div class="flex w-full overflow-x-auto pt-8">
-                <table class="table-compact table" id="student-table">
+                <table class="table-compact table-zebra table" id="student-table">
                     <thead>
                         <tr>
                             <th>LRN</th>

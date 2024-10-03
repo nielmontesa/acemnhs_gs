@@ -2,6 +2,12 @@
 session_start();
 include '../../connection/connection.php';
 
+// If the user is not logged in or not an admin, redirect to the login page
+if (!isset($_SESSION['status']) || $_SESSION['status'] !== 'valid' || $_SESSION['role'] !== 'admin') {
+    header('Location: ../../index.php'); // Redirect to login page
+    exit(); // End script after redirection
+}
+
 $sql = "SELECT department_id, department_name, is_archived FROM department WHERE is_archived = 0";
 $result = mysqli_query($conn, $sql);
 

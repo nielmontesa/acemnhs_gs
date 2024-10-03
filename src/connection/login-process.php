@@ -49,8 +49,6 @@ if (isset($_POST['login'])) {
                     echo '<script>window.location.href = "../pages/admin/departments.php";</script>';
                 } elseif ($role == 'teacher') {
                     echo '<script>window.location.href = "../pages/teacher/sections.php";</script>';
-                } elseif ($role == 'parent') {
-                    echo '<script>window.location.href = "../pages/parent/student_details.php";</script>';
                 }
                 exit();
             } else {

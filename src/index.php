@@ -1,3 +1,17 @@
+<?php
+session_start();
+
+// If the user is already logged in, redirect them based on their role
+if (isset($_SESSION['status']) && $_SESSION['status'] === 'valid') {
+    if ($_SESSION['role'] === 'admin') {
+        header('Location: pages/admin/departments.php');
+    } elseif ($_SESSION['role'] === 'teacher') {
+        header('Location: pages/teacher/sections.php');
+    }
+    exit(); // End script after redirection
+}
+?>
+
 <!DOCTYPE html>
 <html data-theme="light">
 

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 02, 2024 at 12:42 PM
+-- Generation Time: Oct 03, 2024 at 04:27 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -32,8 +32,16 @@ CREATE TABLE `activity` (
   `gradesheet_id` int(11) DEFAULT NULL,
   `activity_name` varchar(255) NOT NULL,
   `total_score` int(11) NOT NULL,
-  `activity_type` varchar(255) DEFAULT NULL
+  `activity_type` varchar(255) DEFAULT NULL,
+  `quarter` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `activity`
+--
+
+INSERT INTO `activity` (`activity_id`, `gradesheet_id`, `activity_name`, `total_score`, `activity_type`, `quarter`) VALUES
+(71, 37, 'Assignment #1', 50, 'Written Work', 0);
 
 -- --------------------------------------------------------
 
@@ -77,6 +85,16 @@ CREATE TABLE `department` (
   `teacher_id` int(11) DEFAULT NULL,
   `is_archived` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `department`
+--
+
+INSERT INTO `department` (`department_id`, `department_name`, `teacher_id`, `is_archived`) VALUES
+(3, 'Bruh', NULL, 1),
+(4, 'Bruh', NULL, 1),
+(5, 'Bruh', NULL, 0),
+(6, 'bru', NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -130,7 +148,19 @@ INSERT INTO `gradesheet` (`gradesheet_id`, `section_id`, `subject`) VALUES
 (33, 28, 'Music'),
 (34, 28, 'Arts'),
 (35, 28, 'PE'),
-(36, 28, 'Health');
+(36, 28, 'Health'),
+(37, 29, 'Filipino'),
+(38, 29, 'English'),
+(39, 29, 'Mathematics'),
+(40, 29, 'Science'),
+(41, 29, 'Home Economics'),
+(42, 29, 'Araling Panlipunan'),
+(43, 29, 'Edukasyon sa Pagpapakatao'),
+(44, 29, 'TLE'),
+(45, 29, 'Music'),
+(46, 29, 'Arts'),
+(47, 29, 'PE'),
+(48, 29, 'Health');
 
 -- --------------------------------------------------------
 
@@ -195,7 +225,8 @@ INSERT INTO `section` (`section_id`, `grade_level`, `section_name`, `is_archived
 (25, 8, 'Bonifacio', 1),
 (26, 7, 'Rizal', 1),
 (27, 8, 'Lapu-lapu', 0),
-(28, 10, 'Gomez', 0);
+(28, 10, 'Gomez', 0),
+(29, 7, 'Luna', 0);
 
 -- --------------------------------------------------------
 
@@ -226,7 +257,15 @@ INSERT INTO `students` (`student_id`, `first_name`, `last_name`, `section_ID`, `
 (27, 'Marco', 'Montesa', 24, 'Solved', 'mmontesa@gmail.com', 'Male', 1, '348237523423'),
 (28, 'Noemi', 'Montesa', 24, 'Inactive', 'nmontesa@gmail.com', 'Female', 1, '242342342342'),
 (29, 'Noemi', 'Montesa', 24, 'Inactive', 'nmontesa@gmail.com', 'Female', 1, '242342342342'),
-(30, 'Niel', 'Montesa', 27, 'Active', 'nmontesa@gmail.com', 'Male', 0, '141313221321');
+(30, 'Niel', 'Montesa', 27, 'Active', 'nmontesa@gmail.com', 'Male', 1, '141313221321'),
+(31, 'Alex Bading', 'Berdera', 27, 'Inactive', 'aberdera@gmail.com', 'Male', 1, '123772136127'),
+(32, 'Fran', 'Custodio', 27, 'Solved', 'fcustodio@gmail.com', 'Female', 1, '2021102643'),
+(33, 'dsadasd', 'asdasdasd', 27, 'Active', 'asdas@gmail.com', 'Male', 1, '123772136127'),
+(34, 'Niel', 'Montesa', 29, 'Inactive', 'nirumontesa@gmail.com', 'Male', 0, '321312321321'),
+(35, 'Rhen', 'Fernandez', 29, 'Inactive', 'rfernandez@gmail.com', 'Male', 0, '432432432432'),
+(36, 'Ash Siebert', 'Joloan', 29, 'Inactive', 'ajoloan@gmail.com', 'Male', 0, '241323123123'),
+(37, 'Jayrald', 'Pelegrino', 29, 'Inactive', 'jpelegrino@gmail.com', 'Male', 0, '413243245435'),
+(38, 'Alex', 'Berdera', 29, 'Active', 'aberdera@gmail.com', 'Female', 0, '312312321321');
 
 -- --------------------------------------------------------
 
@@ -240,6 +279,17 @@ CREATE TABLE `student_activity_score` (
   `activity_id` int(11) DEFAULT NULL,
   `score` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `student_activity_score`
+--
+
+INSERT INTO `student_activity_score` (`score_id`, `student_id`, `activity_id`, `score`) VALUES
+(26, 38, 71, 25),
+(27, 34, 71, 15),
+(28, 35, 71, 35),
+(29, 36, 71, 50),
+(30, 37, 71, 25);
 
 -- --------------------------------------------------------
 
@@ -354,7 +404,7 @@ ALTER TABLE `teachers`
 -- AUTO_INCREMENT for table `activity`
 --
 ALTER TABLE `activity`
-  MODIFY `activity_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
+  MODIFY `activity_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
 
 --
 -- AUTO_INCREMENT for table `admin`
@@ -372,13 +422,13 @@ ALTER TABLE `attendance`
 -- AUTO_INCREMENT for table `department`
 --
 ALTER TABLE `department`
-  MODIFY `department_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `department_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `gradesheet`
 --
 ALTER TABLE `gradesheet`
-  MODIFY `gradesheet_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `gradesheet_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
 
 --
 -- AUTO_INCREMENT for table `parents`
@@ -396,19 +446,19 @@ ALTER TABLE `report_card`
 -- AUTO_INCREMENT for table `section`
 --
 ALTER TABLE `section`
-  MODIFY `section_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `section_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT for table `students`
 --
 ALTER TABLE `students`
-  MODIFY `student_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `student_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- AUTO_INCREMENT for table `student_activity_score`
 --
 ALTER TABLE `student_activity_score`
-  MODIFY `score_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `score_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT for table `teachers`

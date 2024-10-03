@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="color-scheme" content="light only">
     <title>Antonio C. Esguerra MNHS</title>
-    <link rel="stylesheet" href='../../styles/tailwind.css'>
-    <link rel="stylesheet" href='../../styles/style.css'>
-    <link rel="icon" href="../../assets/acemnhs_logo.png">
+    <link rel="stylesheet" href='../../../styles/tailwind.css'>
+    <link rel="stylesheet" href='../../../styles/style.css'>
+    <link rel="icon" href="../../../assets/acemnhs_logo.png">
 </head>
 
 <body>
@@ -19,7 +19,7 @@
             <aside
                 class="sidebar sidebar-fixed-left sidebar-mobile h-full justify-start max-sm:fixed max-sm:-translate-x-full">
                 <section class="sidebar-title items-center p-4 gap-2">
-                    <img src="../../assets/acemnhs_logo.png" class="w-14" alt="">
+                    <img src="../../../assets/acemnhs_logo.png" class="w-14" alt="">
                     <div class="flex flex-col">
                         <span class="text-lg">ACEMN High School</span>
                         <span class="text-xs font-normal text-content2">Grading System</span>
@@ -30,7 +30,7 @@
                         <section class="menu-section px-4">
                             <span class="menu-title">Welcome, Username</span>
                             <ul class="menu-items">
-                                <a href="departments.php">
+                                <a href="../departments.php">
                                     <li class="menu-item ">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-75" fill="none"
                                             viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -42,7 +42,7 @@
                                         <span>Faculty</span>
                                     </li>
                                 </a>
-                                <a href="sections.php">
+                                <a href="../sections.php">
                                     <li class="menu-item menu-active">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-75" fill="none"
                                             viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -52,7 +52,7 @@
                                         <span>Students</span>
                                     </li>
                                 </a>
-                                <a href="reports.php">
+                                <a href="../reports.php">
                                     <li class="menu-item">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-75" fill="none"
                                             viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -83,8 +83,9 @@
                             </div>
                         </label>
                         <div class="dropdown-menu-right-top dropdown-menu ml-2">
-                            <a href="settings.php" tabindex="-1" class="dropdown-item text-sm">Account settings</a>
-                            <a href="../../connection/logout.php" tabindex="-1" class="dropdown-item text-sm">Logout</a>
+                            <a href="../settings.php" tabindex="-1" class="dropdown-item text-sm">Account settings</a>
+                            <a href="../../../connection/logout.php" tabindex="-1"
+                                class="dropdown-item text-sm">Logout</a>
                         </div>
                     </div>
                 </section>
@@ -95,7 +96,7 @@
 
             <?php
             // Include your database connection
-            include '../../connection/connection.php';
+            include '../../../connection/connection.php';
 
             // Check if gradesheet_id is provided
             if (isset($_GET['gradesheet_id'])) {
@@ -110,11 +111,43 @@
 
                 if ($gradesheet_result->num_rows > 0) {
                     $gradesheet = $gradesheet_result->fetch_assoc();
-                    echo "<h1>Gradesheet for " . htmlspecialchars($gradesheet['subject']) . "</h1>";
-
+                    echo "<h1 class='text-xl font-bold'>Gradesheet for " . htmlspecialchars($gradesheet['subject']) . "</h1>";
                     // Add the drawer form for adding activities
                     ?>
-                    <form method="POST" action="">
+
+                    <p>This is a gradesheet for
+
+                        <?php
+                        include '../../../connection/connection.php';
+                        if (isset($_GET['section_id'])) {
+                            $section_id = $_GET['section_id'];
+                            $section_details_query = "SELECT section_name, grade_level, section_id FROM section WHERE section_id = $section_id";
+                            $result = $conn->query($section_details_query);
+
+                            if ($result->num_rows > 0) {
+                                // Fetch the result as an associative array and display section_name
+                                while ($row = $result->fetch_assoc()) {
+                                    echo "Grade ";
+                                    echo $row['grade_level'];
+                                    echo " - ";
+                                    echo $row['section_name']; // Output each section name
+                                }
+                            } else {
+                                echo "No sections found.";
+                            }
+                        }
+                        ?>.
+                    </p>
+                    <?php
+                    if (isset($_GET['section_id'])) {
+                        $section_id = $_GET['section_id'];
+                        $section_details_query = "SELECT section_name, grade_level, section_id FROM section WHERE section_id = $section_id";
+                        $result = $conn->query($section_details_query);
+                    }
+                    ?>
+                    </p>
+
+                    <form method="POST" action="" class="pt-2">
                         <input type="hidden" name="gradesheet_id" value="<?php echo $gradesheet_id; ?>">
                         <input type="checkbox" id="drawer-right" class="drawer-toggle" />
                         <label for="drawer-right" class="btn btn-primary">Add Activity</label>
@@ -187,7 +220,7 @@
             ?>
 
 
-            <div class="overflow-x-auto pt-8 max-w-3xl lg:max-w-none">
+            <div class="overflow-x-auto max-w-3xl lg:max-w-none" style="padding-top: 1rem">
                 <table class="table-compact table w-full" id="student-table">
                     <thead>
                         <tr>
@@ -195,7 +228,7 @@
                             <th>First Name</th>
                             <th>Last Name</th>
                             <?php
-                            include "../../connection/connection.php";
+                            include "../../../connection/connection.php";
                             if (isset($_GET['section_id']) && isset($_GET['gradesheet_id'])) {
 
                                 $section_id = $_GET['section_id'];
@@ -206,7 +239,7 @@
 
                                 if ($activity_result->num_rows > 0) {
                                     while ($activity = $activity_result->fetch_assoc()) {
-                                        echo "<th class='activity-header' data-activity-id='" . $activity['activity_id'] . "' data-activity-name='" . htmlspecialchars($activity['activity_name']) . "' data-total-score='" . $activity['total_score'] . "' onclick='openActivityDrawer(this)'>" . htmlspecialchars($activity['activity_name']) . "</th>";
+                                        echo "<th class='activity-header cursor-pointer underline' data-activity-id='" . $activity['activity_id'] . "'data-activity-type='" . $activity['activity_type'] . "' data-activity-name='" . htmlspecialchars($activity['activity_name']) . "' data-total-score='" . $activity['total_score'] . "' onclick='openActivityDrawer(this)'>" . htmlspecialchars($activity['activity_name']) . "</th>";
                                     }
                                 }
                             }
@@ -247,7 +280,7 @@
                                             $student_score = $student_score_row ? $student_score_row['score'] : 0;
 
                                             // Display the score in the desired format
-                                            echo "<td class='score-cell' data-student-id='" . $student['student_id'] . "' data-activity-id='$activity_id' data-max-score='$total_score' onclick='openDrawer(this)'>" . htmlspecialchars($student_score) . " / " . htmlspecialchars($total_score) . "</td>";
+                                            echo "<td class='score-cell underline cursor-pointer' data-student-id='" . $student['student_id'] . "' data-activity-id='$activity_id' data-max-score='$total_score' onclick='openDrawer(this)'>" . htmlspecialchars($student_score) . " / " . htmlspecialchars($total_score) . "</td>";
                                         }
                                     }
                                     echo "</tr>";
@@ -272,7 +305,7 @@
                                     <h2 class="text-xl font-medium">Enter Student Score</h2>
                                     <p id="max_score_display"></p>
                                     <div>
-                                        <form method="POST" action="../../connection/submit_score.php" class="flex">
+                                        <form method="POST" action="../../../connection/submit_score.php" class="flex">
                                             <input id="student-score" class="input py-1.5 my-3"
                                                 placeholder="Type score here..." name="score" type="number" required />
                                             <input type="hidden" id="activity-id" name="activity_id" />
@@ -280,6 +313,7 @@
                                             <input type="hidden" name="redirect_url"
                                                 value="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>" />
                                             <input type="hidden" id="max-score" />
+
                                     </div>
                                 </div>
                                 <!-- Change the action to your PHP file -->
@@ -307,15 +341,33 @@
             <div class="flex flex-col content-between h-full">
                 <div>
                     <h2 class="text-xl font-medium">Edit Activity</h2>
-                    <form method="POST" action="../../connection/edit_activity.php">
+                    <form method="POST" action="../../../connection/edit_activity.php">
                         <div>
                             <label for="activity-name" class="block">Activity Name</label>
-                            <input type="text" id="activity-name" name="activity_name" class="input w-full" required>
+                            <input type="text" id="activity-name" name="activity_name" class="input w-full" required
+                                value="<?php echo htmlspecialchars($activity_name); ?>">
                         </div>
                         <div>
                             <label for="total-score" class="block">Total Score</label>
-                            <input type="number" id="total-score" name="total_score" class="input w-full" required>
+                            <input type="number" id="total-score" name="total_score" class="input w-full" required
+                                value="<?php echo htmlspecialchars($total_score); ?>">
                         </div>
+
+                        <!-- Dropdown for Activity Type -->
+                        <!-- Dropdown for Activity Type -->
+                        <div>
+                            <label for="activity_type">
+                                <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium for="
+                                    activity_type">Activity Type</span>
+                                <select class="select" name="activity_type" id="activity_type">
+                                    <option value="Written Work">Written Work</option>
+                                    <option value="Performance Task">Performance Task</option>
+                                    <option value="Quarterly Assessment">Quarterly Assessment</option>
+                                </select>
+                            </label>
+                        </div>
+
+
                         <input type="hidden" name="redirect_url"
                             value="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>" />
                         <input type="hidden" id="activity-id-edit" name="activity_id">
@@ -332,6 +384,8 @@
             </div>
         </div>
     </div>
+
+
 </body>
 
 <script>
@@ -340,11 +394,14 @@
         const activityId = headerElement.getAttribute('data-activity-id');
         const activityName = headerElement.getAttribute('data-activity-name');
         const totalScore = headerElement.getAttribute('data-total-score');
+        const activityType = headerElement.getAttribute('data-activity-type');
 
         // Update to the new ID
         document.getElementById('activity-id-edit').value = activityId;
         document.getElementById('activity-name').value = activityName;
         document.getElementById('total-score').value = totalScore;
+        document.getElementById('activity_type').value = activityType;
+
 
         // Set value for archiving
         document.getElementById('archive-activity-id').value = activityId;

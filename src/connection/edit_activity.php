@@ -9,11 +9,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['activity_id'])) {
         // Save changes to activity
         $activity_name = $_POST['activity_name'];
         $total_score = $_POST['total_score'];
+        $activity_type = $_POST['activity_type'];
 
-        // Update the activity in the database
-        $update_sql = "UPDATE activity SET activity_name = ?, total_score = ? WHERE activity_id = ?";
+        // Update the activity in the database, including activity_type
+        $update_sql = "UPDATE activity SET activity_name = ?, total_score = ?, activity_type = ? WHERE activity_id = ?";
         $stmt = $conn->prepare($update_sql);
-        $stmt->bind_param("sdi", $activity_name, $total_score, $activity_id);
+        $stmt->bind_param("sdsi", $activity_name, $total_score, $activity_type, $activity_id);
 
         if ($stmt->execute()) {
             // Redirect after saving

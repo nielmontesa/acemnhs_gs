@@ -46,74 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href='../../styles/tailwind.css'>
     <link rel="stylesheet" href='../../styles/style.css'>
     <link rel="icon" href="../../assets/acemnhs_logo.png">
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const genderRadioButtons = document.querySelectorAll('input[name="gender-filter"]');
-            const akapDropdown = document.getElementById('akap-dropdown');
-            const sections = document.querySelectorAll('#student-table > tbody');
-            const emptyStateMessage = document.createElement('tbody'); // Create an empty state message element
-            emptyStateMessage.innerHTML = "<tr><td colspan='8'>No students found in this view</td></tr>";
-            emptyStateMessage.style.color = 'red'; // Change color for visibility
-            emptyStateMessage.style.margin = '10px 0'; // Add margin for spacing
 
-            // Append the empty state message to the table
-            const tableContainer = document.getElementById('student-table'); // Adjust the selector as needed
-            tableContainer.appendChild(emptyStateMessage);
-
-            // Hide male and female sections initially, only show "all"
-            sections.forEach(section => {
-                const sectionType = section.getAttribute('data-type');
-                if (sectionType !== 'all') {
-                    section.style.display = 'none'; // Hide male and female initially
-                }
-            });
-
-            // Function to filter sections based on selected filters
-            function filterSections() {
-                const selectedGender = document.querySelector('input[name="gender-filter"]:checked').value;
-                const selectedAKAP = akapDropdown.value;
-                let anyVisible = false; // Track if there are any visible sections
-
-                sections.forEach(section => {
-                    const sectionType = section.getAttribute('data-type');
-                    const sectionAKAP = section.getAttribute('data-akap');
-
-                    // Check visibility conditions
-                    const genderMatches = (selectedGender === 'all' && sectionType === 'all') ||
-                        (sectionType === selectedGender);
-                    const akapMatches = (selectedAKAP === 'all' || sectionAKAP === selectedAKAP);
-
-                    // Show or hide the section based on matches
-                    if (genderMatches && akapMatches) {
-                        section.style.display = ''; // Show section
-                        if (section.querySelector('tr')) { // Check if there's at least one <tr> inside the section
-                            anyVisible = true; // Mark that at least one section has students
-                        }
-                    } else {
-                        section.style.display = 'none'; // Hide section
-                    }
-                });
-
-                // Update empty state message visibility
-                if (!anyVisible) {
-                    emptyStateMessage.style.display = ''; // Show empty state message
-                } else {
-                    emptyStateMessage.style.display = 'none'; // Hide empty state message
-                }
-            }
-
-            // Add event listeners to gender radio buttons
-            genderRadioButtons.forEach(radio => {
-                radio.addEventListener('change', filterSections);
-            });
-
-            // Add event listener to AKAP dropdown
-            akapDropdown.addEventListener('change', filterSections);
-
-            // Initial call to filterSections to handle the case where no students are visible at page load
-            filterSections();
-        });
-    </script>
 
 </head>
 
@@ -1701,6 +1634,73 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </main>
     </div>
 </body>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const genderRadioButtons = document.querySelectorAll('input[name="gender-filter"]');
+        const akapDropdown = document.getElementById('akap-dropdown');
+        const sections = document.querySelectorAll('#student-table > tbody');
+        const emptyStateMessage = document.createElement('tbody'); // Create an empty state message element
+        emptyStateMessage.innerHTML = "<tr><td colspan='8'>No students found in this view</td></tr>";
+        emptyStateMessage.style.color = 'red'; // Change color for visibility
+        emptyStateMessage.style.margin = '10px 0'; // Add margin for spacing
 
+        // Append the empty state message to the table
+        const tableContainer = document.getElementById('student-table'); // Adjust the selector as needed
+        tableContainer.appendChild(emptyStateMessage);
+
+        // Hide male and female sections initially, only show "all"
+        sections.forEach(section => {
+            const sectionType = section.getAttribute('data-type');
+            if (sectionType !== 'all') {
+                section.style.display = 'none'; // Hide male and female initially
+            }
+        });
+
+        // Function to filter sections based on selected filters
+        function filterSections() {
+            const selectedGender = document.querySelector('input[name="gender-filter"]:checked').value;
+            const selectedAKAP = akapDropdown.value;
+            let anyVisible = false; // Track if there are any visible sections
+
+            sections.forEach(section => {
+                const sectionType = section.getAttribute('data-type');
+                const sectionAKAP = section.getAttribute('data-akap');
+
+                // Check visibility conditions
+                const genderMatches = (selectedGender === 'all' && sectionType === 'all') ||
+                    (sectionType === selectedGender);
+                const akapMatches = (selectedAKAP === 'all' || sectionAKAP === selectedAKAP);
+
+                // Show or hide the section based on matches
+                if (genderMatches && akapMatches) {
+                    section.style.display = ''; // Show section
+                    if (section.querySelector('tr')) { // Check if there's at least one <tr> inside the section
+                        anyVisible = true; // Mark that at least one section has students
+                    }
+                } else {
+                    section.style.display = 'none'; // Hide section
+                }
+            });
+
+            // Update empty state message visibility
+            if (!anyVisible) {
+                emptyStateMessage.style.display = ''; // Show empty state message
+            } else {
+                emptyStateMessage.style.display = 'none'; // Hide empty state message
+            }
+        }
+
+        // Add event listeners to gender radio buttons
+        genderRadioButtons.forEach(radio => {
+            radio.addEventListener('change', filterSections);
+        });
+
+        // Add event listener to AKAP dropdown
+        akapDropdown.addEventListener('change', filterSections);
+
+        // Initial call to filterSections to handle the case where no students are visible at page load
+        filterSections();
+    });
+</script>
 
 </html>

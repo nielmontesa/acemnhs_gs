@@ -183,7 +183,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 echo "</tr>";
                             }
                         } else {
-                            echo "<tr><td colspan='3'>0 results</td></tr>";
+                            echo "<tr><td colspan='3'>No teachers found in this view.</td></tr>";
                         }
                         $conn->close();
                         ?>

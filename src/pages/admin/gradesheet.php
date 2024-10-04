@@ -171,7 +171,7 @@ if (isset($_GET['gradesheet_id'])) {
             ?>
             </p>
             <br>
-            <table class="table-hover table w-full">
+            <table class="table-compact table-zebra table w-full">
                 <thead>
                     <tr>
                         <th>Subject</th>
@@ -196,7 +196,7 @@ if (isset($_GET['gradesheet_id'])) {
                                     <th><?php echo $row['subject']; ?></th>
                                     <td>
                                         <a
-                                            href="grades.php?gradesheet_id=<?php echo $row['gradesheet_id']; ?>&section_id=<?php echo $section_id; ?>">
+                                            href="quarters/1q-grades.php?gradesheet_id=<?php echo $row['gradesheet_id']; ?>&section_id=<?php echo $section_id; ?>">
                                             <button class="btn btn-secondary">View</button>
                                         </a>
 

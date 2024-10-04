@@ -2,6 +2,12 @@
 session_start();
 include '../../connection/connection.php';
 
+// If the user is not logged in or not an admin, redirect to the login page
+if (!isset($_SESSION['status']) || $_SESSION['status'] !== 'valid' || $_SESSION['role'] !== 'admin') {
+    header('Location: ../../index.php'); // Redirect to login page
+    exit(); // End script after redirection
+}
+
 $sql = "SELECT department_id, department_name, is_archived FROM department WHERE is_archived = 0";
 $result = mysqli_query($conn, $sql);
 
@@ -145,7 +151,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <button class="btn btn-outline-primary">View All Teachers</button></a>
             </div>
             <div class="flex w-full overflow-x-auto pt-8">
-                <table class="table-hover table w-full">
+                <table class="table-compact table-zebra table w-full">
                     <thead>
                         <tr>
                             <th>Department</th>
@@ -183,7 +189,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 echo "</tr>";
                             }
                         } else {
-                            echo "<tr><td colspan='3'>0 results</td></tr>";
+                            echo "<tr><td colspan='3'>No teachers found in this view.</td></tr>";
                         }
                         $conn->close();
                         ?>

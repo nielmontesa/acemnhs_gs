@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 03, 2024 at 04:27 AM
+-- Generation Time: Oct 04, 2024 at 12:26 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -41,7 +41,13 @@ CREATE TABLE `activity` (
 --
 
 INSERT INTO `activity` (`activity_id`, `gradesheet_id`, `activity_name`, `total_score`, `activity_type`, `quarter`) VALUES
-(71, 37, 'Assignment #1', 50, 'Written Work', 0);
+(188, 97, 'Assignment #1', 50, 'Written Work', 1),
+(193, 97, 'Exercise #1', 50, 'Performance Task', 1),
+(194, 97, 'Exam #1', 100, 'Quarterly Assessment', 1),
+(195, 98, 'Assignment #1', 100, 'Written Work', 1),
+(196, 98, 'Exercise #1', 50, 'Performance Task', 1),
+(197, 98, 'Exam #1', 100, 'Quarterly Assessment', 1),
+(198, 97, 'Assignment #2', 100, 'Written Work', 1);
 
 -- --------------------------------------------------------
 
@@ -83,7 +89,7 @@ CREATE TABLE `department` (
   `department_id` int(11) NOT NULL,
   `department_name` varchar(255) DEFAULT NULL,
   `teacher_id` int(11) DEFAULT NULL,
-  `is_archived` tinyint(1) default 0 NOT NULL
+  `is_archived` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -99,68 +105,68 @@ INSERT INTO `department` (`department_id`, `department_name`, `teacher_id`, `is_
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `final_grades`
+--
+
+CREATE TABLE `final_grades` (
+  `final_grade_id` int(11) NOT NULL,
+  `student_id` int(11) DEFAULT NULL,
+  `gradesheet_id` int(11) DEFAULT NULL,
+  `quarter` int(11) DEFAULT NULL,
+  `final_grade` decimal(5,2) DEFAULT NULL,
+  `transmuted_grade` int(3) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `final_grades`
+--
+
+INSERT INTO `final_grades` (`final_grade_id`, `student_id`, `gradesheet_id`, `quarter`, `final_grade`, `transmuted_grade`) VALUES
+(33, 50, 97, 1, 70.00, 81),
+(34, 50, 98, 1, 82.60, 89);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `gradesheet`
 --
 
 CREATE TABLE `gradesheet` (
   `gradesheet_id` int(11) NOT NULL,
   `section_id` int(11) DEFAULT NULL,
-  `subject` varchar(255) NOT NULL
+  `subject` varchar(255) NOT NULL,
+  `is_finalized` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `gradesheet`
 --
 
-INSERT INTO `gradesheet` (`gradesheet_id`, `section_id`, `subject`) VALUES
-(1, 26, 'Filipino'),
-(2, 26, 'English'),
-(3, 26, 'Mathematics'),
-(4, 26, 'Science'),
-(5, 26, 'Home Economics'),
-(6, 26, 'Araling Panlipunan'),
-(7, 26, 'Edukasyon sa Pagpapakatao'),
-(8, 26, 'TLE'),
-(9, 26, 'Music'),
-(10, 26, 'Arts'),
-(11, 26, 'PE'),
-(12, 26, 'Health'),
-(13, 27, 'Filipino'),
-(14, 27, 'English'),
-(15, 27, 'Mathematics'),
-(16, 27, 'Science'),
-(17, 27, 'Home Economics'),
-(18, 27, 'Araling Panlipunan'),
-(19, 27, 'Edukasyon sa Pagpapakatao'),
-(20, 27, 'TLE'),
-(21, 27, 'Music'),
-(22, 27, 'Arts'),
-(23, 27, 'PE'),
-(24, 27, 'Health'),
-(25, 28, 'Filipino'),
-(26, 28, 'English'),
-(27, 28, 'Mathematics'),
-(28, 28, 'Science'),
-(29, 28, 'Home Economics'),
-(30, 28, 'Araling Panlipunan'),
-(31, 28, 'Edukasyon sa Pagpapakatao'),
-(32, 28, 'TLE'),
-(33, 28, 'Music'),
-(34, 28, 'Arts'),
-(35, 28, 'PE'),
-(36, 28, 'Health'),
-(37, 29, 'Filipino'),
-(38, 29, 'English'),
-(39, 29, 'Mathematics'),
-(40, 29, 'Science'),
-(41, 29, 'Home Economics'),
-(42, 29, 'Araling Panlipunan'),
-(43, 29, 'Edukasyon sa Pagpapakatao'),
-(44, 29, 'TLE'),
-(45, 29, 'Music'),
-(46, 29, 'Arts'),
-(47, 29, 'PE'),
-(48, 29, 'Health');
+INSERT INTO `gradesheet` (`gradesheet_id`, `section_id`, `subject`, `is_finalized`) VALUES
+(97, 34, 'Filipino', 0),
+(98, 34, 'English', 0),
+(99, 34, 'Mathematics', 0),
+(100, 34, 'Science', 0),
+(101, 34, 'Home Economics', 0),
+(102, 34, 'Araling Panlipunan', 0),
+(103, 34, 'Edukasyon sa Pagpapakatao', 0),
+(104, 34, 'TLE', 0),
+(105, 34, 'Music', 0),
+(106, 34, 'Arts', 0),
+(107, 34, 'PE', 0),
+(108, 34, 'Health', 0),
+(109, 35, 'Filipino', 0),
+(110, 35, 'English', 0),
+(111, 35, 'Mathematics', 0),
+(112, 35, 'Science', 0),
+(113, 35, 'Home Economics', 0),
+(114, 35, 'Araling Panlipunan', 0),
+(115, 35, 'Edukasyon sa Pagpapakatao', 0),
+(116, 35, 'TLE', 0),
+(117, 35, 'Music', 0),
+(118, 35, 'Arts', 0),
+(119, 35, 'PE', 0),
+(120, 35, 'Health', 0);
 
 -- --------------------------------------------------------
 
@@ -195,10 +201,11 @@ INSERT INTO `parents` (`parent_id`, `username`, `password`, `first_name`, `last_
 --
 
 CREATE TABLE `report_card` (
-  `report_id` int(11) NOT NULL,
+  `report_card_id` int(11) NOT NULL,
   `student_id` int(11) DEFAULT NULL,
   `gradesheet_id` int(11) DEFAULT NULL,
-  `final_grades` decimal(3,2) DEFAULT NULL
+  `quarter` int(11) DEFAULT NULL,
+  `final_grade` decimal(5,2) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -224,9 +231,15 @@ INSERT INTO `section` (`section_id`, `grade_level`, `section_name`, `is_archived
 (24, 10, 'Lapu-lapu', 1),
 (25, 8, 'Bonifacio', 1),
 (26, 7, 'Rizal', 1),
-(27, 8, 'Lapu-lapu', 0),
-(28, 10, 'Gomez', 0),
-(29, 7, 'Luna', 0);
+(27, 8, 'Lapu-lapu', 1),
+(28, 10, 'Gomez', 1),
+(29, 7, 'Luna', 1),
+(30, 7, 'Rizal', 1),
+(31, 7, 'Bonifacio', 1),
+(32, 7, 'Test', 1),
+(33, 7, 'Gomez', 1),
+(34, 7, 'Lapu-lapu', 0),
+(35, 7, 'Gomez', 0);
 
 -- --------------------------------------------------------
 
@@ -242,7 +255,7 @@ CREATE TABLE `students` (
   `akap_status` varchar(255) DEFAULT NULL,
   `email` varchar(255) NOT NULL,
   `gender` varchar(255) NOT NULL,
-  `is_archived` tinyint(1) default 0 NOT NULL,
+  `is_archived` tinyint(1) NOT NULL,
   `LRN` varchar(12) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -251,21 +264,23 @@ CREATE TABLE `students` (
 --
 
 INSERT INTO `students` (`student_id`, `first_name`, `last_name`, `section_ID`, `akap_status`, `email`, `gender`, `is_archived`, `LRN`) VALUES
-(23, 'Niel Ivan', 'Montesa', 24, 'Inactive', 'nmontesa@gmail.com', 'Male', 1, '543543543543'),
-(24, 'Fran', 'Custodio', 24, 'Solved', 'fcustodio@gmail.com', 'Female', 1, '123772136127'),
-(25, 'Alex', 'Berdera', 24, 'Solved', 'aberdera@gmail.com', 'Male', 1, '132123213213'),
-(27, 'Marco', 'Montesa', 24, 'Solved', 'mmontesa@gmail.com', 'Male', 1, '348237523423'),
-(28, 'Noemi', 'Montesa', 24, 'Inactive', 'nmontesa@gmail.com', 'Female', 1, '242342342342'),
-(29, 'Noemi', 'Montesa', 24, 'Inactive', 'nmontesa@gmail.com', 'Female', 1, '242342342342'),
-(30, 'Niel', 'Montesa', 27, 'Active', 'nmontesa@gmail.com', 'Male', 1, '141313221321'),
-(31, 'Alex Bading', 'Berdera', 27, 'Inactive', 'aberdera@gmail.com', 'Male', 1, '123772136127'),
-(32, 'Fran', 'Custodio', 27, 'Solved', 'fcustodio@gmail.com', 'Female', 1, '2021102643'),
-(33, 'dsadasd', 'asdasdasd', 27, 'Active', 'asdas@gmail.com', 'Male', 1, '123772136127'),
-(34, 'Niel', 'Montesa', 29, 'Inactive', 'nirumontesa@gmail.com', 'Male', 0, '321312321321'),
-(35, 'Rhen', 'Fernandez', 29, 'Inactive', 'rfernandez@gmail.com', 'Male', 0, '432432432432'),
-(36, 'Ash Siebert', 'Joloan', 29, 'Inactive', 'ajoloan@gmail.com', 'Male', 0, '241323123123'),
-(37, 'Jayrald', 'Pelegrino', 29, 'Inactive', 'jpelegrino@gmail.com', 'Male', 0, '413243245435'),
-(38, 'Alex', 'Berdera', 29, 'Active', 'aberdera@gmail.com', 'Female', 0, '312312321321');
+(34, 'Niel Ivan', 'Montesa', 29, 'Solved', 'nirumontesa@gmail.com', 'Male', 1, '321312321321'),
+(35, 'Rhen', 'Fernandez', 29, 'Inactive', 'rfernandez@gmail.com', 'Male', 1, '432432432432'),
+(36, 'Ash Siebert', 'Joloan', 29, 'Inactive', 'ajoloan@gmail.com', 'Male', 1, '241323123123'),
+(37, 'Jayrald', 'Pelegrino', 29, 'Inactive', 'jpelegrino@gmail.com', 'Female', 1, '413243245435'),
+(38, 'Alex', 'Berdera', 29, 'Active', 'aberdera@gmail.com', 'Male', 1, '312312321321'),
+(39, 'David', 'Acosta', 29, 'Inactive', 'dacosta@gmail.com', 'Male', 1, '312321321312'),
+(40, 'Alex', 'Berdera', 29, 'Active', 'aberdera@gmail.com', 'Female', 1, '218273129308'),
+(41, 'Alex', 'Berdera', 29, 'Inactive', 'aberdera@gmail.com', 'Male', 1, '218273129308'),
+(42, 'Alex', 'Berdera', 29, 'Inactive', 'aberdera@gmail.com', 'Male', 1, '218273129308'),
+(43, 'Alex', 'Berdera', 29, 'Inactive', 'aberdera@gmail.com', 'Male', 1, '218273129308'),
+(44, 'Alex', 'Berdera', 29, 'Inactive', 'aberdera@gmail.com', 'Male', 1, '218273129308'),
+(45, 'David', 'Acosta', 33, 'Inactive', 'dacosta@gmail.com', 'Male', 1, '123772136127'),
+(46, 'David', 'Acosta', 33, 'Inactive', 'dacosta@gmail.com', 'Male', 1, '123772136127'),
+(47, 'Niel', 'Montesa', 34, 'Active', 'nirumontesa@gmail.com', 'Male', 1, '123772136127'),
+(48, 'Niel', 'Montesa', 34, 'Active', 'nirumontesa@gmail.com', 'Male', 1, '123772136127'),
+(49, 'Niel', 'Montesa', 34, 'Active', 'nirumontesa@gmail.com', 'Male', 1, '123772136127'),
+(50, 'David', 'Acosta', 34, 'Inactive', 'dacosta@gmail.com', 'Male', 0, '343254984742');
 
 -- --------------------------------------------------------
 
@@ -285,11 +300,13 @@ CREATE TABLE `student_activity_score` (
 --
 
 INSERT INTO `student_activity_score` (`score_id`, `student_id`, `activity_id`, `score`) VALUES
-(26, 38, 71, 25),
-(27, 34, 71, 15),
-(28, 35, 71, 35),
-(29, 36, 71, 50),
-(30, 37, 71, 25);
+(69, 50, 188, 37),
+(71, 50, 193, 32),
+(72, 50, 194, 78),
+(73, 50, 195, 90),
+(74, 50, 196, 40),
+(75, 50, 197, 78),
+(76, 50, 198, 75);
 
 -- --------------------------------------------------------
 
@@ -347,6 +364,14 @@ ALTER TABLE `department`
   ADD KEY `fk_teacher` (`teacher_id`) USING BTREE;
 
 --
+-- Indexes for table `final_grades`
+--
+ALTER TABLE `final_grades`
+  ADD PRIMARY KEY (`final_grade_id`),
+  ADD KEY `student_id` (`student_id`),
+  ADD KEY `gradesheet_id` (`gradesheet_id`);
+
+--
 -- Indexes for table `gradesheet`
 --
 ALTER TABLE `gradesheet`
@@ -364,7 +389,7 @@ ALTER TABLE `parents`
 -- Indexes for table `report_card`
 --
 ALTER TABLE `report_card`
-  ADD PRIMARY KEY (`report_id`),
+  ADD PRIMARY KEY (`report_card_id`),
   ADD KEY `student_id` (`student_id`),
   ADD KEY `gradesheet_id` (`gradesheet_id`);
 
@@ -404,7 +429,7 @@ ALTER TABLE `teachers`
 -- AUTO_INCREMENT for table `activity`
 --
 ALTER TABLE `activity`
-  MODIFY `activity_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
+  MODIFY `activity_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=227;
 
 --
 -- AUTO_INCREMENT for table `admin`
@@ -425,10 +450,16 @@ ALTER TABLE `department`
   MODIFY `department_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
+-- AUTO_INCREMENT for table `final_grades`
+--
+ALTER TABLE `final_grades`
+  MODIFY `final_grade_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+
+--
 -- AUTO_INCREMENT for table `gradesheet`
 --
 ALTER TABLE `gradesheet`
-  MODIFY `gradesheet_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
+  MODIFY `gradesheet_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=121;
 
 --
 -- AUTO_INCREMENT for table `parents`
@@ -440,25 +471,25 @@ ALTER TABLE `parents`
 -- AUTO_INCREMENT for table `report_card`
 --
 ALTER TABLE `report_card`
-  MODIFY `report_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `report_card_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `section`
 --
 ALTER TABLE `section`
-  MODIFY `section_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `section_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT for table `students`
 --
 ALTER TABLE `students`
-  MODIFY `student_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `student_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 
 --
 -- AUTO_INCREMENT for table `student_activity_score`
 --
 ALTER TABLE `student_activity_score`
-  MODIFY `score_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `score_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
 
 --
 -- AUTO_INCREMENT for table `teachers`
@@ -477,10 +508,24 @@ ALTER TABLE `activity`
   ADD CONSTRAINT `activity_ibfk_1` FOREIGN KEY (`gradesheet_id`) REFERENCES `gradesheet` (`gradesheet_id`) ON DELETE CASCADE;
 
 --
+-- Constraints for table `final_grades`
+--
+ALTER TABLE `final_grades`
+  ADD CONSTRAINT `final_grades_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `students` (`student_id`),
+  ADD CONSTRAINT `final_grades_ibfk_2` FOREIGN KEY (`gradesheet_id`) REFERENCES `gradesheet` (`gradesheet_id`);
+
+--
 -- Constraints for table `parents`
 --
 ALTER TABLE `parents`
   ADD CONSTRAINT `fk_students` FOREIGN KEY (`student_id`) REFERENCES `students` (`student_id`);
+
+--
+-- Constraints for table `report_card`
+--
+ALTER TABLE `report_card`
+  ADD CONSTRAINT `report_card_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `students` (`student_id`),
+  ADD CONSTRAINT `report_card_ibfk_2` FOREIGN KEY (`gradesheet_id`) REFERENCES `gradesheet` (`gradesheet_id`);
 
 --
 -- Constraints for table `student_activity_score`

@@ -1,5 +1,5 @@
 <?php
-include '../../connection/connection.php'; // Include your database connection
+include 'connection.php'; // Include your database connection
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['score'])) {
     $student_id = $_POST['student_id'];

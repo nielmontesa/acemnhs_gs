@@ -89,7 +89,7 @@ CREATE TABLE `department` (
   `department_id` int(11) NOT NULL,
   `department_name` varchar(255) DEFAULT NULL,
   `teacher_id` int(11) DEFAULT NULL,
-  `is_archived` tinyint(1) NOT NULL
+  `is_archived` tinyint(1) default 0 NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -255,7 +255,7 @@ CREATE TABLE `students` (
   `akap_status` varchar(255) DEFAULT NULL,
   `email` varchar(255) NOT NULL,
   `gender` varchar(255) NOT NULL,
-  `is_archived` tinyint(1) NOT NULL,
+  `is_archived` tinyint(1) default 0 NOT NULL,
   `LRN` varchar(12) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 

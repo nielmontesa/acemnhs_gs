@@ -271,8 +271,50 @@
                                     </div>
                                 </div>
                             </form>
-                            <a href="#" class="btn btn-outline-primary">Finalize</a>
-                            <a href="#" class="btn btn-outline-primary">Totals</a>
+                            <a href="#" class="btn btn-outline-primary">Check Totals</a>
+                            <div>
+                                <?php
+                                include "../../../connection/connection.php"; // Include your database connection
+                        
+                                // Initialize the is_finalized variable
+                                $is_finalized = 0; // Default value
+                        
+                                // Assuming you have the gradesheet_id from the context (e.g., a GET parameter)
+                                if (isset($_GET['gradesheet_id'])) {
+                                    $gradesheet_id = (int) $_GET['gradesheet_id']; // Convert to integer for safety
+                        
+                                    // Prepare a statement to fetch the is_finalized value
+                                    $sql = "SELECT is_finalized FROM gradesheet WHERE gradesheet_id = ?";
+                                    $stmt = $conn->prepare($sql);
+
+                                    if ($stmt) {
+                                        $stmt->bind_param("i", $gradesheet_id);
+                                        $stmt->execute();
+                                        $result = $stmt->get_result();
+
+                                        // Fetch the result
+                                        if ($result->num_rows > 0) {
+                                            $row = $result->fetch_assoc();
+                                            $is_finalized = (int) $row['is_finalized']; // Ensure it's treated as an integer
+                                        }
+                                        $stmt->close(); // Close the statement
+                                    } else {
+                                        echo "Error preparing statement: " . $conn->error; // Handle errors in statement preparation
+                                    }
+                                }
+
+                                // Close the connection
+                        
+
+                                ?>
+                                <div>
+                                    <label class="flex cursor-pointer gap-2 items-center justify-center">
+                                        <input type="checkbox" class="checkbox" id="finalized-checkbox" <?php echo $is_finalized ? 'checked' : ''; ?> />
+                                        <span>Gradesheet Finalized?</span>
+                                    </label>
+                                </div>
+                            </div>
+
                         </div>
                         <div class="flex items-center content-center gap-2">
                             <span>Filter Quarter:</span>
@@ -295,9 +337,11 @@
                             $gradesheet_id = $_POST['gradesheet_id']; // Get the gradesheet_id from POST data
             
                             // Insert the new activity into the activities table
-                            $add_activity_query = "INSERT INTO activity (activity_name, total_score, activity_type, gradesheet_id) VALUES (?, ?, ?, ?)";
+                            $add_activity_query = "INSERT INTO activity (activity_name, total_score, activity_type, gradesheet_id, quarter) VALUES (?, ?, ?, ?, ?)";
                             $add_stmt = $conn->prepare($add_activity_query);
-                            $add_stmt->bind_param("sisi", $activity_name, $total_score, $activity_type, $gradesheet_id);
+                            $quarter = 1; // The value you want to insert for the quarter column
+                            $add_stmt->bind_param("sisii", $activity_name, $total_score, $activity_type, $gradesheet_id, $quarter);
+
 
                             if ($add_stmt->execute()) {
 
@@ -331,7 +375,7 @@
                                 $gradesheet_id = $_GET['gradesheet_id'];
 
                                 // Updated SQL query with ORDER BY to sort activity types
-                                $activity_sql = "SELECT * FROM activity WHERE gradesheet_id = $gradesheet_id ORDER BY 
+                                $activity_sql = "SELECT * FROM activity WHERE gradesheet_id = $gradesheet_id AND quarter = 1 ORDER BY 
                              CASE activity_type 
                                  WHEN 'Written Work' THEN 1 
                                  WHEN 'Performance Task' THEN 2 
@@ -498,7 +542,6 @@
                         </div>
 
                         <!-- Dropdown for Activity Type -->
-                        <!-- Dropdown for Activity Type -->
                         <div>
                             <label for="activity_type">
                                 <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium for="
@@ -532,7 +575,7 @@
 
 
 </body>
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     // Function to open the activity drawer
     function openActivityDrawer(headerElement) {
@@ -685,10 +728,27 @@
         });
     });
 
+    $(document).ready(function () {
+        $('#finalized-checkbox').change(function () {
+            var isChecked = $(this).is(':checked') ? 1 : 0; // Set value based on checkbox state
+            var gradesheet_id = <?php echo isset($_GET['gradesheet_id']) ? json_encode($_GET['gradesheet_id']) : '0'; ?>; // Get the gradesheet ID
 
-
-
-
+            $.ajax({
+                url: '../../../connection/update_gradesheet.php', // Your PHP file to handle the update
+                type: 'POST',
+                data: {
+                    gradesheet_id: gradesheet_id,
+                    is_finalized: isChecked
+                },
+                success: function (response) {
+                    console.log(response); // Optional: Log the response
+                },
+                error: function (xhr, status, error) {
+                    console.error(error); // Optional: Log any errors
+                }
+            });
+        });
+    });
 </script>
 
 

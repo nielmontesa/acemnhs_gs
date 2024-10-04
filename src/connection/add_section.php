@@ -1,7 +1,7 @@
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Database connection
-    include '../connection/connection.php';
+    include 'connection.php';
 
     // Check connection
     if ($conn->connect_error) {

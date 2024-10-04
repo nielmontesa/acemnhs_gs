@@ -419,6 +419,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                 </select>
                                                             </label>
 
+                                                            <?php
+                                                            $student_id = $student['student_id']; // Assume this is dynamically set based on the current student
+                                                            ?>
+                                                            <a href="report_card.php?student_id=<?php echo $student_id; ?>"
+                                                                class="btn btn-outline-primary">View Report Card</a>
+
+
+
                                                             <div class="h-full flex flex-row justify-end items-end gap-2">
                                                                 <button type="button" class="btn btn-ghost"
                                                                     onclick="document.getElementById('<?php echo $drawer_id; ?>').checked = false;">Cancel</button>
@@ -464,9 +472,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         </td>
                                     </tr>
                                 <?php endwhile; ?>
+                            <?php else: ?>
+                                <tr>
+                                    <td colspan="8" class="text-center">No students found in this view.</td>
+                                </tr>
                             <?php endif;
                         } else {
-                            echo "<p>No section selected.</p>";
+                            echo "<tr><td colspan='7'>No students found in this view.</td></tr>";
                         }
                         ?>
                     </tbody>

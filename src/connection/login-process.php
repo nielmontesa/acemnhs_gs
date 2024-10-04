@@ -1,6 +1,6 @@
 <?php
 session_start();
-include '../connection/connection.php';
+include 'connection.php';
 
 // Handle login form submission
 if (isset($_POST['login'])) {

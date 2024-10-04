@@ -1,7 +1,7 @@
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Database connection
-    include '../connection/connection.php';
+    include 'connection.php';
 
     // Retrieve student_id and section_id from the form
     $student_id = $conn->real_escape_string($_POST['student_id']);

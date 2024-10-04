@@ -1238,6 +1238,38 @@ html {
   outline-color: rgb(var(--error));
 }
 
+.btn-warning {
+  --tw-bg-opacity: 1;
+  background-color: rgb(var(--warning)/var(--tw-bg-opacity));
+}
+
+.btn-warning:focus-visible {
+  outline-color: rgb(var(--warning));
+}
+
+.btn-outline {
+  --tw-border-opacity: 1;
+  --tw-text-opacity: 1;
+  background-color: transparent;
+  border-color: rgb(var(--gray-6)/var(--tw-border-opacity));
+  border-width: 2px;
+  color: rgb(var(--whiteInverted)/var(--tw-text-opacity));
+  transition-duration: .15s;
+  transition-property: transform,color,background-color,border-color,text-decoration-color,fill,stroke;
+  transition-timing-function: cubic-bezier(.4,0,.2,1);
+}
+
+.btn-outline:hover {
+  --tw-border-opacity: 1;
+  --tw-bg-opacity: 1;
+  background-color: rgb(var(--gray-4)/var(--tw-bg-opacity));
+  border-color: rgb(var(--gray-4)/var(--tw-border-opacity));
+}
+
+.btn-outline:focus-visible {
+  outline-color: rgb(var(--gray-7));
+}
+
 .btn-outline-primary {
   --tw-border-opacity: 1;
   --tw-text-opacity: 1;
@@ -1259,6 +1291,29 @@ html {
 
 .btn-outline-primary:focus-visible {
   outline-color: rgb(var(--primary));
+}
+
+.btn-outline-secondary {
+  --tw-border-opacity: 1;
+  --tw-text-opacity: 1;
+  background-color: transparent;
+  border-color: rgb(var(--secondary)/var(--tw-border-opacity));
+  border-width: 2px;
+  color: rgb(var(--secondary)/var(--tw-text-opacity));
+  transition-duration: .15s;
+  transition-property: transform,color,background-color,border-color,text-decoration-color,fill,stroke;
+  transition-timing-function: cubic-bezier(.4,0,.2,1);
+}
+
+.btn-outline-secondary:hover {
+  --tw-bg-opacity: 1;
+  --tw-text-opacity: 1;
+  background-color: rgb(var(--secondary)/var(--tw-bg-opacity));
+  color: rgb(255 255 255/var(--tw-text-opacity));
+}
+
+.btn-outline-secondary:focus-visible {
+  outline-color: rgb(var(--secondary));
 }
 
 .btn-sm {
@@ -1775,6 +1830,11 @@ html {
   max-width: -moz-fit-content;
   max-width: fit-content;
   width: 100%;
+}
+
+.btn-group-scrollable {
+  flex-wrap: nowrap;
+  overflow: auto;
 }
 
 .btn-group>:first-child {
@@ -3214,6 +3274,14 @@ html:has(.drawer-toggle:checked) {
   text-decoration-line: underline;
 }
 
+.opacity-100 {
+  opacity: 1;
+}
+
+.opacity-50 {
+  opacity: 0.5;
+}
+
 .opacity-75 {
   opacity: 0.75;
 }
@@ -3221,6 +3289,12 @@ html:has(.drawer-toggle:checked) {
 .shadow {
   --tw-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
   --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+.shadow-md {
+  --tw-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --tw-shadow-colored: 0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
 
@@ -3255,6 +3329,10 @@ input[type=number] {
 .hover\:bg-gray-4:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(var(--gray-4) / var(--tw-bg-opacity));
+}
+
+.hover\:opacity-40:hover {
+  opacity: 0.4;
 }
 
 @media not all and (min-width: 640px) {

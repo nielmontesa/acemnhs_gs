@@ -17,20 +17,18 @@
         position: sticky;
         top: 0;
         z-index: 10;
-        /* Ensure it stays above other content */
-        background-color: white;
-        /* Or any background color you prefer */
+        background-color: #f3f3f3;
     }
 
-    /* Style the first three columns to be sticky */
+    /* Style the first four columns to be sticky */
     #student-table th:first-child,
     #student-table th:nth-child(2),
     #student-table th:nth-child(3),
+    #student-table th:nth-child(4),
     #student-table td:first-child,
     #student-table td:nth-child(2),
-    #student-table td:nth-child(3) {
-        min-width: 124px;
-        max-width: 124px;
+    #student-table td:nth-child(3),
+    #student-table td:nth-child(4) {
         overflow: hidden;
         text-overflow: ellipsis;
 
@@ -43,21 +41,33 @@
         /* Lower than the header but above other table content */
     }
 
+    #student-table th:nth-child(2),
+    #student-table th:nth-child(3),
+    #student-table th:nth-child(4),
+    #student-table td:nth-child(2),
+    #student-table td:nth-child(3),
+    #student-table td:nth-child(4) {
+        min-width: 124px;
+        max-width: 124px;
+    }
+
     /* Add a slight shadow effect to distinguish sticky columns */
     #student-table th:first-child,
     #student-table th:nth-child(2),
-    #student-table th:nth-child(3) {
+    #student-table th:nth-child(3),
+    #student-table th:nth-child(4) {
         box-shadow: 1px 0 5px rgba(0, 0, 0, 0.1);
     }
 
     /* Ensure the sticky columns do not overlap */
     #student-table td:first-child,
     #student-table td:nth-child(2),
-    #student-table td:nth-child(3) {
+    #student-table td:nth-child(3),
+    #student-table td:nth-child(4) {
         box-shadow: 1px 0 5px rgba(0, 0, 0, 0.05);
     }
 
-    /* Set a fixed width for the first three columns to avoid collapsing */
+    /* Set a fixed width for the first four columns to avoid collapsing */
     #student-table th:first-child,
     #student-table td:first-child {
         width: 100px;
@@ -72,6 +82,12 @@
 
     #student-table th:nth-child(3),
     #student-table td:nth-child(3) {
+        width: 150px;
+        /* Adjust as needed */
+    }
+
+    #student-table th:nth-child(4),
+    #student-table td:nth-child(4) {
         width: 150px;
         /* Adjust as needed */
     }
@@ -212,49 +228,62 @@
                     }
                     ?>
                     </p>
-
-                    <form method="POST" action="" class="pt-2">
-                        <input type="hidden" name="gradesheet_id" value="<?php echo $gradesheet_id; ?>">
-                        <input type="checkbox" id="drawer-right" class="drawer-toggle" />
-                        <label for="drawer-right" class="btn btn-primary">Add Activity</label>
-                        <label class="overlay" for="drawer-right"></label>
-                        <div class="drawer drawer-right">
-                            <div class="drawer-content pt-10 flex flex-col h-full">
-                                <label for="drawer-right"
-                                    class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
-                                <div>
-                                    <h2 class="text-xl font-medium">Add Activity</h2>
-                                    <label for="activity_name">
-                                        <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Activity
-                                            Name</span>
-                                        <input class="input-block input" placeholder="Please enter the activity name."
-                                            name="activity_name" type="text" required />
-                                    </label>
-                                    <label for="total_score">
-                                        <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Total
-                                            Score</span>
-                                        <input class="input-block input" placeholder="Please enter total score."
-                                            name="total_score" type="number" required />
-                                    </label>
-                                    <label for="activity_type">
-                                        <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium for="
-                                            activity_type">Activity Type</span>
-                                        <select class="select" name="activity_type">
-                                            <option value="Written Work">Written Work</option>
-                                            <option value="Performance Task">Performance Task</option>
-                                            <option value="Quarterly Assessment">Quarterly Assessment</option>
-                                        </select>
-                                    </label>
+                    <div class="flex items-center justify-between  pt-2">
+                        <div class="flex items-center content-center gap-2">
+                            <form method="POST" action="">
+                                <input type="hidden" name="gradesheet_id" value="<?php echo $gradesheet_id; ?>">
+                                <input type="checkbox" id="drawer-right" class="drawer-toggle" />
+                                <label for="drawer-right" class="btn btn-primary">Add Activity</label>
+                                <label class="overlay" for="drawer-right"></label>
+                                <div class="drawer drawer-right">
+                                    <div class="drawer-content pt-10 flex flex-col h-full">
+                                        <label for="drawer-right"
+                                            class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
+                                        <div>
+                                            <h2 class="text-xl font-medium">Add Activity</h2>
+                                            <label for="activity_name">
+                                                <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Activity
+                                                    Name</span>
+                                                <input class="input-block input" placeholder="Please enter the activity name."
+                                                    name="activity_name" type="text" required />
+                                            </label>
+                                            <label for="total_score">
+                                                <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Total
+                                                    Score</span>
+                                                <input class="input-block input" placeholder="Please enter total score."
+                                                    name="total_score" type="number" required />
+                                            </label>
+                                            <label for="activity_type">
+                                                <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium for="
+                                                    activity_type">Activity Type</span>
+                                                <select class="select" name="activity_type">
+                                                    <option value="Written Work">Written Work</option>
+                                                    <option value="Performance Task">Performance Task</option>
+                                                    <option value="Quarterly Assessment">Quarterly Assessment</option>
+                                                </select>
+                                            </label>
+                                        </div>
+                                        <div class="h-full flex flex-row justify-end items-end gap-2">
+                                            <button type="button" class="btn btn-ghost"
+                                                onclick="document.getElementById('drawer-right').checked = false;">Cancel</button>
+                                            <button type="submit" class="btn btn-primary">Add Activity</button>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="h-full flex flex-row justify-end items-end gap-2">
-                                    <button type="button" class="btn btn-ghost"
-                                        onclick="document.getElementById('drawer-right').checked = false;">Cancel</button>
-                                    <button type="submit" class="btn btn-primary">Add Activity</button>
-                                </div>
+                            </form>
+                            <a href="#" class="btn btn-outline-primary">Finalize</a>
+                            <a href="#" class="btn btn-outline-primary">Totals</a>
+                        </div>
+                        <div class="flex items-center content-center gap-2">
+                            <span>Filter Quarter:</span>
+                            <div class="btn-group btn-group-scrollable">
+                                <input type="radio" name="options" data-content="1" class="btn" checked />
+                                <input type="radio" name="options" data-content="2" class="btn" />
+                                <input type="radio" name="options" data-content="3" class="btn" />
+                                <input type="radio" name="options" data-content="4" class="btn" />
                             </div>
                         </div>
-                    </form>
-
+                    </div>
                     <?php
                     // Handle the POST request to add an activity
                     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -287,9 +316,10 @@
 
 
             <div class="overflow-x-auto max-w-3xl lg:max-w-none" style="padding-top: 1rem">
-                <table class="table-compact table-zebra table w-full" id="student-table">
+                <table class="table-compact table-hover table w-full" id="student-table">
                     <thead>
                         <tr>
+                            <th>No.</th>
                             <th>LRN</th>
                             <th>First Name</th>
                             <th>Last Name</th>
@@ -337,15 +367,42 @@
                         <?php
                         // Query the database for students in this section
                         if (isset($section_id)) {
-                            $sql = "SELECT * FROM students WHERE section_ID = $section_id AND is_archived = 0";
+                            $sql = "SELECT * FROM students WHERE section_ID = $section_id AND is_archived = 0  
+                ORDER BY 
+                CASE WHEN gender = 'Male' THEN 1 ELSE 2 END, 
+                last_name ASC";
                             $result = $conn->query($sql);
 
                             if ($result->num_rows > 0) {
+                                $male_counter = 1;  // Initialize the counter for males
+                                $female_counter = 1;  // Initialize the counter for females
+                                $current_gender = 'Male';  // Track the current gender
+                        
                                 while ($student = $result->fetch_assoc()) {
+                                    // Reset counter when switching from male to female or vice versa
+                                    if ($student['gender'] !== $current_gender) {
+                                        $current_gender = $student['gender'];
+                                        if ($current_gender == 'Male') {
+                                            $male_counter = 1;  // Reset male counter
+                                        } else {
+                                            $female_counter = 1;  // Reset female counter
+                                        }
+                                    }
+
                                     echo "<tr>";
+
+                                    // Display male or female counter
+                                    echo "<th>";
+                                    if ($student['gender'] == 'Male') {
+                                        echo $male_counter++;  // Increment and display male counter
+                                    } else {
+                                        echo $female_counter++;  // Increment and display female counter
+                                    }
+                                    echo "</th>";
+
                                     echo "<th>" . htmlspecialchars($student['LRN']) . "</th>";
                                     echo "<th>" . htmlspecialchars($student['first_name']) . "</th>";
-                                    echo "<th>" . htmlspecialchars($student['last_name']) . "</td>";
+                                    echo "<th>" . htmlspecialchars($student['last_name']) . "</th>";
 
                                     // Fetch the total score for each activity for this student
                                     if (isset($gradesheet_id)) {
@@ -365,9 +422,10 @@
                                             $student_score = $student_score_row ? $student_score_row['score'] : 0;
 
                                             // Display the score in a contenteditable <td>
-                                            echo "<td class='editable' contenteditable='true' data-student-id='" . $student['student_id'] . "' data-activity-id='$activity_id' data-max-score='$total_score'>" . htmlspecialchars($student_score) . " / " . htmlspecialchars($total_score) . "</td>";
+                                            echo "<td class='editable' contenteditable='true' data-student-id='" . $student['student_id'] . "' data-activity-id='$activity_id' data-max-score='$total_score'><span class='student-score opacity-50'>" . htmlspecialchars($student_score) . "</span> / <span class='total-score'> " . htmlspecialchars($total_score) . "</span></td>";
                                         }
                                     }
+
                                     echo "</tr>";
                                 }
                             } else {
@@ -378,6 +436,7 @@
                         }
                         ?>
                     </tbody>
+
                     <!-- Drawer Modal -->
                     <input type="checkbox" id="drawer-right-1" class="drawer-toggle" />
                     <label class="overlay" for="drawer-right-1"></label>
@@ -458,7 +517,7 @@
                         <input type="hidden" id="activity-id-edit" name="activity_id">
 
                         <!-- Buttons for saving changes and archiving -->
-                        <div class="flex flex-row-reverse justify-end items-end gap-2 mt-4">
+                        <div class="flex flex-row-reverse justify-start items-end gap-2 mt-4">
                             <input type="hidden" id="archive-activity-id" name="activity_id"
                                 value="<?php echo htmlspecialchars($activity_id); ?>" />
                             <button type="submit" name="action" value="save" class="btn btn-primary">Save</button>
@@ -590,7 +649,12 @@
                 .then(data => {
                     if (data.success) {
                         // Update the content with the new score and max score
-                        this.textContent = `${numericScore} / ${maxScore}`;
+
+                        if (numericScore === 0) {
+                            this.innerHTML = `<span class="opacity-50">${numericScore}</span> / ${maxScore}`;
+                        } else {
+                            this.innerHTML = `<span class="opacity-100">${numericScore}</span> / ${maxScore}`;
+                        }
                     } else {
                         // Reset the content if there was an error
                         this.textContent = originalContent;
@@ -607,6 +671,23 @@
             }
         });
     });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const studentScores = document.querySelectorAll('.student-score');
+        // Loop through each student score element
+        studentScores.forEach(studentScore => {
+            // Check if the text content of the current student score is not '0'
+            if (studentScore.textContent.trim() !== '0') {
+                // Remove 'opacity-50' class and add 'opacity-100' class
+                studentScore.classList.remove('opacity-50');
+                studentScore.classList.add('opacity-100');
+            }
+        });
+    });
+
+
+
+
 
 </script>
 

@@ -276,6 +276,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <table class="table-compact table-zebra table" id="student-table">
                     <thead>
                         <tr>
+                            <th>No.</th>
                             <th>LRN</th>
                             <th>First Name</th>
                             <th>Last Name</th>
@@ -285,21 +286,50 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody data-type="all" data-akap="inactive">
+                    <tbody data-type="all" data-akap="all">
                         <?php
                         include '../../connection/connection.php';
+
                         // Check if section_id is passed in the URL
                         if (isset($_GET['section_id'])) {
                             $section_id = $_GET['section_id'];
 
-                            // Query the database for students in this section
-                            $sql = "SELECT * FROM students WHERE section_ID = $section_id AND is_archived = 0 AND akap_status = 'Inactive'";
+                            // Query the database for students in this section, ordered by gender (Male first) and then by last name
+                            $sql = "SELECT * FROM students WHERE section_ID = $section_id AND is_archived = 0
+                ORDER BY 
+                CASE WHEN gender = 'Male' THEN 1 ELSE 2 END, 
+                last_name ASC";
                             $result = $conn->query($sql);
 
                             if ($result->num_rows > 0):
-                                ?>
-                                <?php while ($student = $result->fetch_assoc()): ?>
+                                $male_counter = 1;  // Initialize the counter for males
+                                $female_counter = 1;  // Initialize the counter for females
+                                $current_gender = 'Male';  // Track the current gender
+                        
+                                while ($student = $result->fetch_assoc()):
+                                    $drawer_id = "drawer-all-" . $student['student_id'];
+
+                                    // Reset counter when switching from male to female or vice versa
+                                    if ($student['gender'] !== $current_gender) {
+                                        $current_gender = $student['gender'];
+                                        if ($current_gender == 'Male') {
+                                            $male_counter = 1;  // Reset male counter
+                                        } else {
+                                            $female_counter = 1;  // Reset female counter
+                                        }
+                                    }
+                                    ?>
                                     <tr>
+                                        <th>
+                                            <!-- Display male or female counter -->
+                                            <?php
+                                            if ($student['gender'] == 'Male') {
+                                                echo $male_counter++;  // Increment and display male counter
+                                            } else {
+                                                echo $female_counter++;  // Increment and display female counter
+                                            }
+                                            ?>
+                                        </th>
                                         <th><?php echo $student['LRN']; ?></th>
                                         <th><?php echo $student['first_name']; ?></th>
                                         <td><?php echo $student['last_name']; ?></td>
@@ -307,13 +337,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         <td><?php echo $student['gender']; ?></td>
                                         <td><?php echo $student['akap_status']; ?></td>
                                         <td>
-                                            <input type="checkbox" id="drawer-right-2" class="drawer-toggle" />
-                                            <label for="drawer-right-2" class="btn btn-secondary">Edit</label>
-                                            <label class="overlay" for="drawer-right-2"></label>
+                                            <!-- Dynamic Drawer Toggle -->
+                                            <input type="checkbox" id="<?php echo $drawer_id; ?>" class="drawer-toggle" />
+                                            <label for="<?php echo $drawer_id; ?>" class="btn btn-secondary">Edit</label>
+                                            <label class="overlay" for="<?php echo $drawer_id; ?>"></label>
+
+                                            <!-- Drawer Content -->
                                             <div class="drawer drawer-right">
                                                 <form method="POST" action="../../connection/update_student.php"
                                                     class="drawer-content pt-10 flex flex-col h-full">
-                                                    <label for="drawer-right-2"
+                                                    <label for="<?php echo $drawer_id; ?>"
                                                         class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
                                                     <div>
                                                         <h2 class="text-xl font-medium">Edit Student</h2>
@@ -330,7 +363,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                             <label for="student_firstname">
                                                                 <span
                                                                     class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Student
-                                                                    First Name</span>
+                                                                    First
+                                                                    Name</span>
                                                                 <br>
                                                                 <input class="input-block input"
                                                                     placeholder="Please enter first name." name="student_firstname"
@@ -341,7 +375,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                             <label for="student_lastname">
                                                                 <span
                                                                     class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Student
-                                                                    Last Name</span>
+                                                                    Last
+                                                                    Name</span>
                                                                 <br>
                                                                 <input class="input-block input"
                                                                     placeholder="Please enter last name." name="student_lastname"
@@ -364,7 +399,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                 <br>
                                                                 <select class="select" name="gender" required>
                                                                     <option value="">Select Gender...</option>
-                                                                    <option value="Male" <?php echo ($student['gender'] == 'Male') ? 'selected' : ''; ?>>Male</option>
+                                                                    <option value="Male" <?php echo ($student['gender'] == 'Male') ? 'selected' : ''; ?>>
+                                                                        Male</option>
                                                                     <option value="Female" <?php echo ($student['gender'] == 'Female') ? 'selected' : ''; ?>>Female</option>
                                                                 </select>
                                                             </label>
@@ -385,7 +421,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                             <div class="h-full flex flex-row justify-end items-end gap-2">
                                                                 <button type="button" class="btn btn-ghost"
-                                                                    onclick="document.getElementById('drawer-right-2').checked = false;">Cancel</button>
+                                                                    onclick="document.getElementById('<?php echo $drawer_id; ?>').checked = false;">Cancel</button>
                                                                 <button type="submit" class="btn btn-primary">Update</button>
                                                                 <input type="hidden" name="student_id"
                                                                     value="<?php echo htmlspecialchars($student['student_id']); ?>" />
@@ -396,6 +432,191 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                 </form>
                                             </div>
 
+                                            <!-- Archive Button and Modal -->
+                                            <label class="btn btn-error"
+                                                for="modal-2-<?php echo $student['student_id']; ?>">Archive</label>
+                                            <input class="modal-state" id="modal-2-<?php echo $student['student_id']; ?>"
+                                                type="checkbox" />
+                                            <div class="modal">
+                                                <label class="modal-overlay"
+                                                    for="modal-2-<?php echo $student['student_id']; ?>"></label>
+                                                <form method="POST" action="../../connection/archive_student.php"
+                                                    class="modal-content flex flex-col gap-5">
+                                                    <label for="modal-2-<?php echo $student['student_id']; ?>"
+                                                        class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
+                                                    <h2 class="text-xl">Archive Student?</h2>
+                                                    <span>Are you sure you want to archive this student?</span>
+
+                                                    <!-- Hidden input to send student ID -->
+                                                    <input type="hidden" name="student_id"
+                                                        value="<?php echo $student['student_id']; ?>" />
+
+                                                    <!-- Hidden input to send the current section ID -->
+                                                    <input type="hidden" name="section_id"
+                                                        value="<?php echo $_GET['section_id']; ?>" />
+                                                    <div class="flex gap-3">
+                                                        <button class="btn btn-error btn-block" type="submit">Archive</button>
+                                                        <label for="modal-2-<?php echo $student['student_id']; ?>"
+                                                            class="btn btn-block">Cancel</label>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <?php endwhile; ?>
+                            <?php endif;
+                        } else {
+                            echo "<p>No section selected.</p>";
+                        }
+                        ?>
+                    </tbody>
+                    <tbody data-type="all" data-akap="inactive">
+                        <?php
+                        include '../../connection/connection.php';
+
+                        // Check if section_id is passed in the URL
+                        if (isset($_GET['section_id'])) {
+                            $section_id = $_GET['section_id'];
+
+                            // Query the database for students in this section, ordered by gender (Male first) and then by last name
+                            $sql = "SELECT * FROM students WHERE section_ID = $section_id AND is_archived = 0 AND akap_status = 'Inactive'
+                ORDER BY 
+                CASE WHEN gender = 'Male' THEN 1 ELSE 2 END, 
+                last_name ASC";
+                            $result = $conn->query($sql);
+
+                            if ($result->num_rows > 0):
+                                $male_counter = 1;  // Initialize the counter for males
+                                $female_counter = 1;  // Initialize the counter for females
+                                $current_gender = 'Male';  // Track the current gender
+                        
+                                while ($student = $result->fetch_assoc()):
+                                    $drawer_id = "drawer-right-" . $student['student_id'];
+
+                                    // Reset counter when switching from male to female or vice versa
+                                    if ($student['gender'] !== $current_gender) {
+                                        $current_gender = $student['gender'];
+                                        if ($current_gender == 'Male') {
+                                            $male_counter = 1;  // Reset male counter
+                                        } else {
+                                            $female_counter = 1;  // Reset female counter
+                                        }
+                                    }
+                                    ?>
+                                    <tr>
+                                        <th>
+                                            <!-- Display male or female counter -->
+                                            <?php
+                                            if ($student['gender'] == 'Male') {
+                                                echo $male_counter++;  // Increment and display male counter
+                                            } else {
+                                                echo $female_counter++;  // Increment and display female counter
+                                            }
+                                            ?>
+                                        </th>
+                                        <th><?php echo $student['LRN']; ?></th>
+                                        <th><?php echo $student['first_name']; ?></th>
+                                        <td><?php echo $student['last_name']; ?></td>
+                                        <td><?php echo $student['email']; ?></td>
+                                        <td><?php echo $student['gender']; ?></td>
+                                        <td><?php echo $student['akap_status']; ?></td>
+                                        <td>
+                                            <!-- Dynamic Drawer Toggle -->
+                                            <input type="checkbox" id="<?php echo $drawer_id; ?>" class="drawer-toggle" />
+                                            <label for="<?php echo $drawer_id; ?>" class="btn btn-secondary">Edit</label>
+                                            <label class="overlay" for="<?php echo $drawer_id; ?>"></label>
+
+                                            <!-- Drawer Content -->
+                                            <div class="drawer drawer-right">
+                                                <form method="POST" action="../../connection/update_student.php"
+                                                    class="drawer-content pt-10 flex flex-col h-full">
+                                                    <label for="<?php echo $drawer_id; ?>"
+                                                        class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
+                                                    <div>
+                                                        <h2 class="text-xl font-medium">Edit Student</h2>
+                                                        <div class="flex flex-col gap-2">
+                                                            <label for="student_lrn">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">LRN</span>
+                                                                <br>
+                                                                <input class="input-block input" placeholder="Please enter the LRN."
+                                                                    name="student_lrn" type="text"
+                                                                    value="<?php echo htmlspecialchars($student['LRN']); ?>"
+                                                                    required />
+                                                            </label>
+                                                            <label for="student_firstname">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Student
+                                                                    First
+                                                                    Name</span>
+                                                                <br>
+                                                                <input class="input-block input"
+                                                                    placeholder="Please enter first name." name="student_firstname"
+                                                                    type="text"
+                                                                    value="<?php echo htmlspecialchars($student['first_name']); ?>"
+                                                                    required />
+                                                            </label>
+                                                            <label for="student_lastname">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Student
+                                                                    Last
+                                                                    Name</span>
+                                                                <br>
+                                                                <input class="input-block input"
+                                                                    placeholder="Please enter last name." name="student_lastname"
+                                                                    type="text"
+                                                                    value="<?php echo htmlspecialchars($student['last_name']); ?>"
+                                                                    required />
+                                                            </label>
+                                                            <label for="email">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">E-mail</span>
+                                                                <br>
+                                                                <input class="input-block input" placeholder="Please enter e-mail."
+                                                                    name="email" type="email"
+                                                                    value="<?php echo htmlspecialchars($student['email']); ?>"
+                                                                    required />
+                                                            </label>
+                                                            <label for="gender">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Gender</span>
+                                                                <br>
+                                                                <select class="select" name="gender" required>
+                                                                    <option value="">Select Gender...</option>
+                                                                    <option value="Male" <?php echo ($student['gender'] == 'Male') ? 'selected' : ''; ?>>
+                                                                        Male</option>
+                                                                    <option value="Female" <?php echo ($student['gender'] == 'Female') ? 'selected' : ''; ?>>Female</option>
+                                                                </select>
+                                                            </label>
+                                                            <label for="akap_status">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">AKAP</span>
+                                                                <br>
+                                                                <select class="select" name="akap_status" required>
+                                                                    <option value="">Select Status...</option>
+                                                                    <option value="Active" <?php echo ($student['akap_status'] == 'Active') ? 'selected' : ''; ?>>
+                                                                        Active</option>
+                                                                    <option value="Inactive" <?php echo ($student['akap_status'] == 'Inactive') ? 'selected' : ''; ?>>
+                                                                        Inactive</option>
+                                                                    <option value="Solved" <?php echo ($student['akap_status'] == 'Solved') ? 'selected' : ''; ?>>
+                                                                        Solved</option>
+                                                                </select>
+                                                            </label>
+
+                                                            <div class="h-full flex flex-row justify-end items-end gap-2">
+                                                                <button type="button" class="btn btn-ghost"
+                                                                    onclick="document.getElementById('<?php echo $drawer_id; ?>').checked = false;">Cancel</button>
+                                                                <button type="submit" class="btn btn-primary">Update</button>
+                                                                <input type="hidden" name="student_id"
+                                                                    value="<?php echo htmlspecialchars($student['student_id']); ?>" />
+                                                                <!-- Hidden field for student ID -->
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+
+                                            <!-- Archive Button and Modal -->
                                             <label class="btn btn-error"
                                                 for="modal-1-<?php echo $student['student_id']; ?>">Archive</label>
                                             <input class="modal-state" id="modal-1-<?php echo $student['student_id']; ?>"
@@ -427,8 +648,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         </td>
                                     </tr>
                                 <?php endwhile; ?>
-                            <?php endif; ?>
-                            <?php
+                            <?php endif;
                         } else {
                             echo "<p>No section selected.</p>";
                         }
@@ -437,18 +657,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <tbody data-type="all" data-akap="active">
                         <?php
                         include '../../connection/connection.php';
+
                         // Check if section_id is passed in the URL
                         if (isset($_GET['section_id'])) {
                             $section_id = $_GET['section_id'];
 
-                            // Query the database for students in this section
-                            $sql = "SELECT * FROM students WHERE section_ID = $section_id AND is_archived = 0 AND akap_status = 'Active'";
+                            // Query the database for students in this section, ordered by gender (Male first) and then by last name
+                            $sql = "SELECT * FROM students WHERE section_ID = $section_id AND is_archived = 0 AND akap_status = 'Active'
+                ORDER BY 
+                CASE WHEN gender = 'Male' THEN 1 ELSE 2 END, 
+                last_name ASC";
                             $result = $conn->query($sql);
 
                             if ($result->num_rows > 0):
-                                ?>
-                                <?php while ($student = $result->fetch_assoc()): ?>
+                                $male_counter = 1;  // Initialize the counter for males
+                                $female_counter = 1;  // Initialize the counter for females
+                                $current_gender = 'Male';  // Track the current gender
+                        
+                                while ($student = $result->fetch_assoc()):
+                                    $drawer_id = "drawer-right-" . $student['student_id'];
+
+                                    // Reset counter when switching from male to female or vice versa
+                                    if ($student['gender'] !== $current_gender) {
+                                        $current_gender = $student['gender'];
+                                        if ($current_gender == 'Male') {
+                                            $male_counter = 1;  // Reset male counter
+                                        } else {
+                                            $female_counter = 1;  // Reset female counter
+                                        }
+                                    }
+                                    ?>
                                     <tr>
+                                        <th>
+                                            <!-- Display male or female counter -->
+                                            <?php
+                                            if ($student['gender'] == 'Male') {
+                                                echo $male_counter++;  // Increment and display male counter
+                                            } else {
+                                                echo $female_counter++;  // Increment and display female counter
+                                            }
+                                            ?>
+                                        </th>
                                         <th><?php echo $student['LRN']; ?></th>
                                         <th><?php echo $student['first_name']; ?></th>
                                         <td><?php echo $student['last_name']; ?></td>
@@ -456,13 +705,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         <td><?php echo $student['gender']; ?></td>
                                         <td><?php echo $student['akap_status']; ?></td>
                                         <td>
-                                            <input type="checkbox" id="drawer-right-2" class="drawer-toggle" />
-                                            <label for="drawer-right-2" class="btn btn-secondary">Edit</label>
-                                            <label class="overlay" for="drawer-right-2"></label>
+                                            <!-- Dynamic Drawer Toggle -->
+                                            <input type="checkbox" id="<?php echo $drawer_id; ?>" class="drawer-toggle" />
+                                            <label for="<?php echo $drawer_id; ?>" class="btn btn-secondary">Edit</label>
+                                            <label class="overlay" for="<?php echo $drawer_id; ?>"></label>
+
+                                            <!-- Drawer Content -->
                                             <div class="drawer drawer-right">
                                                 <form method="POST" action="../../connection/update_student.php"
                                                     class="drawer-content pt-10 flex flex-col h-full">
-                                                    <label for="drawer-right-2"
+                                                    <label for="<?php echo $drawer_id; ?>"
                                                         class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
                                                     <div>
                                                         <h2 class="text-xl font-medium">Edit Student</h2>
@@ -479,7 +731,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                             <label for="student_firstname">
                                                                 <span
                                                                     class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Student
-                                                                    First Name</span>
+                                                                    First
+                                                                    Name</span>
                                                                 <br>
                                                                 <input class="input-block input"
                                                                     placeholder="Please enter first name." name="student_firstname"
@@ -490,7 +743,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                             <label for="student_lastname">
                                                                 <span
                                                                     class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Student
-                                                                    Last Name</span>
+                                                                    Last
+                                                                    Name</span>
                                                                 <br>
                                                                 <input class="input-block input"
                                                                     placeholder="Please enter last name." name="student_lastname"
@@ -513,7 +767,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                 <br>
                                                                 <select class="select" name="gender" required>
                                                                     <option value="">Select Gender...</option>
-                                                                    <option value="Male" <?php echo ($student['gender'] == 'Male') ? 'selected' : ''; ?>>Male</option>
+                                                                    <option value="Male" <?php echo ($student['gender'] == 'Male') ? 'selected' : ''; ?>>
+                                                                        Male</option>
                                                                     <option value="Female" <?php echo ($student['gender'] == 'Female') ? 'selected' : ''; ?>>Female</option>
                                                                 </select>
                                                             </label>
@@ -534,7 +789,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                             <div class="h-full flex flex-row justify-end items-end gap-2">
                                                                 <button type="button" class="btn btn-ghost"
-                                                                    onclick="document.getElementById('drawer-right-2').checked = false;">Cancel</button>
+                                                                    onclick="document.getElementById('<?php echo $drawer_id; ?>').checked = false;">Cancel</button>
                                                                 <button type="submit" class="btn btn-primary">Update</button>
                                                                 <input type="hidden" name="student_id"
                                                                     value="<?php echo htmlspecialchars($student['student_id']); ?>" />
@@ -545,6 +800,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                 </form>
                                             </div>
 
+                                            <!-- Archive Button and Modal -->
                                             <label class="btn btn-error"
                                                 for="modal-1-<?php echo $student['student_id']; ?>">Archive</label>
                                             <input class="modal-state" id="modal-1-<?php echo $student['student_id']; ?>"
@@ -576,8 +832,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         </td>
                                     </tr>
                                 <?php endwhile; ?>
-                            <?php endif; ?>
-                            <?php
+                            <?php endif;
                         } else {
                             echo "<p>No section selected.</p>";
                         }
@@ -586,18 +841,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <tbody data-type="all" data-akap="solved">
                         <?php
                         include '../../connection/connection.php';
+
                         // Check if section_id is passed in the URL
                         if (isset($_GET['section_id'])) {
                             $section_id = $_GET['section_id'];
 
-                            // Query the database for students in this section
-                            $sql = "SELECT * FROM students WHERE section_ID = $section_id AND is_archived = 0 AND akap_status = 'Solved'";
+                            // Query the database for students in this section, ordered by gender (Male first) and then by last name
+                            $sql = "SELECT * FROM students WHERE section_ID = $section_id AND is_archived = 0 AND akap_status = 'Solved'
+                ORDER BY 
+                CASE WHEN gender = 'Male' THEN 1 ELSE 2 END, 
+                last_name ASC";
                             $result = $conn->query($sql);
 
                             if ($result->num_rows > 0):
-                                ?>
-                                <?php while ($student = $result->fetch_assoc()): ?>
+                                $male_counter = 1;  // Initialize the counter for males
+                                $female_counter = 1;  // Initialize the counter for females
+                                $current_gender = 'Male';  // Track the current gender
+                        
+                                while ($student = $result->fetch_assoc()):
+                                    $drawer_id = "drawer-right-" . $student['student_id'];
+
+                                    // Reset counter when switching from male to female or vice versa
+                                    if ($student['gender'] !== $current_gender) {
+                                        $current_gender = $student['gender'];
+                                        if ($current_gender == 'Male') {
+                                            $male_counter = 1;  // Reset male counter
+                                        } else {
+                                            $female_counter = 1;  // Reset female counter
+                                        }
+                                    }
+                                    ?>
                                     <tr>
+                                        <td>
+                                            <!-- Display male or female counter -->
+                                            <?php
+                                            if ($student['gender'] == 'Male') {
+                                                echo $male_counter++;  // Increment and display male counter
+                                            } else {
+                                                echo $female_counter++;  // Increment and display female counter
+                                            }
+                                            ?>
+                                        </td>
                                         <th><?php echo $student['LRN']; ?></th>
                                         <th><?php echo $student['first_name']; ?></th>
                                         <td><?php echo $student['last_name']; ?></td>
@@ -605,13 +889,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         <td><?php echo $student['gender']; ?></td>
                                         <td><?php echo $student['akap_status']; ?></td>
                                         <td>
-                                            <input type="checkbox" id="drawer-right-2" class="drawer-toggle" />
-                                            <label for="drawer-right-2" class="btn btn-secondary">Edit</label>
-                                            <label class="overlay" for="drawer-right-2"></label>
+                                            <!-- Dynamic Drawer Toggle -->
+                                            <input type="checkbox" id="<?php echo $drawer_id; ?>" class="drawer-toggle" />
+                                            <label for="<?php echo $drawer_id; ?>" class="btn btn-secondary">Edit</label>
+                                            <label class="overlay" for="<?php echo $drawer_id; ?>"></label>
+
+                                            <!-- Drawer Content -->
                                             <div class="drawer drawer-right">
                                                 <form method="POST" action="../../connection/update_student.php"
                                                     class="drawer-content pt-10 flex flex-col h-full">
-                                                    <label for="drawer-right-2"
+                                                    <label for="<?php echo $drawer_id; ?>"
                                                         class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
                                                     <div>
                                                         <h2 class="text-xl font-medium">Edit Student</h2>
@@ -628,7 +915,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                             <label for="student_firstname">
                                                                 <span
                                                                     class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Student
-                                                                    First Name</span>
+                                                                    First
+                                                                    Name</span>
                                                                 <br>
                                                                 <input class="input-block input"
                                                                     placeholder="Please enter first name." name="student_firstname"
@@ -639,7 +927,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                             <label for="student_lastname">
                                                                 <span
                                                                     class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Student
-                                                                    Last Name</span>
+                                                                    Last
+                                                                    Name</span>
                                                                 <br>
                                                                 <input class="input-block input"
                                                                     placeholder="Please enter last name." name="student_lastname"
@@ -662,7 +951,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                 <br>
                                                                 <select class="select" name="gender" required>
                                                                     <option value="">Select Gender...</option>
-                                                                    <option value="Male" <?php echo ($student['gender'] == 'Male') ? 'selected' : ''; ?>>Male</option>
+                                                                    <option value="Male" <?php echo ($student['gender'] == 'Male') ? 'selected' : ''; ?>>
+                                                                        Male</option>
                                                                     <option value="Female" <?php echo ($student['gender'] == 'Female') ? 'selected' : ''; ?>>Female</option>
                                                                 </select>
                                                             </label>
@@ -683,7 +973,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                             <div class="h-full flex flex-row justify-end items-end gap-2">
                                                                 <button type="button" class="btn btn-ghost"
-                                                                    onclick="document.getElementById('drawer-right-2').checked = false;">Cancel</button>
+                                                                    onclick="document.getElementById('<?php echo $drawer_id; ?>').checked = false;">Cancel</button>
                                                                 <button type="submit" class="btn btn-primary">Update</button>
                                                                 <input type="hidden" name="student_id"
                                                                     value="<?php echo htmlspecialchars($student['student_id']); ?>" />
@@ -694,6 +984,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                 </form>
                                             </div>
 
+                                            <!-- Archive Button and Modal -->
                                             <label class="btn btn-error"
                                                 for="modal-1-<?php echo $student['student_id']; ?>">Archive</label>
                                             <input class="modal-state" id="modal-1-<?php echo $student['student_id']; ?>"
@@ -725,8 +1016,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         </td>
                                     </tr>
                                 <?php endwhile; ?>
-                            <?php endif; ?>
-                            <?php
+                            <?php endif;
                         } else {
                             echo "<p>No section selected.</p>";
                         }
@@ -735,18 +1025,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <tbody data-type="male" data-akap="inactive">
                         <?php
                         include '../../connection/connection.php';
+
                         // Check if section_id is passed in the URL
                         if (isset($_GET['section_id'])) {
                             $section_id = $_GET['section_id'];
 
-                            // Query the database for students in this section
-                            $sql = "SELECT * FROM students WHERE section_ID = $section_id AND is_archived = 0 AND akap_status = 'Inactive' AND gender ='Male'";
+                            // Query the database for students in this section, ordered by gender (Male first) and then by last name
+                            $sql = "SELECT * FROM students WHERE section_ID = $section_id AND is_archived = 0 AND akap_status = 'Inactive' AND gender = 'Male'
+                ORDER BY 
+                CASE WHEN gender = 'Male' THEN 1 ELSE 2 END, 
+                last_name ASC";
                             $result = $conn->query($sql);
 
                             if ($result->num_rows > 0):
-                                ?>
-                                <?php while ($student = $result->fetch_assoc()): ?>
+                                $male_counter = 1;  // Initialize the counter for males
+                                $female_counter = 1;  // Initialize the counter for females
+                                $current_gender = 'Male';  // Track the current gender
+                        
+                                while ($student = $result->fetch_assoc()):
+                                    $drawer_id = "drawer-right-" . $student['student_id'];
+
+                                    // Reset counter when switching from male to female or vice versa
+                                    if ($student['gender'] !== $current_gender) {
+                                        $current_gender = $student['gender'];
+                                        if ($current_gender == 'Male') {
+                                            $male_counter = 1;  // Reset male counter
+                                        } else {
+                                            $female_counter = 1;  // Reset female counter
+                                        }
+                                    }
+                                    ?>
                                     <tr>
+                                        <th>
+                                            <!-- Display male or female counter -->
+                                            <?php
+                                            if ($student['gender'] == 'Male') {
+                                                echo $male_counter++;  // Increment and display male counter
+                                            } else {
+                                                echo $female_counter++;  // Increment and display female counter
+                                            }
+                                            ?>
+                                        </th>
                                         <th><?php echo $student['LRN']; ?></th>
                                         <th><?php echo $student['first_name']; ?></th>
                                         <td><?php echo $student['last_name']; ?></td>
@@ -754,13 +1073,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         <td><?php echo $student['gender']; ?></td>
                                         <td><?php echo $student['akap_status']; ?></td>
                                         <td>
-                                            <input type="checkbox" id="drawer-right-3" class="drawer-toggle" />
-                                            <label for="drawer-right-3" class="btn btn-secondary">Edit</label>
-                                            <label class="overlay" for="drawer-right-3"></label>
+                                            <!-- Dynamic Drawer Toggle -->
+                                            <input type="checkbox" id="<?php echo $drawer_id; ?>" class="drawer-toggle" />
+                                            <label for="<?php echo $drawer_id; ?>" class="btn btn-secondary">Edit</label>
+                                            <label class="overlay" for="<?php echo $drawer_id; ?>"></label>
+
+                                            <!-- Drawer Content -->
                                             <div class="drawer drawer-right">
                                                 <form method="POST" action="../../connection/update_student.php"
                                                     class="drawer-content pt-10 flex flex-col h-full">
-                                                    <label for="drawer-right-3"
+                                                    <label for="<?php echo $drawer_id; ?>"
                                                         class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
                                                     <div>
                                                         <h2 class="text-xl font-medium">Edit Student</h2>
@@ -777,7 +1099,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                             <label for="student_firstname">
                                                                 <span
                                                                     class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Student
-                                                                    First Name</span>
+                                                                    First
+                                                                    Name</span>
                                                                 <br>
                                                                 <input class="input-block input"
                                                                     placeholder="Please enter first name." name="student_firstname"
@@ -788,7 +1111,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                             <label for="student_lastname">
                                                                 <span
                                                                     class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Student
-                                                                    Last Name</span>
+                                                                    Last
+                                                                    Name</span>
                                                                 <br>
                                                                 <input class="input-block input"
                                                                     placeholder="Please enter last name." name="student_lastname"
@@ -811,7 +1135,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                 <br>
                                                                 <select class="select" name="gender" required>
                                                                     <option value="">Select Gender...</option>
-                                                                    <option value="Male" <?php echo ($student['gender'] == 'Male') ? 'selected' : ''; ?>>Male</option>
+                                                                    <option value="Male" <?php echo ($student['gender'] == 'Male') ? 'selected' : ''; ?>>
+                                                                        Male</option>
                                                                     <option value="Female" <?php echo ($student['gender'] == 'Female') ? 'selected' : ''; ?>>Female</option>
                                                                 </select>
                                                             </label>
@@ -832,7 +1157,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                             <div class="h-full flex flex-row justify-end items-end gap-2">
                                                                 <button type="button" class="btn btn-ghost"
-                                                                    onclick="document.getElementById('drawer-right-3').checked = false;">Cancel</button>
+                                                                    onclick="document.getElementById('<?php echo $drawer_id; ?>').checked = false;">Cancel</button>
                                                                 <button type="submit" class="btn btn-primary">Update</button>
                                                                 <input type="hidden" name="student_id"
                                                                     value="<?php echo htmlspecialchars($student['student_id']); ?>" />
@@ -843,16 +1168,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                 </form>
                                             </div>
 
+                                            <!-- Archive Button and Modal -->
                                             <label class="btn btn-error"
-                                                for="modal-2-<?php echo $student['student_id']; ?>">Archive</label>
-                                            <input class="modal-state" id="modal-2-<?php echo $student['student_id']; ?>"
+                                                for="modal-1-<?php echo $student['student_id']; ?>">Archive</label>
+                                            <input class="modal-state" id="modal-1-<?php echo $student['student_id']; ?>"
                                                 type="checkbox" />
                                             <div class="modal">
                                                 <label class="modal-overlay"
-                                                    for="modal-2-<?php echo $student['student_id']; ?>"></label>
+                                                    for="modal-1-<?php echo $student['student_id']; ?>"></label>
                                                 <form method="POST" action="../../connection/archive_student.php"
                                                     class="modal-content flex flex-col gap-5">
-                                                    <label for="modal-2-<?php echo $student['student_id']; ?>"
+                                                    <label for="modal-1-<?php echo $student['student_id']; ?>"
                                                         class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
                                                     <h2 class="text-xl">Archive Student?</h2>
                                                     <span>Are you sure you want to archive this student?</span>
@@ -866,7 +1192,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                         value="<?php echo $_GET['section_id']; ?>" />
                                                     <div class="flex gap-3">
                                                         <button class="btn btn-error btn-block" type="submit">Archive</button>
-                                                        <label for="modal-2-<?php echo $student['student_id']; ?>"
+                                                        <label for="modal-1-<?php echo $student['student_id']; ?>"
                                                             class="btn btn-block">Cancel</label>
                                                     </div>
                                                 </form>
@@ -874,8 +1200,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         </td>
                                     </tr>
                                 <?php endwhile; ?>
-                            <?php endif; ?>
-                            <?php
+                            <?php endif;
                         } else {
                             echo "<p>No section selected.</p>";
                         }
@@ -884,18 +1209,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <tbody data-type="male" data-akap="active">
                         <?php
                         include '../../connection/connection.php';
+
                         // Check if section_id is passed in the URL
                         if (isset($_GET['section_id'])) {
                             $section_id = $_GET['section_id'];
 
-                            // Query the database for students in this section
-                            $sql = "SELECT * FROM students WHERE section_ID = $section_id AND is_archived = 0 AND akap_status = 'Active' AND gender ='Male'";
+                            // Query the database for students in this section, ordered by gender (Male first) and then by last name
+                            $sql = "SELECT * FROM students WHERE section_ID = $section_id AND is_archived = 0 AND akap_status = 'Active' AND gender = 'Male'
+                ORDER BY 
+                CASE WHEN gender = 'Male' THEN 1 ELSE 2 END, 
+                last_name ASC";
                             $result = $conn->query($sql);
 
                             if ($result->num_rows > 0):
-                                ?>
-                                <?php while ($student = $result->fetch_assoc()): ?>
+                                $male_counter = 1;  // Initialize the counter for males
+                                $female_counter = 1;  // Initialize the counter for females
+                                $current_gender = 'Male';  // Track the current gender
+                        
+                                while ($student = $result->fetch_assoc()):
+                                    $drawer_id = "drawer-right-" . $student['student_id'];
+
+                                    // Reset counter when switching from male to female or vice versa
+                                    if ($student['gender'] !== $current_gender) {
+                                        $current_gender = $student['gender'];
+                                        if ($current_gender == 'Male') {
+                                            $male_counter = 1;  // Reset male counter
+                                        } else {
+                                            $female_counter = 1;  // Reset female counter
+                                        }
+                                    }
+                                    ?>
                                     <tr>
+                                        <th>
+                                            <!-- Display male or female counter -->
+                                            <?php
+                                            if ($student['gender'] == 'Male') {
+                                                echo $male_counter++;  // Increment and display male counter
+                                            } else {
+                                                echo $female_counter++;  // Increment and display female counter
+                                            }
+                                            ?>
+                                        </th>
                                         <th><?php echo $student['LRN']; ?></th>
                                         <th><?php echo $student['first_name']; ?></th>
                                         <td><?php echo $student['last_name']; ?></td>
@@ -903,13 +1257,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         <td><?php echo $student['gender']; ?></td>
                                         <td><?php echo $student['akap_status']; ?></td>
                                         <td>
-                                            <input type="checkbox" id="drawer-right-3" class="drawer-toggle" />
-                                            <label for="drawer-right-3" class="btn btn-secondary">Edit</label>
-                                            <label class="overlay" for="drawer-right-3"></label>
+                                            <!-- Dynamic Drawer Toggle -->
+                                            <input type="checkbox" id="<?php echo $drawer_id; ?>" class="drawer-toggle" />
+                                            <label for="<?php echo $drawer_id; ?>" class="btn btn-secondary">Edit</label>
+                                            <label class="overlay" for="<?php echo $drawer_id; ?>"></label>
+
+                                            <!-- Drawer Content -->
                                             <div class="drawer drawer-right">
                                                 <form method="POST" action="../../connection/update_student.php"
                                                     class="drawer-content pt-10 flex flex-col h-full">
-                                                    <label for="drawer-right-3"
+                                                    <label for="<?php echo $drawer_id; ?>"
                                                         class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
                                                     <div>
                                                         <h2 class="text-xl font-medium">Edit Student</h2>
@@ -926,7 +1283,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                             <label for="student_firstname">
                                                                 <span
                                                                     class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Student
-                                                                    First Name</span>
+                                                                    First
+                                                                    Name</span>
                                                                 <br>
                                                                 <input class="input-block input"
                                                                     placeholder="Please enter first name." name="student_firstname"
@@ -937,7 +1295,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                             <label for="student_lastname">
                                                                 <span
                                                                     class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Student
-                                                                    Last Name</span>
+                                                                    Last
+                                                                    Name</span>
                                                                 <br>
                                                                 <input class="input-block input"
                                                                     placeholder="Please enter last name." name="student_lastname"
@@ -960,7 +1319,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                 <br>
                                                                 <select class="select" name="gender" required>
                                                                     <option value="">Select Gender...</option>
-                                                                    <option value="Male" <?php echo ($student['gender'] == 'Male') ? 'selected' : ''; ?>>Male</option>
+                                                                    <option value="Male" <?php echo ($student['gender'] == 'Male') ? 'selected' : ''; ?>>
+                                                                        Male</option>
                                                                     <option value="Female" <?php echo ($student['gender'] == 'Female') ? 'selected' : ''; ?>>Female</option>
                                                                 </select>
                                                             </label>
@@ -981,7 +1341,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                             <div class="h-full flex flex-row justify-end items-end gap-2">
                                                                 <button type="button" class="btn btn-ghost"
-                                                                    onclick="document.getElementById('drawer-right-3').checked = false;">Cancel</button>
+                                                                    onclick="document.getElementById('<?php echo $drawer_id; ?>').checked = false;">Cancel</button>
                                                                 <button type="submit" class="btn btn-primary">Update</button>
                                                                 <input type="hidden" name="student_id"
                                                                     value="<?php echo htmlspecialchars($student['student_id']); ?>" />
@@ -992,16 +1352,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                 </form>
                                             </div>
 
+                                            <!-- Archive Button and Modal -->
                                             <label class="btn btn-error"
-                                                for="modal-2-<?php echo $student['student_id']; ?>">Archive</label>
-                                            <input class="modal-state" id="modal-2-<?php echo $student['student_id']; ?>"
+                                                for="modal-1-<?php echo $student['student_id']; ?>">Archive</label>
+                                            <input class="modal-state" id="modal-1-<?php echo $student['student_id']; ?>"
                                                 type="checkbox" />
                                             <div class="modal">
                                                 <label class="modal-overlay"
-                                                    for="modal-2-<?php echo $student['student_id']; ?>"></label>
+                                                    for="modal-1-<?php echo $student['student_id']; ?>"></label>
                                                 <form method="POST" action="../../connection/archive_student.php"
                                                     class="modal-content flex flex-col gap-5">
-                                                    <label for="modal-2-<?php echo $student['student_id']; ?>"
+                                                    <label for="modal-1-<?php echo $student['student_id']; ?>"
                                                         class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
                                                     <h2 class="text-xl">Archive Student?</h2>
                                                     <span>Are you sure you want to archive this student?</span>
@@ -1015,7 +1376,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                         value="<?php echo $_GET['section_id']; ?>" />
                                                     <div class="flex gap-3">
                                                         <button class="btn btn-error btn-block" type="submit">Archive</button>
-                                                        <label for="modal-2-<?php echo $student['student_id']; ?>"
+                                                        <label for="modal-1-<?php echo $student['student_id']; ?>"
                                                             class="btn btn-block">Cancel</label>
                                                     </div>
                                                 </form>
@@ -1023,8 +1384,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         </td>
                                     </tr>
                                 <?php endwhile; ?>
-                            <?php endif; ?>
-                            <?php
+                            <?php endif;
                         } else {
                             echo "<p>No section selected.</p>";
                         }
@@ -1033,18 +1393,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <tbody data-type="male" data-akap="solved">
                         <?php
                         include '../../connection/connection.php';
+
                         // Check if section_id is passed in the URL
                         if (isset($_GET['section_id'])) {
                             $section_id = $_GET['section_id'];
 
-                            // Query the database for students in this section
-                            $sql = "SELECT * FROM students WHERE section_ID = $section_id AND is_archived = 0 AND akap_status = 'Solved' AND gender ='Male'";
+                            // Query the database for students in this section, ordered by gender (Male first) and then by last name
+                            $sql = "SELECT * FROM students WHERE section_ID = $section_id AND is_archived = 0 AND akap_status = 'Solved' AND gender = 'Male'
+                ORDER BY 
+                CASE WHEN gender = 'Male' THEN 1 ELSE 2 END, 
+                last_name ASC";
                             $result = $conn->query($sql);
 
                             if ($result->num_rows > 0):
-                                ?>
-                                <?php while ($student = $result->fetch_assoc()): ?>
+                                $male_counter = 1;  // Initialize the counter for males
+                                $female_counter = 1;  // Initialize the counter for females
+                                $current_gender = 'Male';  // Track the current gender
+                        
+                                while ($student = $result->fetch_assoc()):
+                                    $drawer_id = "drawer-right-" . $student['student_id'];
+
+                                    // Reset counter when switching from male to female or vice versa
+                                    if ($student['gender'] !== $current_gender) {
+                                        $current_gender = $student['gender'];
+                                        if ($current_gender == 'Male') {
+                                            $male_counter = 1;  // Reset male counter
+                                        } else {
+                                            $female_counter = 1;  // Reset female counter
+                                        }
+                                    }
+                                    ?>
                                     <tr>
+                                        <th>
+                                            <!-- Display male or female counter -->
+                                            <?php
+                                            if ($student['gender'] == 'Male') {
+                                                echo $male_counter++;  // Increment and display male counter
+                                            } else {
+                                                echo $female_counter++;  // Increment and display female counter
+                                            }
+                                            ?>
+                                        </th>
                                         <th><?php echo $student['LRN']; ?></th>
                                         <th><?php echo $student['first_name']; ?></th>
                                         <td><?php echo $student['last_name']; ?></td>
@@ -1052,13 +1441,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         <td><?php echo $student['gender']; ?></td>
                                         <td><?php echo $student['akap_status']; ?></td>
                                         <td>
-                                            <input type="checkbox" id="drawer-right-3" class="drawer-toggle" />
-                                            <label for="drawer-right-3" class="btn btn-secondary">Edit</label>
-                                            <label class="overlay" for="drawer-right-3"></label>
+                                            <!-- Dynamic Drawer Toggle -->
+                                            <input type="checkbox" id="<?php echo $drawer_id; ?>" class="drawer-toggle" />
+                                            <label for="<?php echo $drawer_id; ?>" class="btn btn-secondary">Edit</label>
+                                            <label class="overlay" for="<?php echo $drawer_id; ?>"></label>
+
+                                            <!-- Drawer Content -->
                                             <div class="drawer drawer-right">
                                                 <form method="POST" action="../../connection/update_student.php"
                                                     class="drawer-content pt-10 flex flex-col h-full">
-                                                    <label for="drawer-right-3"
+                                                    <label for="<?php echo $drawer_id; ?>"
                                                         class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
                                                     <div>
                                                         <h2 class="text-xl font-medium">Edit Student</h2>
@@ -1075,7 +1467,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                             <label for="student_firstname">
                                                                 <span
                                                                     class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Student
-                                                                    First Name</span>
+                                                                    First
+                                                                    Name</span>
                                                                 <br>
                                                                 <input class="input-block input"
                                                                     placeholder="Please enter first name." name="student_firstname"
@@ -1086,7 +1479,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                             <label for="student_lastname">
                                                                 <span
                                                                     class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Student
-                                                                    Last Name</span>
+                                                                    Last
+                                                                    Name</span>
                                                                 <br>
                                                                 <input class="input-block input"
                                                                     placeholder="Please enter last name." name="student_lastname"
@@ -1109,7 +1503,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                 <br>
                                                                 <select class="select" name="gender" required>
                                                                     <option value="">Select Gender...</option>
-                                                                    <option value="Male" <?php echo ($student['gender'] == 'Male') ? 'selected' : ''; ?>>Male</option>
+                                                                    <option value="Male" <?php echo ($student['gender'] == 'Male') ? 'selected' : ''; ?>>
+                                                                        Male</option>
                                                                     <option value="Female" <?php echo ($student['gender'] == 'Female') ? 'selected' : ''; ?>>Female</option>
                                                                 </select>
                                                             </label>
@@ -1130,7 +1525,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                             <div class="h-full flex flex-row justify-end items-end gap-2">
                                                                 <button type="button" class="btn btn-ghost"
-                                                                    onclick="document.getElementById('drawer-right-3').checked = false;">Cancel</button>
+                                                                    onclick="document.getElementById('<?php echo $drawer_id; ?>').checked = false;">Cancel</button>
                                                                 <button type="submit" class="btn btn-primary">Update</button>
                                                                 <input type="hidden" name="student_id"
                                                                     value="<?php echo htmlspecialchars($student['student_id']); ?>" />
@@ -1141,16 +1536,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                 </form>
                                             </div>
 
+                                            <!-- Archive Button and Modal -->
                                             <label class="btn btn-error"
-                                                for="modal-2-<?php echo $student['student_id']; ?>">Archive</label>
-                                            <input class="modal-state" id="modal-2-<?php echo $student['student_id']; ?>"
+                                                for="modal-1-<?php echo $student['student_id']; ?>">Archive</label>
+                                            <input class="modal-state" id="modal-1-<?php echo $student['student_id']; ?>"
                                                 type="checkbox" />
                                             <div class="modal">
                                                 <label class="modal-overlay"
-                                                    for="modal-2-<?php echo $student['student_id']; ?>"></label>
+                                                    for="modal-1-<?php echo $student['student_id']; ?>"></label>
                                                 <form method="POST" action="../../connection/archive_student.php"
                                                     class="modal-content flex flex-col gap-5">
-                                                    <label for="modal-2-<?php echo $student['student_id']; ?>"
+                                                    <label for="modal-1-<?php echo $student['student_id']; ?>"
                                                         class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
                                                     <h2 class="text-xl">Archive Student?</h2>
                                                     <span>Are you sure you want to archive this student?</span>
@@ -1164,7 +1560,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                         value="<?php echo $_GET['section_id']; ?>" />
                                                     <div class="flex gap-3">
                                                         <button class="btn btn-error btn-block" type="submit">Archive</button>
-                                                        <label for="modal-2-<?php echo $student['student_id']; ?>"
+                                                        <label for="modal-1-<?php echo $student['student_id']; ?>"
                                                             class="btn btn-block">Cancel</label>
                                                     </div>
                                                 </form>
@@ -1172,8 +1568,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         </td>
                                     </tr>
                                 <?php endwhile; ?>
-                            <?php endif; ?>
-                            <?php
+                            <?php endif;
                         } else {
                             echo "<p>No section selected.</p>";
                         }
@@ -1182,18 +1577,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <tbody data-type="female" data-akap="inactive">
                         <?php
                         include '../../connection/connection.php';
+
                         // Check if section_id is passed in the URL
                         if (isset($_GET['section_id'])) {
                             $section_id = $_GET['section_id'];
 
-                            // Query the database for students in this section
-                            $sql = "SELECT * FROM students WHERE section_ID = $section_id AND is_archived = 0 AND akap_status = 'Inactive' AND gender ='Female'";
+                            // Query the database for students in this section, ordered by gender (Male first) and then by last name
+                            $sql = "SELECT * FROM students WHERE section_ID = $section_id AND is_archived = 0 AND akap_status = 'Inactive' AND gender = 'Female'
+                ORDER BY 
+                CASE WHEN gender = 'Male' THEN 1 ELSE 2 END, 
+                last_name ASC";
                             $result = $conn->query($sql);
 
                             if ($result->num_rows > 0):
-                                ?>
-                                <?php while ($student = $result->fetch_assoc()): ?>
+                                $male_counter = 1;  // Initialize the counter for males
+                                $female_counter = 1;  // Initialize the counter for females
+                                $current_gender = 'Male';  // Track the current gender
+                        
+                                while ($student = $result->fetch_assoc()):
+                                    $drawer_id = "drawer-right-" . $student['student_id'];
+
+                                    // Reset counter when switching from male to female or vice versa
+                                    if ($student['gender'] !== $current_gender) {
+                                        $current_gender = $student['gender'];
+                                        if ($current_gender == 'Male') {
+                                            $male_counter = 1;  // Reset male counter
+                                        } else {
+                                            $female_counter = 1;  // Reset female counter
+                                        }
+                                    }
+                                    ?>
                                     <tr>
+                                        <td>
+                                            <!-- Display male or female counter -->
+                                            <?php
+                                            if ($student['gender'] == 'Male') {
+                                                echo $male_counter++;  // Increment and display male counter
+                                            } else {
+                                                echo $female_counter++;  // Increment and display female counter
+                                            }
+                                            ?>
+                                        </td>
                                         <th><?php echo $student['LRN']; ?></th>
                                         <th><?php echo $student['first_name']; ?></th>
                                         <td><?php echo $student['last_name']; ?></td>
@@ -1201,13 +1625,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         <td><?php echo $student['gender']; ?></td>
                                         <td><?php echo $student['akap_status']; ?></td>
                                         <td>
-                                            <input type="checkbox" id="drawer-right-4" class="drawer-toggle" />
-                                            <label for="drawer-right-4" class="btn btn-secondary">Edit</label>
-                                            <label class="overlay" for="drawer-right-4"></label>
+                                            <!-- Dynamic Drawer Toggle -->
+                                            <input type="checkbox" id="<?php echo $drawer_id; ?>" class="drawer-toggle" />
+                                            <label for="<?php echo $drawer_id; ?>" class="btn btn-secondary">Edit</label>
+                                            <label class="overlay" for="<?php echo $drawer_id; ?>"></label>
+
+                                            <!-- Drawer Content -->
                                             <div class="drawer drawer-right">
                                                 <form method="POST" action="../../connection/update_student.php"
                                                     class="drawer-content pt-10 flex flex-col h-full">
-                                                    <label for="drawer-right-4"
+                                                    <label for="<?php echo $drawer_id; ?>"
                                                         class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
                                                     <div>
                                                         <h2 class="text-xl font-medium">Edit Student</h2>
@@ -1224,7 +1651,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                             <label for="student_firstname">
                                                                 <span
                                                                     class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Student
-                                                                    First Name</span>
+                                                                    First
+                                                                    Name</span>
                                                                 <br>
                                                                 <input class="input-block input"
                                                                     placeholder="Please enter first name." name="student_firstname"
@@ -1235,7 +1663,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                             <label for="student_lastname">
                                                                 <span
                                                                     class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Student
-                                                                    Last Name</span>
+                                                                    Last
+                                                                    Name</span>
                                                                 <br>
                                                                 <input class="input-block input"
                                                                     placeholder="Please enter last name." name="student_lastname"
@@ -1258,7 +1687,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                 <br>
                                                                 <select class="select" name="gender" required>
                                                                     <option value="">Select Gender...</option>
-                                                                    <option value="Male" <?php echo ($student['gender'] == 'Male') ? 'selected' : ''; ?>>Male</option>
+                                                                    <option value="Male" <?php echo ($student['gender'] == 'Male') ? 'selected' : ''; ?>>
+                                                                        Male</option>
                                                                     <option value="Female" <?php echo ($student['gender'] == 'Female') ? 'selected' : ''; ?>>Female</option>
                                                                 </select>
                                                             </label>
@@ -1279,7 +1709,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                             <div class="h-full flex flex-row justify-end items-end gap-2">
                                                                 <button type="button" class="btn btn-ghost"
-                                                                    onclick="document.getElementById('drawer-right-4').checked = false;">Cancel</button>
+                                                                    onclick="document.getElementById('<?php echo $drawer_id; ?>').checked = false;">Cancel</button>
                                                                 <button type="submit" class="btn btn-primary">Update</button>
                                                                 <input type="hidden" name="student_id"
                                                                     value="<?php echo htmlspecialchars($student['student_id']); ?>" />
@@ -1290,16 +1720,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                 </form>
                                             </div>
 
+                                            <!-- Archive Button and Modal -->
                                             <label class="btn btn-error"
-                                                for="modal-4-<?php echo $student['student_id']; ?>">Archive</label>
-                                            <input class="modal-state" id="modal-4-<?php echo $student['student_id']; ?>"
+                                                for="modal-1-<?php echo $student['student_id']; ?>">Archive</label>
+                                            <input class="modal-state" id="modal-1-<?php echo $student['student_id']; ?>"
                                                 type="checkbox" />
                                             <div class="modal">
                                                 <label class="modal-overlay"
-                                                    for="modal-4-<?php echo $student['student_id']; ?>"></label>
+                                                    for="modal-1-<?php echo $student['student_id']; ?>"></label>
                                                 <form method="POST" action="../../connection/archive_student.php"
                                                     class="modal-content flex flex-col gap-5">
-                                                    <label for="modal-4-<?php echo $student['student_id']; ?>"
+                                                    <label for="modal-1-<?php echo $student['student_id']; ?>"
                                                         class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
                                                     <h2 class="text-xl">Archive Student?</h2>
                                                     <span>Are you sure you want to archive this student?</span>
@@ -1313,7 +1744,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                         value="<?php echo $_GET['section_id']; ?>" />
                                                     <div class="flex gap-3">
                                                         <button class="btn btn-error btn-block" type="submit">Archive</button>
-                                                        <label for="modal-4-<?php echo $student['student_id']; ?>"
+                                                        <label for="modal-1-<?php echo $student['student_id']; ?>"
                                                             class="btn btn-block">Cancel</label>
                                                     </div>
                                                 </form>
@@ -1321,8 +1752,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         </td>
                                     </tr>
                                 <?php endwhile; ?>
-                            <?php endif; ?>
-                            <?php
+                            <?php endif;
                         } else {
                             echo "<p>No section selected.</p>";
                         }
@@ -1331,18 +1761,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <tbody data-type="female" data-akap="active">
                         <?php
                         include '../../connection/connection.php';
+
                         // Check if section_id is passed in the URL
                         if (isset($_GET['section_id'])) {
                             $section_id = $_GET['section_id'];
 
-                            // Query the database for students in this section
-                            $sql = "SELECT * FROM students WHERE section_ID = $section_id AND is_archived = 0 AND akap_status = 'Active' AND gender ='Female'";
+                            // Query the database for students in this section, ordered by gender (Male first) and then by last name
+                            $sql = "SELECT * FROM students WHERE section_ID = $section_id AND is_archived = 0 AND akap_status = 'Active' AND gender = 'Female'
+                ORDER BY 
+                CASE WHEN gender = 'Male' THEN 1 ELSE 2 END, 
+                last_name ASC";
                             $result = $conn->query($sql);
 
                             if ($result->num_rows > 0):
-                                ?>
-                                <?php while ($student = $result->fetch_assoc()): ?>
+                                $male_counter = 1;  // Initialize the counter for males
+                                $female_counter = 1;  // Initialize the counter for females
+                                $current_gender = 'Male';  // Track the current gender
+                        
+                                while ($student = $result->fetch_assoc()):
+                                    $drawer_id = "drawer-right-" . $student['student_id'];
+
+                                    // Reset counter when switching from male to female or vice versa
+                                    if ($student['gender'] !== $current_gender) {
+                                        $current_gender = $student['gender'];
+                                        if ($current_gender == 'Male') {
+                                            $male_counter = 1;  // Reset male counter
+                                        } else {
+                                            $female_counter = 1;  // Reset female counter
+                                        }
+                                    }
+                                    ?>
                                     <tr>
+                                        <th>
+                                            <!-- Display male or female counter -->
+                                            <?php
+                                            if ($student['gender'] == 'Male') {
+                                                echo $male_counter++;  // Increment and display male counter
+                                            } else {
+                                                echo $female_counter++;  // Increment and display female counter
+                                            }
+                                            ?>
+                                        </th>
                                         <th><?php echo $student['LRN']; ?></th>
                                         <th><?php echo $student['first_name']; ?></th>
                                         <td><?php echo $student['last_name']; ?></td>
@@ -1350,13 +1809,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         <td><?php echo $student['gender']; ?></td>
                                         <td><?php echo $student['akap_status']; ?></td>
                                         <td>
-                                            <input type="checkbox" id="drawer-right-4" class="drawer-toggle" />
-                                            <label for="drawer-right-4" class="btn btn-secondary">Edit</label>
-                                            <label class="overlay" for="drawer-right-4"></label>
+                                            <!-- Dynamic Drawer Toggle -->
+                                            <input type="checkbox" id="<?php echo $drawer_id; ?>" class="drawer-toggle" />
+                                            <label for="<?php echo $drawer_id; ?>" class="btn btn-secondary">Edit</label>
+                                            <label class="overlay" for="<?php echo $drawer_id; ?>"></label>
+
+                                            <!-- Drawer Content -->
                                             <div class="drawer drawer-right">
                                                 <form method="POST" action="../../connection/update_student.php"
                                                     class="drawer-content pt-10 flex flex-col h-full">
-                                                    <label for="drawer-right-4"
+                                                    <label for="<?php echo $drawer_id; ?>"
                                                         class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
                                                     <div>
                                                         <h2 class="text-xl font-medium">Edit Student</h2>
@@ -1373,7 +1835,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                             <label for="student_firstname">
                                                                 <span
                                                                     class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Student
-                                                                    First Name</span>
+                                                                    First
+                                                                    Name</span>
                                                                 <br>
                                                                 <input class="input-block input"
                                                                     placeholder="Please enter first name." name="student_firstname"
@@ -1384,7 +1847,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                             <label for="student_lastname">
                                                                 <span
                                                                     class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Student
-                                                                    Last Name</span>
+                                                                    Last
+                                                                    Name</span>
                                                                 <br>
                                                                 <input class="input-block input"
                                                                     placeholder="Please enter last name." name="student_lastname"
@@ -1407,7 +1871,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                 <br>
                                                                 <select class="select" name="gender" required>
                                                                     <option value="">Select Gender...</option>
-                                                                    <option value="Male" <?php echo ($student['gender'] == 'Male') ? 'selected' : ''; ?>>Male</option>
+                                                                    <option value="Male" <?php echo ($student['gender'] == 'Male') ? 'selected' : ''; ?>>
+                                                                        Male</option>
                                                                     <option value="Female" <?php echo ($student['gender'] == 'Female') ? 'selected' : ''; ?>>Female</option>
                                                                 </select>
                                                             </label>
@@ -1428,7 +1893,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                             <div class="h-full flex flex-row justify-end items-end gap-2">
                                                                 <button type="button" class="btn btn-ghost"
-                                                                    onclick="document.getElementById('drawer-right-4').checked = false;">Cancel</button>
+                                                                    onclick="document.getElementById('<?php echo $drawer_id; ?>').checked = false;">Cancel</button>
                                                                 <button type="submit" class="btn btn-primary">Update</button>
                                                                 <input type="hidden" name="student_id"
                                                                     value="<?php echo htmlspecialchars($student['student_id']); ?>" />
@@ -1439,16 +1904,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                 </form>
                                             </div>
 
+                                            <!-- Archive Button and Modal -->
                                             <label class="btn btn-error"
-                                                for="modal-4-<?php echo $student['student_id']; ?>">Archive</label>
-                                            <input class="modal-state" id="modal-4-<?php echo $student['student_id']; ?>"
+                                                for="modal-1-<?php echo $student['student_id']; ?>">Archive</label>
+                                            <input class="modal-state" id="modal-1-<?php echo $student['student_id']; ?>"
                                                 type="checkbox" />
                                             <div class="modal">
                                                 <label class="modal-overlay"
-                                                    for="modal-4-<?php echo $student['student_id']; ?>"></label>
+                                                    for="modal-1-<?php echo $student['student_id']; ?>"></label>
                                                 <form method="POST" action="../../connection/archive_student.php"
                                                     class="modal-content flex flex-col gap-5">
-                                                    <label for="modal-4-<?php echo $student['student_id']; ?>"
+                                                    <label for="modal-1-<?php echo $student['student_id']; ?>"
                                                         class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
                                                     <h2 class="text-xl">Archive Student?</h2>
                                                     <span>Are you sure you want to archive this student?</span>
@@ -1462,7 +1928,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                         value="<?php echo $_GET['section_id']; ?>" />
                                                     <div class="flex gap-3">
                                                         <button class="btn btn-error btn-block" type="submit">Archive</button>
-                                                        <label for="modal-4-<?php echo $student['student_id']; ?>"
+                                                        <label for="modal-1-<?php echo $student['student_id']; ?>"
                                                             class="btn btn-block">Cancel</label>
                                                     </div>
                                                 </form>
@@ -1470,8 +1936,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         </td>
                                     </tr>
                                 <?php endwhile; ?>
-                            <?php endif; ?>
-                            <?php
+                            <?php endif;
                         } else {
                             echo "<p>No section selected.</p>";
                         }
@@ -1480,18 +1945,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <tbody data-type="female" data-akap="solved">
                         <?php
                         include '../../connection/connection.php';
+
                         // Check if section_id is passed in the URL
                         if (isset($_GET['section_id'])) {
                             $section_id = $_GET['section_id'];
 
-                            // Query the database for students in this section
-                            $sql = "SELECT * FROM students WHERE section_ID = $section_id AND is_archived = 0 AND akap_status = 'Solved' AND gender ='Female'";
+                            // Query the database for students in this section, ordered by gender (Male first) and then by last name
+                            $sql = "SELECT * FROM students WHERE section_ID = $section_id AND is_archived = 0 AND akap_status = 'Solved' AND gender = 'Female'
+                ORDER BY 
+                CASE WHEN gender = 'Male' THEN 1 ELSE 2 END, 
+                last_name ASC";
                             $result = $conn->query($sql);
 
                             if ($result->num_rows > 0):
-                                ?>
-                                <?php while ($student = $result->fetch_assoc()): ?>
+                                $male_counter = 1;  // Initialize the counter for males
+                                $female_counter = 1;  // Initialize the counter for females
+                                $current_gender = 'Male';  // Track the current gender
+                        
+                                while ($student = $result->fetch_assoc()):
+                                    $drawer_id = "drawer-right-" . $student['student_id'];
+
+                                    // Reset counter when switching from male to female or vice versa
+                                    if ($student['gender'] !== $current_gender) {
+                                        $current_gender = $student['gender'];
+                                        if ($current_gender == 'Male') {
+                                            $male_counter = 1;  // Reset male counter
+                                        } else {
+                                            $female_counter = 1;  // Reset female counter
+                                        }
+                                    }
+                                    ?>
                                     <tr>
+                                        <th>
+                                            <!-- Display male or female counter -->
+                                            <?php
+                                            if ($student['gender'] == 'Male') {
+                                                echo $male_counter++;  // Increment and display male counter
+                                            } else {
+                                                echo $female_counter++;  // Increment and display female counter
+                                            }
+                                            ?>
+                                        </th>
                                         <th><?php echo $student['LRN']; ?></th>
                                         <th><?php echo $student['first_name']; ?></th>
                                         <td><?php echo $student['last_name']; ?></td>
@@ -1499,13 +1993,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         <td><?php echo $student['gender']; ?></td>
                                         <td><?php echo $student['akap_status']; ?></td>
                                         <td>
-                                            <input type="checkbox" id="drawer-right-4" class="drawer-toggle" />
-                                            <label for="drawer-right-4" class="btn btn-secondary">Edit</label>
-                                            <label class="overlay" for="drawer-right-4"></label>
+                                            <!-- Dynamic Drawer Toggle -->
+                                            <input type="checkbox" id="<?php echo $drawer_id; ?>" class="drawer-toggle" />
+                                            <label for="<?php echo $drawer_id; ?>" class="btn btn-secondary">Edit</label>
+                                            <label class="overlay" for="<?php echo $drawer_id; ?>"></label>
+
+                                            <!-- Drawer Content -->
                                             <div class="drawer drawer-right">
                                                 <form method="POST" action="../../connection/update_student.php"
                                                     class="drawer-content pt-10 flex flex-col h-full">
-                                                    <label for="drawer-right-4"
+                                                    <label for="<?php echo $drawer_id; ?>"
                                                         class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
                                                     <div>
                                                         <h2 class="text-xl font-medium">Edit Student</h2>
@@ -1522,7 +2019,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                             <label for="student_firstname">
                                                                 <span
                                                                     class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Student
-                                                                    First Name</span>
+                                                                    First
+                                                                    Name</span>
                                                                 <br>
                                                                 <input class="input-block input"
                                                                     placeholder="Please enter first name." name="student_firstname"
@@ -1533,7 +2031,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                             <label for="student_lastname">
                                                                 <span
                                                                     class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Student
-                                                                    Last Name</span>
+                                                                    Last
+                                                                    Name</span>
                                                                 <br>
                                                                 <input class="input-block input"
                                                                     placeholder="Please enter last name." name="student_lastname"
@@ -1556,7 +2055,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                 <br>
                                                                 <select class="select" name="gender" required>
                                                                     <option value="">Select Gender...</option>
-                                                                    <option value="Male" <?php echo ($student['gender'] == 'Male') ? 'selected' : ''; ?>>Male</option>
+                                                                    <option value="Male" <?php echo ($student['gender'] == 'Male') ? 'selected' : ''; ?>>
+                                                                        Male</option>
                                                                     <option value="Female" <?php echo ($student['gender'] == 'Female') ? 'selected' : ''; ?>>Female</option>
                                                                 </select>
                                                             </label>
@@ -1577,7 +2077,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                                             <div class="h-full flex flex-row justify-end items-end gap-2">
                                                                 <button type="button" class="btn btn-ghost"
-                                                                    onclick="document.getElementById('drawer-right-4').checked = false;">Cancel</button>
+                                                                    onclick="document.getElementById('<?php echo $drawer_id; ?>').checked = false;">Cancel</button>
                                                                 <button type="submit" class="btn btn-primary">Update</button>
                                                                 <input type="hidden" name="student_id"
                                                                     value="<?php echo htmlspecialchars($student['student_id']); ?>" />
@@ -1588,16 +2088,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                 </form>
                                             </div>
 
+                                            <!-- Archive Button and Modal -->
                                             <label class="btn btn-error"
-                                                for="modal-4-<?php echo $student['student_id']; ?>">Archive</label>
+                                                for="modal-1-<?php echo $student['student_id']; ?>">Archive</label>
                                             <input class="modal-state" id="modal-1-<?php echo $student['student_id']; ?>"
                                                 type="checkbox" />
                                             <div class="modal">
                                                 <label class="modal-overlay"
-                                                    for="modal-4-<?php echo $student['student_id']; ?>"></label>
+                                                    for="modal-1-<?php echo $student['student_id']; ?>"></label>
                                                 <form method="POST" action="../../connection/archive_student.php"
                                                     class="modal-content flex flex-col gap-5">
-                                                    <label for="modal-4-<?php echo $student['student_id']; ?>"
+                                                    <label for="modal-1-<?php echo $student['student_id']; ?>"
                                                         class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
                                                     <h2 class="text-xl">Archive Student?</h2>
                                                     <span>Are you sure you want to archive this student?</span>
@@ -1611,7 +2112,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                         value="<?php echo $_GET['section_id']; ?>" />
                                                     <div class="flex gap-3">
                                                         <button class="btn btn-error btn-block" type="submit">Archive</button>
-                                                        <label for="modal-4-<?php echo $student['student_id']; ?>"
+                                                        <label for="modal-1-<?php echo $student['student_id']; ?>"
                                                             class="btn btn-block">Cancel</label>
                                                     </div>
                                                 </form>
@@ -1619,8 +2120,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         </td>
                                     </tr>
                                 <?php endwhile; ?>
-                            <?php endif; ?>
-                            <?php
+                            <?php endif;
                         } else {
                             echo "<p>No section selected.</p>";
                         }
@@ -1639,20 +2139,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         const genderRadioButtons = document.querySelectorAll('input[name="gender-filter"]');
         const akapDropdown = document.getElementById('akap-dropdown');
         const sections = document.querySelectorAll('#student-table > tbody');
-        const emptyStateMessage = document.createElement('tbody'); // Create an empty state message element
+        const allAllSection = document.querySelector('tbody[data-type="all"][data-akap="all"]'); // New tbody for "All-All"
+        const emptyStateMessage = document.createElement('tbody');
         emptyStateMessage.innerHTML = "<tr><td colspan='8'>No students found in this view</td></tr>";
-        emptyStateMessage.style.color = 'red'; // Change color for visibility
-        emptyStateMessage.style.margin = '10px 0'; // Add margin for spacing
-
-        // Append the empty state message to the table
-        const tableContainer = document.getElementById('student-table'); // Adjust the selector as needed
+        emptyStateMessage.style.color = 'red';
+        emptyStateMessage.style.margin = '10px 0';
+        const tableContainer = document.getElementById('student-table');
         tableContainer.appendChild(emptyStateMessage);
 
-        // Hide male and female sections initially, only show "all"
+        // Initially hide all sections except for "all"
         sections.forEach(section => {
             const sectionType = section.getAttribute('data-type');
             if (sectionType !== 'all') {
-                section.style.display = 'none'; // Hide male and female initially
+                section.style.display = 'none';
             }
         });
 
@@ -1660,47 +2159,55 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         function filterSections() {
             const selectedGender = document.querySelector('input[name="gender-filter"]:checked').value;
             const selectedAKAP = akapDropdown.value;
-            let anyVisible = false; // Track if there are any visible sections
+            let anyVisible = false;
 
+            // Hide all sections initially
             sections.forEach(section => {
-                const sectionType = section.getAttribute('data-type');
-                const sectionAKAP = section.getAttribute('data-akap');
-
-                // Check visibility conditions
-                const genderMatches = (selectedGender === 'all' && sectionType === 'all') ||
-                    (sectionType === selectedGender);
-                const akapMatches = (selectedAKAP === 'all' || sectionAKAP === selectedAKAP);
-
-                // Show or hide the section based on matches
-                if (genderMatches && akapMatches) {
-                    section.style.display = ''; // Show section
-                    if (section.querySelector('tr')) { // Check if there's at least one <tr> inside the section
-                        anyVisible = true; // Mark that at least one section has students
-                    }
-                } else {
-                    section.style.display = 'none'; // Hide section
-                }
+                section.style.display = 'none';
             });
 
-            // Update empty state message visibility
-            if (!anyVisible) {
-                emptyStateMessage.style.display = ''; // Show empty state message
+            // Special case: if both filters are "All", show the new "All-All" section
+            if (selectedGender === 'all' && selectedAKAP === 'all') {
+                allAllSection.style.display = ''; // Show the special "All-All" section
+                anyVisible = true;
             } else {
-                emptyStateMessage.style.display = 'none'; // Hide empty state message
+                // Filter sections based on selected values
+                sections.forEach(section => {
+                    const sectionType = section.getAttribute('data-type');
+                    const sectionAKAP = section.getAttribute('data-akap');
+
+                    const genderMatches = (selectedGender === 'all' && sectionType === 'all') ||
+                        (sectionType === selectedGender);
+                    const akapMatches = (selectedAKAP === 'all' || sectionAKAP === selectedAKAP);
+
+                    if (genderMatches && akapMatches) {
+                        section.style.display = '';
+                        if (section.querySelector('tr')) {
+                            anyVisible = true;
+                        }
+                    }
+                });
+            }
+
+            // Handle empty state
+            if (!anyVisible) {
+                emptyStateMessage.style.display = '';
+            } else {
+                emptyStateMessage.style.display = 'none';
             }
         }
 
-        // Add event listeners to gender radio buttons
+        // Event listeners for filter changes
         genderRadioButtons.forEach(radio => {
             radio.addEventListener('change', filterSections);
         });
 
-        // Add event listener to AKAP dropdown
         akapDropdown.addEventListener('change', filterSections);
 
-        // Initial call to filterSections to handle the case where no students are visible at page load
+        // Initial filter call
         filterSections();
     });
 </script>
+
 
 </html>

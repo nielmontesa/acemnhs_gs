@@ -1,3 +1,26 @@
+<?php
+session_start();
+include '../../connection/connection.php';
+
+// Check if we are accessing a new gradesheet; if yes, clear the old session data
+if (isset($_GET['section_id'])) {
+    // Unset previous session values
+    unset($_SESSION['section_id']);
+    unset($_SESSION['gradesheet_id']);
+
+    // Set the new session values
+    $_SESSION['section_id'] = $_GET['section_id'];
+}
+
+// Do similar for gradesheet_id if necessary
+if (isset($_GET['gradesheet_id'])) {
+    unset($_SESSION['gradesheet_id']);
+    $_SESSION['gradesheet_id'] = $_GET['gradesheet_id'];
+}
+?>
+
+
+
 <!DOCTYPE html>
 <html data-theme="light">
 
@@ -31,7 +54,7 @@
                             <span class="menu-title">Welcome, Username</span>
                             <ul class="menu-items">
                                 <a href="departments.php">
-                                    <li class="menu-item">
+                                    <li class="menu-item ">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-75" fill="none"
                                             viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -42,8 +65,8 @@
                                         <span>Faculty</span>
                                     </li>
                                 </a>
-                                <a href="sections.html">
-                                    <li class="menu-item">
+                                <a href="sections.php">
+                                    <li class="menu-item menu-active">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-75" fill="none"
                                             viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -52,7 +75,7 @@
                                         <span>Students</span>
                                     </li>
                                 </a>
-                                <a href="reports.html">
+                                <a href="reports.php">
                                     <li class="menu-item">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-75" fill="none"
                                             viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -83,43 +106,112 @@
                             </div>
                         </label>
                         <div class="dropdown-menu-right-top dropdown-menu ml-2">
-                            <a tabindex="-1" class="dropdown-item text-sm">Account settings</a>
+                            <a href="settings.php" tabindex="-1" class="dropdown-item text-sm">Account settings</a>
                             <a href="../../connection/logout.php" tabindex="-1" class="dropdown-item text-sm">Logout</a>
                         </div>
                     </div>
                 </section>
             </aside>
         </div>
-        <main class="main-content flex-1 p-8">
+        <main class="main-content flex-1 p-8 overflow-x-auto">
             <div class="w-fit">
-                <label for="sidebar-mobile-fixed" class="btn-primary btn sm:hidden mb-4">Open Sidebar</label>
+                <label for="sidebar-mobile-fixed" class="btn-primary btn sm:hidden">Open Sidebar</label>
             </div>
 
-            <h1 class="text-xl font-bold">Account Settings</h1>
-            <p class="pt-2">Change your username or your password.</p>
+            <h1 class="text-xl font-bold">
+                <?php
 
-            <form action="./pages/admin/departments.php" class="form-control">
-                <div class="flex flex-col gap-4 mt-4">
-                    <div class="flex flex-col gap-2">
-                        <label for="username">
-                            <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Username</span>
-                            <input class="input-block input" placeholder="Please enter your username." name="username"
-                                type="text" />
-                        </label>
-                        <label for="oldpassword">
-                            <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Old Password</span>
-                            <input class="input-block input" placeholder="Please enter your old password."
-                                name="password" type="password" />
-                        </label>
-                        <label for="newpassword">
-                            <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">New Password</span>
-                            <input class="input-block input" placeholder="Please enter your new password."
-                                name="password" type="password" />
-                        </label>
-                        <button class="btn btn-primary mt-2" type="submit">Update Details</button>
-                    </div>
-                </div>
-            </form>
+                if (isset($_GET['section_id'])) {
+                    $section_id = $_GET['section_id'];
+                    $section_details_query = "SELECT section_name, grade_level, section_id FROM section WHERE section_id = $section_id";
+                    $result = $conn->query($section_details_query);
+
+                    if ($result->num_rows > 0) {
+                        // Fetch the result as an associative array and display section_name
+                        while ($row = $result->fetch_assoc()) {
+                            echo "Gradesheets of Grade ";
+                            echo $row['grade_level'];
+                            echo " - ";
+                            echo $row['section_name']; // Output each section name
+                        }
+                    } else {
+                        echo "No sections found.";
+                    }
+                }
+                ?>
+            </h1>
+            <p class='pt-2'>This is currently all of the gradesheets in
+
+                <?php
+                if (isset($_GET['section_id'])) {
+                    $section_id = $_GET['section_id'];
+                    $section_details_query = "SELECT section_name, grade_level, section_id FROM section WHERE section_id = $section_id";
+                    $result = $conn->query($section_details_query);
+
+                    if ($result->num_rows > 0) {
+                        // Fetch the result as an associative array and display section_name
+                        while ($row = $result->fetch_assoc()) {
+                            echo "Grade ";
+                            echo $row['grade_level'];
+                            echo " - ";
+                            echo $row['section_name']; // Output each section name
+                        }
+                    } else {
+                        echo "No sections found.";
+                    }
+                }
+                ?>.
+            </p>
+            <?php
+            if (isset($_GET['section_id'])) {
+                $section_id = $_GET['section_id'];
+                $section_details_query = "SELECT section_name, grade_level, section_id FROM section WHERE section_id = $section_id";
+                $result = $conn->query($section_details_query);
+            }
+            ?>
+            </p>
+            <br>
+            <table class="table-compact table-zebra table w-full">
+                <thead>
+                    <tr>
+                        <th>Subject</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    // SQL query to get gradesheet details for the specific section_id
+                    if (isset($section_id)) {
+                        $sql = "SELECT g.gradesheet_id, g.subject, s.section_name, s.grade_level
+                    FROM gradesheet g
+                    INNER JOIN section s ON g.section_id = s.section_id
+                    WHERE s.section_id = $section_id AND s.is_archived = 0";
+                        $result = $conn->query($sql);
+
+                        if ($result->num_rows > 0):
+                            ?>
+                        <tbody>
+                            <?php while ($row = $result->fetch_assoc()): ?>
+                                <tr>
+                                    <th><?php echo $row['subject']; ?></th>
+                                    <td>
+                                        <a
+                                            href="quarters/1q-grades.php?gradesheet_id=<?php echo $row['gradesheet_id']; ?>&section_id=<?php echo $section_id; ?>">
+                                            <button class="btn btn-secondary">View</button>
+                                        </a>
+
+                                    </td>
+                                </tr>
+                            <?php endwhile; ?>
+                        </tbody>
+                    <?php else: ?>
+                        <tr>
+                            <td colspan="4">No gradesheets found for this section.</td>
+                        </tr>
+                    <?php endif;
+                    } ?>
+                </tbody>
+            </table>
 
         </main>
     </div>

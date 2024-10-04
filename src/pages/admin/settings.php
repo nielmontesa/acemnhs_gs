@@ -31,7 +31,7 @@
                             <span class="menu-title">Welcome, Username</span>
                             <ul class="menu-items">
                                 <a href="departments.php">
-                                    <li class="menu-item ">
+                                    <li class="menu-item">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-75" fill="none"
                                             viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -42,7 +42,7 @@
                                         <span>Faculty</span>
                                     </li>
                                 </a>
-                                <a href="sections.html">
+                                <a href="sections.php">
                                     <li class="menu-item">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-75" fill="none"
                                             viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -52,8 +52,8 @@
                                         <span>Students</span>
                                     </li>
                                 </a>
-                                <a href="reports.html">
-                                    <li class="menu-item menu-active">
+                                <a href="reports.php">
+                                    <li class="menu-item">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-75" fill="none"
                                             viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -83,29 +83,45 @@
                             </div>
                         </label>
                         <div class="dropdown-menu-right-top dropdown-menu ml-2">
-                            <a href="settings.html" tabindex="-1" class="dropdown-item text-sm">Account settings</a>
+                            <a tabindex="-1" class="dropdown-item text-sm">Account settings</a>
                             <a href="../../connection/logout.php" tabindex="-1" class="dropdown-item text-sm">Logout</a>
                         </div>
                     </div>
                 </section>
             </aside>
         </div>
-        <main class="main-content flex-1 p-8">
+        <main class="main-content flex-1 p-8 overflow-x-auto">
             <div class="w-fit">
-                <label for="sidebar-mobile-fixed" class="btn-primary btn sm:hidden">Open Sidebar</label>
+                <label for="sidebar-mobile-fixed" class="btn-primary btn sm:hidden mb-4">Open Sidebar</label>
             </div>
 
-            <h1 class="text-xl font-bold">Reports</h1>
-            <p class="pt-2">This is charts of the entire school.</p>
+            <h1 class="text-xl font-bold">Account Settings</h1>
+            <p class="pt-2">Change your username or your password.</p>
 
-            <div>
-                <img src="https://images.squarespace-cdn.com/content/v1/55b6a6dce4b089e11621d3ed/62a2d66b-8435-4e41-8df9-262db165ed79/NPL+and+Reserves+combo+chart.png"
-                    alt="">
-                <img src="https://www.mongodb.com/docs/charts/static/87821c53a354afffdf8f003e3f86adac/64ccf/stacked-bar-chart-reference-small.webp"
-                    alt="">
-            </div>
-    </div>
-    </main>
+            <form action="./pages/admin/departments.php" class="form-control">
+                <div class="flex flex-col gap-4 mt-4">
+                    <div class="flex flex-col gap-2">
+                        <label for="username">
+                            <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Username</span>
+                            <input class="input-block input" placeholder="Please enter your username." name="username"
+                                type="text" />
+                        </label>
+                        <label for="oldpassword">
+                            <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Old Password</span>
+                            <input class="input-block input" placeholder="Please enter your old password."
+                                name="password" type="password" />
+                        </label>
+                        <label for="newpassword">
+                            <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">New Password</span>
+                            <input class="input-block input" placeholder="Please enter your new password."
+                                name="password" type="password" />
+                        </label>
+                        <button class="btn btn-primary mt-2" type="submit">Update Details</button>
+                    </div>
+                </div>
+            </form>
+
+        </main>
     </div>
 </body>
 

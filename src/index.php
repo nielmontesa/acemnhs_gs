@@ -1,3 +1,17 @@
+<?php
+session_start();
+
+// If the user is already logged in, redirect them based on their role
+if (isset($_SESSION['status']) && $_SESSION['status'] === 'valid') {
+    if ($_SESSION['role'] === 'admin') {
+        header('Location: pages/admin/departments.php');
+    } elseif ($_SESSION['role'] === 'teacher') {
+        header('Location: pages/teacher/sections.php');
+    }
+    exit(); // End script after redirection
+}
+?>
+
 <!DOCTYPE html>
 <html data-theme="light">
 
@@ -8,7 +22,7 @@
     <title>Antonio C. Esguerra MNHS</title>
     <link rel="stylesheet" href='styles/tailwind.css'>
     <link rel="stylesheet" href='styles/style.css'>
-    <link rel="icon" href="assets/acemnhs_logo.png">
+    <lisnk rel="icon" href="assets/acemnhs_logo.png">
 </head>
 
 <body class="h-screen flex justify-center items-center">
@@ -23,9 +37,9 @@
                 <div class="w-full flex place-content-center">
                     <div class="btn-group mx-auto">
                         <input type="radio" name="role" value="admin" data-content="Admin"
-                            class="btn bg-[rgba(0,0,0,0.02)]" required />
-                        <input type="radio" name="role" value="teacher" data-content="Teacher"
                             class="btn bg-[rgba(0,0,0,0.02)]" checked required />
+                        <input type="radio" name="role" value="teacher" data-content="Teacher"
+                            class="btn bg-[rgba(0,0,0,0.02)]" required />
                     </div>
                 </div>
                 <div class="flex flex-col gap-2">

@@ -2,20 +2,6 @@
 session_start();
 include '../connection/connection.php';
 
-// Check if user is already logged in
-if (isset($_SESSION['status']) && $_SESSION['status'] == 'valid') {
-    if ($_SESSION['role'] == 'admin') {
-        echo '<script>window.location.href = "../pages/admin/departments.php";</script>';
-        exit();
-    } elseif ($_SESSION['role'] == 'teacher') {
-        echo '<script>window.location.href = "../pages/teacher/sections.php";</script>';
-        exit();
-    } elseif ($_SESSION['role'] == 'parent') {
-        echo '<script>window.location.href = "../pages/parent/student_details.php";</script>';
-        exit();
-    }
-}
-
 // Handle login form submission
 if (isset($_POST['login'])) {
     $username = mysqli_real_escape_string($conn, trim($_POST['username']));
@@ -63,15 +49,15 @@ if (isset($_POST['login'])) {
                     echo '<script>window.location.href = "../pages/admin/departments.php";</script>';
                 } elseif ($role == 'teacher') {
                     echo '<script>window.location.href = "../pages/teacher/sections.php";</script>';
-                } elseif ($role == 'parent') {
-                    echo '<script>window.location.href = "../pages/parent/student_details.php";</script>';
                 }
                 exit();
             } else {
                 echo '<script>alert("Login failed. Incorrect username or password for ' . ucfirst($role) . '.");</script>';
+                echo '<script>window.location.href = "../index.php";</script>';
             }
         } else {
             echo '<script>alert("No such user found.");</script>';
+            echo '<script>window.location.href = "../index.php";</script>';
         }
     }
 }

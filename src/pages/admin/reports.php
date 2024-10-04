@@ -1,31 +1,3 @@
-<?php
-session_start();
-include '../../connection/connection.php';
-
-// If the user is not logged in or not an admin, redirect to the login page
-if (!isset($_SESSION['status']) || $_SESSION['status'] !== 'valid' || $_SESSION['role'] !== 'admin') {
-    header('Location: ../../index.php'); // Redirect to login page
-    exit(); // End script after redirection
-}
-
-$sql = "SELECT department_id, department_name, is_archived FROM department WHERE is_archived = 0";
-$result = mysqli_query($conn, $sql);
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    header("Location: ../../pages/admin/departments.php");
-    $departmentName = $_POST['department_name'];
-
-    // Prepare and execute the SQL query
-    $sql = "INSERT INTO department (department_name) VALUES (?)";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("s", $departmentName);
-    $stmt->execute();
-
-    // Display an alert message
-    echo "<script>alert('Department created successfully!');</script>";
-}
-?>
-
 <!DOCTYPE html>
 <html data-theme="light">
 
@@ -56,10 +28,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <section class="sidebar-content">
                     <nav class="menu rounded-md">
                         <section class="menu-section px-4">
-                            <span class="menu-title">Welcome, <?php echo $_SESSION['username']; ?></span>
+                            <span class="menu-title">Welcome, Username</span>
                             <ul class="menu-items">
                                 <a href="departments.php">
-                                    <li class="menu-item  menu-active">
+                                    <li class="menu-item ">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-75" fill="none"
                                             viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -81,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     </li>
                                 </a>
                                 <a href="reports.php">
-                                    <li class="menu-item">
+                                    <li class="menu-item menu-active">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-75" fill="none"
                                             viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -105,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 </div>
 
                                 <div class="flex flex-col">
-                                    <span><?php echo $_SESSION['username']; ?></span>
+                                    <span>Username</span>
                                     <span class="text-xs">Administrator</span>
                                 </div>
                             </div>
@@ -123,81 +95,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <label for="sidebar-mobile-fixed" class="btn-primary btn sm:hidden">Open Sidebar</label>
             </div>
 
-            <h1 class="text-xl font-bold">Departments</h1>
-            <p class="pt-2">This is currently all of the departments in the school.</p>
+            <h1 class="text-xl font-bold">Reports</h1>
+            <p class="pt-2">This is charts of the entire school.</p>
 
-
-            <div class="mt-8">
-                <input type="checkbox" id="drawer-right" class="drawer-toggle" />
-                <label for="drawer-right" class="btn btn-primary">Add Department</label>
-                <label class="overlay" for="drawer-right"></label>
-                <div class="drawer drawer-right">
-                    <div class="drawer-content pt-10 flex flex-col h-full">
-                        <label for="drawer-right"
-                            class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
-                        <div>
-                            <h2 class="text-xl font-medium">Add Department</h2>
-                            <form action="departments.php" method="post">
-                                <input class="input py-1.5 my-3" name="department_name" placeholder="Department Name" />
-                        </div>
-                        <div class="h-full flex flex-row justify-end items-end gap-2">
-                            <button class="btn btn-ghost">Cancel</button>
-                            <button class="btn btn-primary">Create</button>
-                        </div>
-                        </form>
-                    </div>
-                </div>
-                <a href="all_teachers.php">
-                    <button class="btn btn-outline-primary">View All Teachers</button></a>
+            <div>
+                <img src="https://images.squarespace-cdn.com/content/v1/55b6a6dce4b089e11621d3ed/62a2d66b-8435-4e41-8df9-262db165ed79/NPL+and+Reserves+combo+chart.png"
+                    alt="">
+                <img src="https://www.mongodb.com/docs/charts/static/87821c53a354afffdf8f003e3f86adac/64ccf/stacked-bar-chart-reference-small.webp"
+                    alt="">
             </div>
-            <div class="flex w-full overflow-x-auto pt-8">
-                <table class="table-compact table-zebra table w-full">
-                    <thead>
-                        <tr>
-                            <th>Department</th>
-                            <th>Teacher Count</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        if ($result->num_rows > 0) {
-                            while ($row = $result->fetch_assoc()) {
-                                echo "<tr>";
-                                echo "<td>" . htmlspecialchars($row['department_name']) . "</td>";
-                                echo "<td>20</td>"; // Replace with actual teacher count
-                                echo "<td>
-                        <a href='teachers.php'><button class='btn btn-secondary'>View</button></a>
-                        <label class='btn btn-error' for='modal-" . $row['department_id'] . "'>Archive</label>
-                        <input class='modal-state' id='modal-" . $row['department_id'] . "' type='checkbox' />
-                        <div class='modal'>
-                            <label class='modal-overlay' for='modal-" . $row['department_id'] . "'></label>
-                            <div class='modal-content flex flex-col gap-5'>
-                                <label for='modal-" . $row['department_id'] . "' class='btn btn-sm btn-circle btn-ghost absolute right-2 top-2'>✕</label>
-                                <h2 class='text-xl'>Archive department?</h2>
-                                <span>Are you sure you want to Archive this department?</span>
-                                <form method='POST' action='../../connection/archive_department.php'>
-                                    <input type='hidden' name='department_id' value='" . $row['department_id'] . "' />
-                                    <div class='flex gap-3'>
-                                        <button type='submit' class='btn btn-error btn-block'>Archive</button>
-                                        <label for='modal-" . $row['department_id'] . "' class='btn btn-block'>Cancel</label>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                      </td>";
-                                echo "</tr>";
-                            }
-                        } else {
-                            echo "<tr><td colspan='3'>No teachers found in this view.</td></tr>";
-                        }
-                        $conn->close();
-                        ?>
-                    </tbody>
-                </table>
-
-            </div>
-        </main>
+    </div>
+    </main>
     </div>
 </body>
 

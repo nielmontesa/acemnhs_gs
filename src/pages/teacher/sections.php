@@ -2,7 +2,7 @@
 session_start();
 
 // If the user is not logged in or not a teacher, redirect to the login page
-if (!isset($_SESSION['status']) || $_SESSION['status'] !== 'valid' || $_SESSION['role'] !== 'teacher') {
+if (!isset($_SESSION['logged_in']) || ($_SESSION['logged_in']) !== true || $_SESSION['role'] !== 'teacher') {
     header('Location: ../../index.php'); // Redirect to login page
     exit(); // End script after redirection
 }

@@ -3,7 +3,7 @@ session_start();
 include '../../connection/connection.php';
 
 // If the user is not logged in or not an admin, redirect to the login page
-if (!isset($_SESSION['status']) || $_SESSION['status'] !== 'valid' || $_SESSION['role'] !== 'admin') {
+if (!isset($_SESSION['logged_in']) || ($_SESSION['logged_in']) !== true || $_SESSION['role'] !== 'admin') {
     header('Location: ../../index.php'); // Redirect to login page
     exit(); // End script after redirection
 }

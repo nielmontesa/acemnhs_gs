@@ -504,7 +504,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 $current_gender = 'Male';  // Track the current gender
                         
                                 while ($student = $result->fetch_assoc()):
-                                    $drawer_id = "drawer-right-" . $student['student_id'];
+                                    $drawer_id = "drawer-right-1" . $student['student_id'];
 
                                     // Reset counter when switching from male to female or vice versa
                                     if ($student['gender'] !== $current_gender) {
@@ -615,6 +615,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                         Solved</option>
                                                                 </select>
                                                             </label>
+
+                                                            <?php
+                                                            $student_id = $student['student_id']; // Assume this is dynamically set based on the current student
+                                                            ?>
+                                                            <a href="report_card.php?student_id=<?php echo $student_id; ?>"
+                                                                class="btn btn-outline-primary">View Report Card</a>
 
                                                             <div class="h-full flex flex-row justify-end items-end gap-2">
                                                                 <button type="button" class="btn btn-ghost"
@@ -688,7 +694,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 $current_gender = 'Male';  // Track the current gender
                         
                                 while ($student = $result->fetch_assoc()):
-                                    $drawer_id = "drawer-right-" . $student['student_id'];
+                                    $drawer_id = "drawer-right-2-" . $student['student_id'];
 
                                     // Reset counter when switching from male to female or vice versa
                                     if ($student['gender'] !== $current_gender) {
@@ -799,6 +805,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                         Solved</option>
                                                                 </select>
                                                             </label>
+
+                                                            <?php
+                                                            $student_id = $student['student_id']; // Assume this is dynamically set based on the current student
+                                                            ?>
+                                                            <a href="report_card.php?student_id=<?php echo $student_id; ?>"
+                                                                class="btn btn-outline-primary">View Report Card</a>
 
                                                             <div class="h-full flex flex-row justify-end items-end gap-2">
                                                                 <button type="button" class="btn btn-ghost"
@@ -872,7 +884,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 $current_gender = 'Male';  // Track the current gender
                         
                                 while ($student = $result->fetch_assoc()):
-                                    $drawer_id = "drawer-right-" . $student['student_id'];
+                                    $drawer_id = "drawer-right-3-" . $student['student_id'];
 
                                     // Reset counter when switching from male to female or vice versa
                                     if ($student['gender'] !== $current_gender) {
@@ -983,6 +995,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                         Solved</option>
                                                                 </select>
                                                             </label>
+                                                            <?php
+                                                            $student_id = $student['student_id']; // Assume this is dynamically set based on the current student
+                                                            ?>
+                                                            <a href="report_card.php?student_id=<?php echo $student_id; ?>"
+                                                                class="btn btn-outline-primary">View Report Card</a>
 
                                                             <div class="h-full flex flex-row justify-end items-end gap-2">
                                                                 <button type="button" class="btn btn-ghost"
@@ -1056,7 +1073,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 $current_gender = 'Male';  // Track the current gender
                         
                                 while ($student = $result->fetch_assoc()):
-                                    $drawer_id = "drawer-right-" . $student['student_id'];
+                                    $drawer_id = "drawer-right-4-" . $student['student_id'];
 
                                     // Reset counter when switching from male to female or vice versa
                                     if ($student['gender'] !== $current_gender) {
@@ -1167,6 +1184,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                         Solved</option>
                                                                 </select>
                                                             </label>
+
+                                                            <?php
+                                                            $student_id = $student['student_id']; // Assume this is dynamically set based on the current student
+                                                            ?>
+                                                            <a href="report_card.php?student_id=<?php echo $student_id; ?>"
+                                                                class="btn btn-outline-primary">View Report Card</a>
 
                                                             <div class="h-full flex flex-row justify-end items-end gap-2">
                                                                 <button type="button" class="btn btn-ghost"
@@ -1240,7 +1263,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 $current_gender = 'Male';  // Track the current gender
                         
                                 while ($student = $result->fetch_assoc()):
-                                    $drawer_id = "drawer-right-" . $student['student_id'];
+                                    $drawer_id = "drawer-right-5-" . $student['student_id'];
 
                                     // Reset counter when switching from male to female or vice versa
                                     if ($student['gender'] !== $current_gender) {
@@ -1351,6 +1374,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                         Solved</option>
                                                                 </select>
                                                             </label>
+
+                                                            <?php
+                                                            $student_id = $student['student_id']; // Assume this is dynamically set based on the current student
+                                                            ?>
+                                                            <a href="report_card.php?student_id=<?php echo $student_id; ?>"
+                                                                class="btn btn-outline-primary">View Report Card</a>
 
                                                             <div class="h-full flex flex-row justify-end items-end gap-2">
                                                                 <button type="button" class="btn btn-ghost"
@@ -1424,7 +1453,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 $current_gender = 'Male';  // Track the current gender
                         
                                 while ($student = $result->fetch_assoc()):
-                                    $drawer_id = "drawer-right-" . $student['student_id'];
+                                    $drawer_id = "drawer-right-6-" . $student['student_id'];
 
                                     // Reset counter when switching from male to female or vice versa
                                     if ($student['gender'] !== $current_gender) {
@@ -1535,6 +1564,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                         Solved</option>
                                                                 </select>
                                                             </label>
+
+                                                            <?php
+                                                            $student_id = $student['student_id']; // Assume this is dynamically set based on the current student
+                                                            ?>
+                                                            <a href="report_card.php?student_id=<?php echo $student_id; ?>"
+                                                                class="btn btn-outline-primary">View Report Card</a>
 
                                                             <div class="h-full flex flex-row justify-end items-end gap-2">
                                                                 <button type="button" class="btn btn-ghost"
@@ -1608,7 +1643,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 $current_gender = 'Male';  // Track the current gender
                         
                                 while ($student = $result->fetch_assoc()):
-                                    $drawer_id = "drawer-right-" . $student['student_id'];
+                                    $drawer_id = "drawer-right-7-" . $student['student_id'];
 
                                     // Reset counter when switching from male to female or vice versa
                                     if ($student['gender'] !== $current_gender) {
@@ -1719,6 +1754,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                         Solved</option>
                                                                 </select>
                                                             </label>
+
+                                                            <?php
+                                                            $student_id = $student['student_id']; // Assume this is dynamically set based on the current student
+                                                            ?>
+                                                            <a href="report_card.php?student_id=<?php echo $student_id; ?>"
+                                                                class="btn btn-outline-primary">View Report Card</a>
 
                                                             <div class="h-full flex flex-row justify-end items-end gap-2">
                                                                 <button type="button" class="btn btn-ghost"
@@ -1792,7 +1833,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 $current_gender = 'Male';  // Track the current gender
                         
                                 while ($student = $result->fetch_assoc()):
-                                    $drawer_id = "drawer-right-" . $student['student_id'];
+                                    $drawer_id = "drawer-right-8-" . $student['student_id'];
 
                                     // Reset counter when switching from male to female or vice versa
                                     if ($student['gender'] !== $current_gender) {
@@ -1903,6 +1944,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                         Solved</option>
                                                                 </select>
                                                             </label>
+
+                                                            <?php
+                                                            $student_id = $student['student_id']; // Assume this is dynamically set based on the current student
+                                                            ?>
+                                                            <a href="report_card.php?student_id=<?php echo $student_id; ?>"
+                                                                class="btn btn-outline-primary">View Report Card</a>
 
                                                             <div class="h-full flex flex-row justify-end items-end gap-2">
                                                                 <button type="button" class="btn btn-ghost"
@@ -1976,7 +2023,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 $current_gender = 'Male';  // Track the current gender
                         
                                 while ($student = $result->fetch_assoc()):
-                                    $drawer_id = "drawer-right-" . $student['student_id'];
+                                    $drawer_id = "drawer-right-9-" . $student['student_id'];
 
                                     // Reset counter when switching from male to female or vice versa
                                     if ($student['gender'] !== $current_gender) {
@@ -2087,6 +2134,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                         Solved</option>
                                                                 </select>
                                                             </label>
+
+                                                            <?php
+                                                            $student_id = $student['student_id']; // Assume this is dynamically set based on the current student
+                                                            ?>
+                                                            <a href="report_card.php?student_id=<?php echo $student_id; ?>"
+                                                                class="btn btn-outline-primary">View Report Card</a>
 
                                                             <div class="h-full flex flex-row justify-end items-end gap-2">
                                                                 <button type="button" class="btn btn-ghost"

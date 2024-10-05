@@ -349,6 +349,8 @@ $conn->close();
             </thead>
             <form method="post">
                 <button type="submit" name="export" class="btn btn-primary">Export to Excel</button>
+                <h1> </h1>
+                <a href="PDF Generator\pdfstructure.php?student_id=<?php echo $_GET['student_id']; ?>" target="_blank" class="btn btn-primary">Preview in PDF</a>
             </form>
 
             <tbody>

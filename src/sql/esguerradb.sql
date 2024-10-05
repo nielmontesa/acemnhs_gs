@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 05, 2024 at 12:28 PM
+-- Generation Time: Oct 05, 2024 at 02:59 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -167,7 +167,19 @@ INSERT INTO `final_grades` (`final_grade_id`, `student_id`, `gradesheet_id`, `qu
 (52, 50, 99, 1, 83.20, 89),
 (53, 50, 99, 2, 74.70, 84),
 (54, 50, 99, 3, 87.50, 92),
-(55, 50, 99, 4, 86.00, 91);
+(55, 50, 99, 4, 86.00, 91),
+(56, 51, 97, 1, 88.43, 92),
+(57, 51, 97, 2, 83.10, 89),
+(58, 51, 97, 3, 92.30, 95),
+(59, 51, 97, 4, 85.60, 91),
+(60, 51, 99, 1, 94.30, 96),
+(61, 51, 99, 2, 88.90, 93),
+(62, 51, 99, 3, 77.90, 86),
+(63, 51, 99, 4, 81.10, 88),
+(64, 54, 97, 1, 88.91, 93),
+(65, 54, 97, 2, 73.30, 83),
+(66, 54, 97, 3, 88.20, 92),
+(67, 54, 97, 4, 83.60, 89);
 
 -- --------------------------------------------------------
 
@@ -188,17 +200,17 @@ CREATE TABLE `gradesheet` (
 
 INSERT INTO `gradesheet` (`gradesheet_id`, `section_id`, `subject`, `is_finalized`) VALUES
 (97, 34, 'Filipino', 0),
-(98, 34, 'English', 0),
-(99, 34, 'Mathematics', 0),
-(100, 34, 'Science', 0),
-(101, 34, 'Home Economics', 0),
-(102, 34, 'Araling Panlipunan', 0),
-(103, 34, 'Edukasyon sa Pagpapakatao', 0),
-(104, 34, 'TLE', 0),
-(105, 34, 'Music', 0),
-(106, 34, 'Arts', 0),
-(107, 34, 'PE', 0),
-(108, 34, 'Health', 0),
+(98, 34, 'English', 1),
+(99, 34, 'Mathematics', 1),
+(100, 34, 'Science', 1),
+(101, 34, 'Home Economics', 1),
+(102, 34, 'Araling Panlipunan', 1),
+(103, 34, 'Edukasyon sa Pagpapakatao', 1),
+(104, 34, 'TLE', 1),
+(105, 34, 'Music', 1),
+(106, 34, 'Arts', 1),
+(107, 34, 'PE', 1),
+(108, 34, 'Health', 1),
 (109, 35, 'Filipino', 0),
 (110, 35, 'English', 0),
 (111, 35, 'Mathematics', 0),
@@ -246,7 +258,40 @@ INSERT INTO `gradesheet` (`gradesheet_id`, `section_id`, `subject`, `is_finalize
 (153, 38, 'Music', 0),
 (154, 38, 'Arts', 0),
 (155, 38, 'PE', 0),
-(156, 38, 'Health', 0);
+(156, 38, 'Health', 0),
+(157, 39, 'Filipino', 0),
+(158, 39, 'English', 0),
+(159, 39, 'Mathematics', 0),
+(160, 39, 'Science', 0),
+(161, 39, 'Araling Panlipunan', 0),
+(162, 39, 'Edukasyon sa Pagpapakatao', 0),
+(163, 39, 'TLE', 0),
+(164, 39, 'Music', 0),
+(165, 39, 'Arts', 0),
+(166, 39, 'PE', 0),
+(167, 39, 'Health', 0),
+(168, 40, 'Filipino', 0),
+(169, 40, 'English', 0),
+(170, 40, 'Mathematics', 0),
+(171, 40, 'Science', 0),
+(172, 40, 'Araling Panlipunan', 0),
+(173, 40, 'Edukasyon sa Pagpapakatao', 0),
+(174, 40, 'TLE', 0),
+(175, 40, 'Music', 0),
+(176, 40, 'Arts', 0),
+(177, 40, 'PE', 0),
+(178, 40, 'Health', 0),
+(179, 41, 'Filipino', 0),
+(180, 41, 'English', 0),
+(181, 41, 'Mathematics', 0),
+(182, 41, 'Science', 0),
+(183, 41, 'Araling Panlipunan', 0),
+(184, 41, 'Edukasyon sa Pagpapakatao', 0),
+(185, 41, 'TLE', 0),
+(186, 41, 'Music', 0),
+(187, 41, 'Arts', 0),
+(188, 41, 'PE', 0),
+(189, 41, 'Health', 0);
 
 -- --------------------------------------------------------
 
@@ -291,6 +336,63 @@ CREATE TABLE `report_card` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `score_change_logs`
+--
+
+CREATE TABLE `score_change_logs` (
+  `log_id` int(11) NOT NULL,
+  `score_id` int(11) DEFAULT NULL,
+  `edited_by` varchar(255) DEFAULT NULL,
+  `edited_at` datetime DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `score_change_logs`
+--
+
+INSERT INTO `score_change_logs` (`log_id`, `score_id`, `edited_by`, `edited_at`) VALUES
+(1, 173, 'Unknown User', '2024-10-05 19:58:02'),
+(2, 174, 'Unknown User', '2024-10-05 19:58:08'),
+(3, 175, 'Unknown User', '2024-10-05 19:58:11'),
+(4, 176, 'Unknown User', '2024-10-05 19:58:14'),
+(5, 177, 'Unknown User', '2024-10-05 19:58:33'),
+(6, 178, 'Unknown User', '2024-10-05 19:58:34'),
+(7, 179, 'raymart', '2024-10-05 20:00:07'),
+(8, 180, 'raymart', '2024-10-05 20:47:49'),
+(9, 181, 'raymart', '2024-10-05 20:48:55'),
+(10, 182, 'raymart', '2024-10-05 20:48:58'),
+(11, 183, 'raymart', '2024-10-05 20:49:00'),
+(12, 184, 'raymart', '2024-10-05 20:49:02'),
+(13, 185, 'raymart', '2024-10-05 20:49:04'),
+(14, 186, 'raymart', '2024-10-05 20:49:06'),
+(15, 114, 'raymart', '2024-10-05 20:49:10'),
+(16, 187, 'raymart', '2024-10-05 20:49:11'),
+(17, 188, 'raymart', '2024-10-05 20:49:12'),
+(18, 189, 'raymart', '2024-10-05 20:49:14'),
+(19, 190, 'raymart', '2024-10-05 20:49:17'),
+(20, 191, 'raymart', '2024-10-05 20:49:18'),
+(21, 192, 'raymart', '2024-10-05 20:49:19'),
+(22, 193, 'raymart', '2024-10-05 20:49:31'),
+(23, 194, 'raymart', '2024-10-05 20:49:33'),
+(24, 195, 'raymart', '2024-10-05 20:49:34'),
+(25, 196, 'raymart', '2024-10-05 20:49:37'),
+(26, 197, 'raymart', '2024-10-05 20:49:39'),
+(27, 198, 'raymart', '2024-10-05 20:49:40'),
+(28, 199, 'raymart', '2024-10-05 20:49:43'),
+(29, 200, 'raymart', '2024-10-05 20:49:47'),
+(30, 201, 'raymart', '2024-10-05 20:49:48'),
+(31, 202, 'raymart', '2024-10-05 20:49:49'),
+(32, 203, 'raymart', '2024-10-05 20:49:52'),
+(33, 204, 'raymart', '2024-10-05 20:49:56'),
+(34, 205, 'raymart', '2024-10-05 20:49:56'),
+(35, 206, 'raymart', '2024-10-05 20:49:58'),
+(36, 207, 'raymart', '2024-10-05 20:49:59'),
+(37, 208, 'raymart', '2024-10-05 20:50:08'),
+(38, 209, 'raymart', '2024-10-05 20:50:14');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `section`
 --
 
@@ -320,11 +422,14 @@ INSERT INTO `section` (`section_id`, `grade_level`, `section_name`, `is_archived
 (31, 7, 'Bonifacio', 1, '', NULL),
 (32, 7, 'Test', 1, '', NULL),
 (33, 7, 'Gomez', 1, '', NULL),
-(34, 7, 'Lapu-lapu', 0, '', NULL),
-(35, 7, 'Gomez', 0, '', NULL),
-(36, 7, 'Berdera', 0, '', NULL),
+(34, 7, 'Lapu-lapu', 0, '2024-2025', 1),
+(35, 7, 'Gomez', 1, '', NULL),
+(36, 7, 'Berdera', 1, '', NULL),
 (37, 8, 'Luna', 0, '', NULL),
-(38, 7, 'Montesa', 0, '', NULL);
+(38, 7, 'Montesa', 1, '', NULL),
+(39, 7, 'Crisostomo', 1, '2024-', 1),
+(40, 7, 'Ibarra', 1, '2024-2025', 2),
+(41, 7, 'Bonifacio', 0, '2024-2025', 1);
 
 -- --------------------------------------------------------
 
@@ -368,7 +473,9 @@ INSERT INTO `students` (`student_id`, `first_name`, `last_name`, `section_ID`, `
 (49, 'Niel', 'Montesa', 34, 'Active', 'nirumontesa@gmail.com', 'Male', 1, '123772136127', ''),
 (50, 'David', 'Acosta', 34, 'Inactive', 'dacosta@gmail.com', 'Male', 0, '343254984742', ''),
 (51, 'Niel', 'Montesa', 34, 'Inactive', 'nirumontesa@gmail.com', 'Male', 0, '421124554635', ''),
-(52, 'Alexander', 'Berdera', 34, 'Solved', 'aberdera@gmail.com', 'Male', 0, '423432432432', '');
+(52, 'Alexander', 'Berdera', 34, 'Solved', 'aberdera@gmail.com', 'Female', 0, '423432432432', ''),
+(53, 'Marco', 'Montesa', 34, 'Solved', 'mmontesa@gmail.com', 'Male', 0, '123772136134', ''),
+(54, 'Ara Franchesca', 'Custodio', 34, 'Active', 'fcustodio@gmail.com', 'Female', 0, '739183721983', '');
 
 -- --------------------------------------------------------
 
@@ -432,7 +539,7 @@ INSERT INTO `student_activity_score` (`score_id`, `student_id`, `activity_id`, `
 (111, 51, 237, 93),
 (112, 50, 238, 85),
 (113, 52, 238, 89),
-(114, 51, 238, 86),
+(114, 51, 238, 85),
 (115, 50, 239, 86),
 (116, 52, 239, 92),
 (117, 51, 239, 93),
@@ -483,7 +590,45 @@ INSERT INTO `student_activity_score` (`score_id`, `student_id`, `activity_id`, `
 (168, 51, 257, 73),
 (169, 50, 258, 99),
 (170, 52, 258, 100),
-(171, 51, 258, 78);
+(171, 51, 258, 78),
+(172, 53, 188, 42),
+(173, 53, 198, 78),
+(174, 53, 227, 70),
+(175, 53, 230, 84),
+(176, 53, 231, 83),
+(177, 53, 232, 87),
+(178, 53, 233, 24),
+(179, 53, 193, 42),
+(180, 54, 188, 45),
+(181, 54, 235, 65),
+(182, 54, 236, 74),
+(183, 53, 235, 89),
+(184, 53, 236, 89),
+(185, 53, 237, 78),
+(186, 54, 237, 84),
+(187, 54, 238, 85),
+(188, 53, 238, 86),
+(189, 53, 239, 89),
+(190, 54, 239, 87),
+(191, 53, 246, 96),
+(192, 54, 246, 96),
+(193, 53, 240, 92),
+(194, 54, 240, 76),
+(195, 54, 241, 86),
+(196, 53, 241, 89),
+(197, 53, 242, 68),
+(198, 54, 242, 89),
+(199, 54, 198, 96),
+(200, 54, 227, 65),
+(201, 54, 230, 74),
+(202, 54, 231, 74),
+(203, 54, 232, 89),
+(204, 53, 228, 86),
+(205, 53, 194, 86),
+(206, 54, 194, 86),
+(207, 54, 228, 96),
+(208, 54, 233, 24),
+(209, 54, 193, 42);
 
 -- --------------------------------------------------------
 
@@ -507,8 +652,8 @@ CREATE TABLE `teachers` (
 --
 
 INSERT INTO `teachers` (`teacher_id`, `username`, `password`, `first_name`, `last_name`, `email`, `department_id`, `teacher_idnum`) VALUES
-(1, 'aberdera', 'bruh', NULL, NULL, NULL, NULL, 0),
-(2, 'nmontesa', 'bruh', NULL, NULL, NULL, NULL, 0);
+(1, 'aberdera', 'bruh', 'Alex', 'Berdera', NULL, NULL, 0),
+(2, 'nmontesa', 'bruh', 'Niel', 'Montesa', NULL, NULL, 0);
 
 --
 -- Indexes for dumped tables
@@ -572,6 +717,13 @@ ALTER TABLE `report_card`
   ADD KEY `gradesheet_id` (`gradesheet_id`);
 
 --
+-- Indexes for table `score_change_logs`
+--
+ALTER TABLE `score_change_logs`
+  ADD PRIMARY KEY (`log_id`),
+  ADD KEY `score_id` (`score_id`);
+
+--
 -- Indexes for table `section`
 --
 ALTER TABLE `section`
@@ -632,13 +784,13 @@ ALTER TABLE `department`
 -- AUTO_INCREMENT for table `final_grades`
 --
 ALTER TABLE `final_grades`
-  MODIFY `final_grade_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
+  MODIFY `final_grade_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
 
 --
 -- AUTO_INCREMENT for table `gradesheet`
 --
 ALTER TABLE `gradesheet`
-  MODIFY `gradesheet_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=157;
+  MODIFY `gradesheet_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=190;
 
 --
 -- AUTO_INCREMENT for table `parents`
@@ -653,22 +805,28 @@ ALTER TABLE `report_card`
   MODIFY `report_card_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `score_change_logs`
+--
+ALTER TABLE `score_change_logs`
+  MODIFY `log_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+
+--
 -- AUTO_INCREMENT for table `section`
 --
 ALTER TABLE `section`
-  MODIFY `section_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `section_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
 -- AUTO_INCREMENT for table `students`
 --
 ALTER TABLE `students`
-  MODIFY `student_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
+  MODIFY `student_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
 
 --
 -- AUTO_INCREMENT for table `student_activity_score`
 --
 ALTER TABLE `student_activity_score`
-  MODIFY `score_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=172;
+  MODIFY `score_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=210;
 
 --
 -- AUTO_INCREMENT for table `teachers`
@@ -705,6 +863,12 @@ ALTER TABLE `parents`
 ALTER TABLE `report_card`
   ADD CONSTRAINT `report_card_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `students` (`student_id`),
   ADD CONSTRAINT `report_card_ibfk_2` FOREIGN KEY (`gradesheet_id`) REFERENCES `gradesheet` (`gradesheet_id`);
+
+--
+-- Constraints for table `score_change_logs`
+--
+ALTER TABLE `score_change_logs`
+  ADD CONSTRAINT `score_change_logs_ibfk_1` FOREIGN KEY (`score_id`) REFERENCES `student_activity_score` (`score_id`);
 
 --
 -- Constraints for table `section`

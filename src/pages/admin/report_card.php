@@ -1,5 +1,12 @@
 <?php
+
+session_start();
+
+
 include '../../connection/connection.php';
+require '../../../vendor/autoload.php'; // Update the path if needed
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 // Get student ID from the URL
 $student_id = $_GET['student_id'];
@@ -98,7 +105,6 @@ if ($result->num_rows > 0) {
             // Ensure that the final grade is not null before attempting to transmute
             if (!is_null($final_grade)) {
                 $transmuted_grade = transmute_grade($final_grade);
-                echo $transmuted_grade;
             } else {
                 $transmuted_grade = null; // Handle the case if final_grade is null
             }
@@ -240,6 +246,77 @@ function transmute_grade($final_grade)
     return 60;  // If grade is below 4.00, return 60
 }
 
+use PhpOffice\PhpSpreadsheet\IOFactory;
+
+if (isset($_POST['export'])) {
+    // Load the existing Excel template (sf9.xlsx)
+    $templateFilePath = '../../templates/sf9.xlsx'; // Update this path
+    $spreadsheet = IOFactory::load($templateFilePath);
+
+    // Select the 'BACK' sheet where the grades will be placed
+    $sheet = $spreadsheet->getSheetByName('BACK');
+
+    // Mapping for each subject to its row in the Excel sheet
+    $subjectRowMapping = [
+        'Filipino' => 7,
+        'English' => 8,
+        'Mathematics' => 9,
+        'Science' => 10,
+        // Continue mapping subjects to row numbers
+    ];
+
+    foreach ($final_grades_display as $grade) {
+        // Get the corresponding row number for the subject
+        $row = $subjectRowMapping[$grade['subject']];
+
+        // Set the transmuted grade in the correct column based on the quarter
+        if ($grade['quarter'] == 1) {
+            $sheet->setCellValue('N' . $row, $grade['transmuted_grade']); // Quarter 1
+        } elseif ($grade['quarter'] == 2) {
+            $sheet->setCellValue('O' . $row, $grade['transmuted_grade']); // Quarter 2
+        } elseif ($grade['quarter'] == 3) {
+            $sheet->setCellValue('P' . $row, $grade['transmuted_grade']); // Quarter 3
+        } elseif ($grade['quarter'] == 4) {
+            $sheet->setCellValue('Q' . $row, $grade['transmuted_grade']); // Quarter 4
+        }
+    }
+
+    // After setting all grades, calculate the average and status for each subject
+    foreach ($subjectRowMapping as $subject => $row) {
+        // Retrieve grades for the 4 quarters
+        $quarter1 = $sheet->getCell('N' . $row)->getValue();
+        $quarter2 = $sheet->getCell('O' . $row)->getValue();
+        $quarter3 = $sheet->getCell('P' . $row)->getValue();
+        $quarter4 = $sheet->getCell('Q' . $row)->getValue();
+
+        // Check if grades are set and calculate average only if all quarters have grades
+        if (is_numeric($quarter1) && is_numeric($quarter2) && is_numeric($quarter3) && is_numeric($quarter4)) {
+            $average = ($quarter1 + $quarter2 + $quarter3 + $quarter4) / 4;
+            $sheet->setCellValue('R' . $row, round($average, 2));
+
+            // Determine if the student passed (average >= 75)
+            $status = ($average >= 75) ? 'PASSED' : 'FAILED';
+            $sheet->setCellValue('S' . $row, $status);
+        } else {
+            // Clear average and status cells if any grade is missing
+            $sheet->setCellValue('R' . $row, ''); // Clear average cell
+            $sheet->setCellValue('S' . $row, ''); // Clear status cell
+        }
+    }
+
+    // Save the modified file as .xlsx
+    $writer = new Xlsx($spreadsheet);
+    $filename = 'sf9_final_' . date('Y-m-d_H-i-s') . '.xlsx';
+
+    // Set headers for download
+    header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    header('Content-Disposition: attachment; filename="' . $filename . '"');
+    header('Cache-Control: max-age=0');
+
+    // Save to output buffer
+    $writer->save('php://output');
+    exit; // Ensure no further output after download
+}
 // Close statement
 $stmt->close();
 $conn->close();
@@ -257,6 +334,9 @@ $conn->close();
 
 <body>
     <div class="container">
+
+
+
         <h1>Report Card</h1>
         <table class="table table-striped">
             <thead>
@@ -264,14 +344,20 @@ $conn->close();
                     <th>Subject</th>
                     <th>Quarter</th>
                     <th>Final Grade</th>
+                    <th>Transmuted Grade</th>
                 </tr>
             </thead>
+            <form method="post">
+                <button type="submit" name="export" class="btn btn-primary">Export to Excel</button>
+            </form>
+
             <tbody>
                 <?php foreach ($final_grades_display as $grade): ?>
                     <tr>
                         <td><?php echo htmlspecialchars($grade['subject']); ?></td>
                         <td><?php echo htmlspecialchars($grade['quarter']); ?></td>
                         <td><?php echo htmlspecialchars($grade['final_grade']); ?></td>
+                        <td><?php echo htmlspecialchars($grade['transmuted_grade']); ?></td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>

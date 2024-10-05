@@ -1,3 +1,7 @@
+<?php
+session_start();
+?>
+
 <!DOCTYPE html>
 <html data-theme="light">
 
@@ -110,7 +114,7 @@
                 <section class="sidebar-content">
                     <nav class="menu rounded-md">
                         <section class="menu-section px-4">
-                            <span class="menu-title">Welcome, Username</span>
+                            <span class="menu-title">Welcome, <?php echo $_SESSION['username']; ?></span>
                             <ul class="menu-items">
                                 <a href="../departments.php">
                                     <li class="menu-item ">
@@ -159,7 +163,7 @@
                                 </div>
 
                                 <div class="flex flex-col">
-                                    <span>Username</span>
+                                    <span><?php echo $_SESSION['username']; ?></span>
                                     <span class="text-xs">Administrator</span>
                                 </div>
                             </div>
@@ -319,10 +323,10 @@
                         <div class="flex items-center content-center gap-2">
                             <span>Filter Quarter:</span>
                             <div class="btn-group btn-group-scrollable">
-                                <input type="radio" name="options" data-content="1" class="btn" checked />
-                                <input type="radio" name="options" data-content="2" class="btn" />
-                                <input type="radio" name="options" data-content="3" class="btn" />
-                                <input type="radio" name="options" data-content="4" class="btn" />
+                                <input type="radio" name="quarterFilter" data-content="1" class="btn" checked />
+                                <input type="radio" name="quarterFilter" data-content="2" class="btn" />
+                                <input type="radio" name="quarterFilter" data-content="3" class="btn" />
+                                <input type="radio" name="quarterFilter" data-content="4" class="btn" />
                             </div>
                         </div>
                     </div>
@@ -747,6 +751,23 @@
                     console.error(error); // Optional: Log any errors
                 }
             });
+        });
+    });
+
+    // PHP variables passed to JavaScript
+    const gradesheetId = "<?php echo $gradesheet_id; ?>";
+    const sectionId = "<?php echo $section_id; ?>";
+
+    // Get all the radio buttons
+    const buttons = document.querySelectorAll('input[name="quarterFilter"]');
+
+    // Add a change event listener to each radio button
+    buttons.forEach(button => {
+        button.addEventListener('change', function () {
+            // Get the value from data-content
+            const quarter = this.getAttribute('data-content');
+            // Redirect to the respective quarter page with PHP variables as query parameters
+            window.location.href = `${quarter}q-grades.php?gradesheet_id=${gradesheetId}&section_id=${sectionId}`;
         });
     });
 </script>

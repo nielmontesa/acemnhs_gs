@@ -118,107 +118,150 @@ if (isset($_GET['gradesheet_id'])) {
                 <label for="sidebar-mobile-fixed" class="btn-primary btn sm:hidden">Open Sidebar</label>
             </div>
 
-            <h1 class="text-xl font-bold">
-                <?php
-
-                if (isset($_GET['section_id'])) {
-                    $section_id = $_GET['section_id'];
-                    $section_details_query = "SELECT section_name, grade_level, section_id FROM section WHERE section_id = $section_id";
-                    $result = $conn->query($section_details_query);
-
-                    if ($result->num_rows > 0) {
-                        // Fetch the result as an associative array and display section_name
-                        while ($row = $result->fetch_assoc()) {
-                            echo "Gradesheets of Grade ";
-                            echo $row['grade_level'];
-                            echo " - ";
-                            echo $row['section_name']; // Output each section name
-                        }
-                    } else {
-                        echo "No sections found.";
-                    }
-                }
-                ?>
-            </h1>
-            <p class='pt-2'>This is currently all of the gradesheets in
-
-                <?php
-                if (isset($_GET['section_id'])) {
-                    $section_id = $_GET['section_id'];
-                    $section_details_query = "SELECT section_name, grade_level, section_id FROM section WHERE section_id = $section_id";
-                    $result = $conn->query($section_details_query);
-
-                    if ($result->num_rows > 0) {
-                        // Fetch the result as an associative array and display section_name
-                        while ($row = $result->fetch_assoc()) {
-                            echo "Grade ";
-                            echo $row['grade_level'];
-                            echo " - ";
-                            echo $row['section_name']; // Output each section name
-                        }
-                    } else {
-                        echo "No sections found.";
-                    }
-                }
-                ?>.
-            </p>
             <?php
-            if (isset($_GET['section_id'])) {
-                $section_id = $_GET['section_id'];
-                $section_details_query = "SELECT section_name, grade_level, section_id FROM section WHERE section_id = $section_id";
-                $result = $conn->query($section_details_query);
+            // Include your database connection
+            include '../../connection/connection.php';
+
+            // Check if gradesheet_id is provided
+            if (isset($_GET['gradesheet_id'])) {
+                $gradesheet_id = $_GET['gradesheet_id'];
+
+                // Fetch the gradesheet details
+                $gradesheet_query = "SELECT * FROM gradesheet WHERE gradesheet_id = ?";
+                $stmt = $conn->prepare($gradesheet_query);
+                $stmt->bind_param("i", $gradesheet_id);
+                $stmt->execute();
+                $gradesheet_result = $stmt->get_result();
+
+                if ($gradesheet_result->num_rows > 0) {
+                    $gradesheet = $gradesheet_result->fetch_assoc();
+                    echo "<h1 class='text-xl font-bold'>Gradesheet Log for " . htmlspecialchars($gradesheet['subject']) . "</h1>";
+                    // Add the drawer form for adding activities
+                    ?>
+
+                    <p>This is a gradesheet log for
+
+                        <?php
+                        include '../../connection/connection.php';
+                        if (isset($_GET['section_id'])) {
+                            $section_id = $_GET['section_id'];
+                            $section_details_query = "SELECT section_name, grade_level, section_id FROM section WHERE section_id = $section_id";
+                            $result = $conn->query($section_details_query);
+
+                            if ($result->num_rows > 0) {
+                                // Fetch the result as an associative array and display section_name
+                                while ($row = $result->fetch_assoc()) {
+                                    echo "Grade ";
+                                    echo $row['grade_level'];
+                                    echo " - ";
+                                    echo $row['section_name']; // Output each section name
+                                }
+                            } else {
+                                echo "No sections found.";
+                            }
+                        }
+                        ?>.
+                    </p>
+                    <?php
+                    if (isset($_GET['section_id'])) {
+                        $section_id = $_GET['section_id'];
+                        $section_details_query = "SELECT section_name, grade_level, section_id FROM section WHERE section_id = $section_id";
+                        $result = $conn->query($section_details_query);
+                    }
+                    ?>
+                    </p>
+
+                    <?php
+
+                } else {
+                    echo "Gradesheet not found.";
+                }
+            } else {
+                echo "Gradesheet ID not provided.";
             }
             ?>
-            </p>
-            <br>
-            <table class="table-compact table-hover table w-full">
-                <thead>
-                    <tr>
-                        <th>Subject</th>
-                        <th>Finalized?</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    // SQL query to get gradesheet details for the specific section_id
-                    if (isset($section_id)) {
-                        $sql = "SELECT g.gradesheet_id, g.subject, g.is_finalized, s.section_name, s.grade_level
-                    FROM gradesheet g
-                    INNER JOIN section s ON g.section_id = s.section_id
-                    WHERE s.section_id = $section_id AND s.is_archived = 0";
-                        $result = $conn->query($sql);
 
-                        if ($result->num_rows > 0):
-                            ?>
-                        <tbody>
-                            <?php while ($row = $result->fetch_assoc()): ?>
-                                <tr>
-                                    <th><?php echo $row['subject']; ?></th>
-                                    <td><?php echo $row['is_finalized'] ? 'Yes' : 'No'; ?></td>
-                                    <!-- Displays Yes/No based on is_finalized -->
-                                    <td>
-                                        <a
-                                            href="quarters/1q-grades.php?gradesheet_id=<?php echo $row['gradesheet_id']; ?>&section_id=<?php echo $section_id; ?>">
-                                            <button class="btn btn-secondary">View</button>
-                                        </a>
-                                        <a
-                                            href="gradesheet_log.php?gradesheet_id=<?php echo $row['gradesheet_id']; ?>&section_id=<?php echo $section_id; ?>">
-                                            <button class="btn btn-outline-secondary">Edit Log</button>
-                                        </a>
-                                    </td>
-                                </tr>
-                            <?php endwhile; ?>
-                        </tbody>
-                    <?php else: ?>
+            <?php
+            // Start session and include database connection
+            include '../../connection/connection.php'; // Modify this path as necessary
+            
+            // Get the gradesheet ID and section ID from the URL
+            $gradesheet_id = intval($_GET['gradesheet_id']);
+            $section_id = intval($_GET['section_id']);
+
+            // SQL query to fetch logs related to the gradesheet
+            $sql = "
+    SELECT 
+        s.first_name,
+        s.last_name,
+        sas.score_id,
+        sas.score,
+        a.activity_name,
+        scl.edited_by,
+        scl.edited_at
+    FROM 
+        student_activity_score sas
+    INNER JOIN 
+        activity a ON sas.activity_id = a.activity_id
+    INNER JOIN 
+        students s ON sas.student_id = s.student_id -- Change made here
+    INNER JOIN 
+        score_change_logs scl ON sas.score_id = scl.score_id
+    WHERE 
+        a.gradesheet_id = ? 
+    ORDER BY 
+        scl.edited_at DESC
+";
+
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("i", $gradesheet_id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            // Check if any logs are found
+            if ($result->num_rows > 0):
+                ?>
+                <br>
+                <table class="table-compact table-hover table w-full">
+                    <thead>
                         <tr>
-                            <td colspan="4">No gradesheets found for this section.</td>
+                            <th>Student Name</th>
+                            <th>Activity Name</th>
+                            <th>Score</th>
+                            <th>Edited By</th>
+                            <th>Edited At</th>
                         </tr>
-                    <?php endif;
-                    } ?>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        <?php while ($row = $result->fetch_assoc()): ?>
+                            <tr>
+                                <td><?php echo htmlspecialchars($row['first_name'] . ' ' . $row['last_name']); ?></td>
+                                <td><?php echo htmlspecialchars($row['activity_name']); ?></td>
+                                <td><?php echo htmlspecialchars($row['score']); ?></td>
+                                <td><?php echo htmlspecialchars($row['edited_by']); ?></td>
+                                <td>
+                                    <?php
+                                    // Create a DateTime object and format the date and time
+                                    $dateTime = new DateTime($row['edited_at']);
+                                    $formattedDate = $dateTime->format('F j, Y');
+                                    $formattedTime = $dateTime->format('g:i A');
+                                    echo "{$formattedDate} - {$formattedTime}";
+                                    ?>
+                                </td>
+                            </tr>
+                        <?php endwhile; ?>
+                    </tbody>
+                </table>
 
+                <?php
+            else:
+                echo "<div class='container'><p>No score updates found for this gradesheet.</p></div>";
+            endif;
+
+            // Clean up
+            $stmt->close();
+            $conn->close();
+            ?>
         </main>
     </div>
 </body>

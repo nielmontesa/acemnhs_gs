@@ -104,9 +104,8 @@ session_start();
             <p class="pt-2">This is all the Teachers of the school.</p>
 
 
-            <div class="mt-8">
+            <form class="mt-8">
                 <input type="checkbox" id="drawer-right" class="drawer-toggle" />
-
                 <label for="drawer-right" class="btn btn-primary">Add Teacher</label>
                 <label class="overlay" for="drawer-right"></label>
                 <div class="drawer drawer-right">
@@ -143,35 +142,6 @@ session_start();
                                     name="password" type="password" />
                             </label>
 
-                            <div class="mt-2 flex flex-col gap-2">
-                                <span>Sections Handled</span>
-                                <label class="flex cursor-pointer gap-2">
-                                    <input type="checkbox" class="checkbox" />
-                                    <span>Section 1</span>
-                                </label>
-                                <label class="flex cursor-pointer gap-2">
-                                    <input type="checkbox" class="checkbox" />
-                                    <span>Section 1</span>
-                                </label>
-                                <label class="flex cursor-pointer gap-2">
-                                    <input type="checkbox" class="checkbox" />
-                                    <span>Section 1</span>
-                                </label>
-                                <label class="flex cursor-pointer gap-2">
-                                    <input type="checkbox" class="checkbox" />
-                                    <span>Section 1</span>
-                                </label>
-                                <label class="flex cursor-pointer gap-2">
-                                    <input type="checkbox" class="checkbox" />
-                                    <span>Section 1</span>
-                                </label>
-                                <label class="flex cursor-pointer gap-2">
-                                    <input type="checkbox" class="checkbox" />
-                                    <span>Section 1</span>
-                                </label>
-                            </div>
-
-
                         </div>
                         <div class="h-full flex flex-row justify-end items-end gap-2">
                             <button class="btn btn-ghost">Cancel</button>
@@ -179,7 +149,7 @@ session_start();
                         </div>
                     </div>
                 </div>
-            </div>
+            </form>
             <div class="flex w-full overflow-x-auto pt-8">
                 <div class="flex w-full overflow-x-auto">
                     <table class="table-compact table-zebra table">
@@ -200,10 +170,9 @@ session_start();
                                 <td>rdimagiba</td>
                                 <td>
                                     <input type="checkbox" id="drawer-right-2" class="drawer-toggle" />
-
                                     <label for="drawer-right-2" class="btn btn-secondary">Edit</label>
                                     <label class="overlay" for="drawer-right-2"></label>
-                                    <div class="drawer drawer-right">
+                                    <form class="drawer drawer-right">
                                         <div class="drawer-content pt-10 flex flex-col h-full">
                                             <label for="drawer-right-2"
                                                 class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
@@ -259,7 +228,8 @@ session_start();
                                                 <button class="btn btn-primary">Create</button>
                                             </div>
                                         </div>
-                                    </div>
+                                    </form>
+
                                     <label class="btn btn-error" for="modal-1">Archive</label>
                                     <input class="modal-state" id="modal-1" type="checkbox" />
                                     <div class="modal">
@@ -277,7 +247,6 @@ session_start();
                                         </div>
                                 </td>
                             </tr>
-
                         </tbody>
                     </table>
                 </div>

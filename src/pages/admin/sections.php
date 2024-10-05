@@ -169,6 +169,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                         <option value="10">Grade 10</option>
                                     </select>
                                 </label>
+                                <label for="schoolyear">
+                                    <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">School
+                                        Year</span>
+                                    <div class="flex gap-2 items-center justify-center">
+                                        <input class="input" maxlength="4" placeholder="Start Year" name="startyear" />
+                                        <span> to </span>
+                                        <input class="input" maxlength="4" placeholder="End Year" name="endyear" />
+                                    </div>
+                                </label>
+                                <label for="advisername">
+                                    <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Adviser
+                                        Name</span>
+                                    <select class="input-block input" name="advisername" required>
+                                        <option value="" disabled selected>Select adviser</option>
+                                        <?php
+                                        // Query the 'teachers' table
+                                        $sql = "SELECT teacher_id, first_name, last_name FROM teachers";
+                                        $result = $conn->query($sql);
+
+                                        // Loop through results and generate options
+                                        if ($result->num_rows > 0) {
+                                            while ($row = $result->fetch_assoc()) {
+                                                echo '<option value="' . $row["teacher_id"] . '">' . $row["first_name"] . ' ' . $row["last_name"] . '</option>';
+                                            }
+                                        } else {
+                                            echo '<option value="" disabled>No advisers found</option>';
+                                        }
+                                        ?>
+                                    </select>
+                                </label>
                             </div>
                             <div class="h-full flex flex-row justify-end items-end gap-2">
                                 <button type="reset" class="btn btn-ghost">Cancel</button>
@@ -202,6 +232,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <tr>
                                 <th>Grade Level</th>
                                 <th>Section Name</th>
+                                <th>School Year</th>
+                                <th>Adviser Name</th>
                                 <th>Student Count</th>
                                 <th>Actions</th>
                             </tr>
@@ -209,8 +241,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <tbody>
                             <?php
                             // Assuming you have a valid database connection in $connection
-                            $sql = "SELECT * FROM section WHERE grade_level = 7 AND is_archived = 0";
+                            $sql = "SELECT 
+                                    section.*, 
+                                    teachers.first_name, 
+                                    teachers.last_name,
+                                    COUNT(students.student_id) AS student_count
+                                FROM 
+                                    section
+                                JOIN 
+                                    teachers ON section.adviser_id = teachers.teacher_id
+                                LEFT JOIN 
+                                    students ON section.section_id = students.section_ID AND students.is_archived = 0
+                                WHERE 
+                                    section.grade_level = 7 AND section.is_archived = 0
+                                GROUP BY 
+                                    section.section_id, teachers.first_name, teachers.last_name";
                             $result = $conn->query($sql);
+
+
 
                             if ($result->num_rows > 0):
                                 ?>
@@ -218,8 +266,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <?php while ($row = $result->fetch_assoc()): ?>
                                     <tr>
                                         <td><?php echo $row['grade_level']; ?></td>
-                                        <td><?php echo $row['section_name']; ?></td>
-                                        <td>0</td>
+                                        <th><?php echo $row['section_name']; ?></th>
+                                        <td><?php echo $row['school_year']; ?></td>
+                                        <td><?php echo $row['first_name'] . ' ' . $row['last_name']; ?></td>
+                                        <td><?php echo $row['student_count']; ?></td>
                                         <td>
                                             <a href="students.php?section_id=<?php echo $row['section_id']; ?>">
                                                 <button class="btn btn-secondary">View</button>
@@ -256,17 +306,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         </table>
                     <?php else: ?>
                         <tr>
-                            <td colspan="4">No sections found for Grade 7.</td>
+                            <td colspan="6">No sections found for Grade 7.</td>
                         </tr>
                     <?php endif; ?>
                     </table>
                 </div>
                 <div class="hidden w-full overflow-x-auto pt-8" data-grade="Grade 8">
-                    <table class="table-hover table w-full">
+                    <table class="table-compact table-zebra table w-full">
                         <thead>
                             <tr>
                                 <th>Grade Level</th>
                                 <th>Section Name</th>
+                                <th>School Year</th>
+                                <th>Adviser Name</th>
                                 <th>Student Count</th>
                                 <th>Actions</th>
                             </tr>
@@ -274,8 +326,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <tbody>
                             <?php
                             // Assuming you have a valid database connection in $connection
-                            $sql = "SELECT * FROM section WHERE grade_level = 8 AND is_archived = 0";
+                            $sql = "SELECT 
+                                    section.*, 
+                                    teachers.first_name, 
+                                    teachers.last_name,
+                                    COUNT(students.student_id) AS student_count
+                                FROM 
+                                    section
+                                JOIN 
+                                    teachers ON section.adviser_id = teachers.teacher_id
+                                LEFT JOIN 
+                                    students ON section.section_id = students.section_ID AND students.is_archived = 0
+                                WHERE 
+                                    section.grade_level = 8 AND section.is_archived = 0
+                                GROUP BY 
+                                    section.section_id, teachers.first_name, teachers.last_name";
                             $result = $conn->query($sql);
+
+
 
                             if ($result->num_rows > 0):
                                 ?>
@@ -283,8 +351,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <?php while ($row = $result->fetch_assoc()): ?>
                                     <tr>
                                         <td><?php echo $row['grade_level']; ?></td>
-                                        <td><?php echo $row['section_name']; ?></td>
-                                        <td>0</td>
+                                        <th><?php echo $row['section_name']; ?></th>
+                                        <td><?php echo $row['school_year']; ?></td>
+                                        <td><?php echo $row['first_name'] . ' ' . $row['last_name']; ?></td>
+                                        <td><?php echo $row['student_count']; ?></td>
                                         <td>
                                             <a href="students.php?section_id=<?php echo $row['section_id']; ?>">
                                                 <button class="btn btn-secondary">View</button>
@@ -321,17 +391,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         </table>
                     <?php else: ?>
                         <tr>
-                            <td colspan="4">No sections found for Grade 8.</td>
+                            <td colspan="6">No sections found for Grade 8.</td>
                         </tr>
                     <?php endif; ?>
                     </table>
                 </div>
                 <div class="hidden w-full overflow-x-auto pt-8" data-grade="Grade 9">
-                    <table class="table-hover table w-full">
+                    <table class="table-compact table-zebra table w-full">
                         <thead>
                             <tr>
                                 <th>Grade Level</th>
                                 <th>Section Name</th>
+                                <th>School Year</th>
+                                <th>Adviser Name</th>
                                 <th>Student Count</th>
                                 <th>Actions</th>
                             </tr>
@@ -339,8 +411,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <tbody>
                             <?php
                             // Assuming you have a valid database connection in $connection
-                            $sql = "SELECT * FROM section WHERE grade_level = 9 AND is_archived = 0";
+                            $sql = "SELECT 
+                                    section.*, 
+                                    teachers.first_name, 
+                                    teachers.last_name,
+                                    COUNT(students.student_id) AS student_count
+                                FROM 
+                                    section
+                                JOIN 
+                                    teachers ON section.adviser_id = teachers.teacher_id
+                                LEFT JOIN 
+                                    students ON section.section_id = students.section_ID AND students.is_archived = 0
+                                WHERE 
+                                    section.grade_level = 9 AND section.is_archived = 0
+                                GROUP BY 
+                                    section.section_id, teachers.first_name, teachers.last_name";
                             $result = $conn->query($sql);
+
+
 
                             if ($result->num_rows > 0):
                                 ?>
@@ -348,8 +436,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <?php while ($row = $result->fetch_assoc()): ?>
                                     <tr>
                                         <td><?php echo $row['grade_level']; ?></td>
-                                        <td><?php echo $row['section_name']; ?></td>
-                                        <td>0</td>
+                                        <th><?php echo $row['section_name']; ?></th>
+                                        <td><?php echo $row['school_year']; ?></td>
+                                        <td><?php echo $row['first_name'] . ' ' . $row['last_name']; ?></td>
+                                        <td><?php echo $row['student_count']; ?></td>
                                         <td>
                                             <a href="students.php?section_id=<?php echo $row['section_id']; ?>">
                                                 <button class="btn btn-secondary">View</button>
@@ -386,17 +476,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         </table>
                     <?php else: ?>
                         <tr>
-                            <td colspan="4">No sections found for Grade 9.</td>
+                            <td colspan="6">No sections found for Grade 9.</td>
                         </tr>
                     <?php endif; ?>
                     </table>
                 </div>
                 <div class="hidden w-full overflow-x-auto pt-8" data-grade="Grade 10">
-                    <table class="table-hover table w-full">
+                    <table class="table-compact table-zebra table w-full">
                         <thead>
                             <tr>
                                 <th>Grade Level</th>
                                 <th>Section Name</th>
+                                <th>School Year</th>
+                                <th>Adviser Name</th>
                                 <th>Student Count</th>
                                 <th>Actions</th>
                             </tr>
@@ -404,8 +496,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <tbody>
                             <?php
                             // Assuming you have a valid database connection in $connection
-                            $sql = "SELECT * FROM section WHERE grade_level = 10 AND is_archived = 0";
+                            $sql = "SELECT 
+                                    section.*, 
+                                    teachers.first_name, 
+                                    teachers.last_name,
+                                    COUNT(students.student_id) AS student_count
+                                FROM 
+                                    section
+                                JOIN 
+                                    teachers ON section.adviser_id = teachers.teacher_id
+                                LEFT JOIN 
+                                    students ON section.section_id = students.section_ID AND students.is_archived = 0
+                                WHERE 
+                                    section.grade_level = 10 AND section.is_archived = 0
+                                GROUP BY 
+                                    section.section_id, teachers.first_name, teachers.last_name";
                             $result = $conn->query($sql);
+
+
 
                             if ($result->num_rows > 0):
                                 ?>
@@ -413,8 +521,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <?php while ($row = $result->fetch_assoc()): ?>
                                     <tr>
                                         <td><?php echo $row['grade_level']; ?></td>
-                                        <td><?php echo $row['section_name']; ?></td>
-                                        <td>0</td>
+                                        <th><?php echo $row['section_name']; ?></th>
+                                        <td><?php echo $row['school_year']; ?></td>
+                                        <td><?php echo $row['first_name'] . ' ' . $row['last_name']; ?></td>
+                                        <td><?php echo $row['student_count']; ?></td>
                                         <td>
                                             <a href="students.php?section_id=<?php echo $row['section_id']; ?>">
                                                 <button class="btn btn-secondary">View</button>
@@ -451,7 +561,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         </table>
                     <?php else: ?>
                         <tr>
-                            <td colspan="4">No sections found for Grade 10.</td>
+                            <td colspan="6">No sections found for Grade 10.</td>
                         </tr>
                     <?php endif; ?>
                     </table>

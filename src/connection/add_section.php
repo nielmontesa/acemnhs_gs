@@ -11,9 +11,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Get form inputs
     $sectionname = $conn->real_escape_string($_POST['sectionname']);
     $gradelevel = $conn->real_escape_string($_POST['gradelevel']);
+    $advisername = $conn->real_escape_string($_POST['advisername']); // Adviser name
+    $startyear = $conn->real_escape_string($_POST['startyear']);
+    $endyear = $conn->real_escape_string($_POST['endyear']);
 
-    // SQL query to insert the new section
-    $sql = "INSERT INTO section (section_name, grade_level) VALUES ('$sectionname', '$gradelevel')";
+    // Combine startyear and endyear into school_year format (e.g., 2023-2024)
+    $schoolyear = $startyear . '-' . $endyear;
+
+    // SQL query to insert the new section with adviser and school year
+    $sql = "INSERT INTO section (section_name, grade_level, school_year, adviser_id) VALUES ('$sectionname', '$gradelevel', '$schoolyear', '$advisername')";
 
     if ($conn->query($sql) === TRUE) {
         // Get the last inserted section_id
@@ -25,7 +31,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             'English',
             'Mathematics',
             'Science',
-            'Home Economics',
             'Araling Panlipunan',
             'Edukasyon sa Pagpapakatao',
             'TLE',

@@ -1,4 +1,8 @@
 <?php
+
+session_start();
+
+
 include '../../connection/connection.php';
 require '../../../vendor/autoload.php'; // Update the path if needed
 use PhpOffice\PhpSpreadsheet\Spreadsheet;

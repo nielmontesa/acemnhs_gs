@@ -1,3 +1,8 @@
+<?php
+session_start();
+?>
+
+
 <!DOCTYPE html>
 <html data-theme="light">
 
@@ -110,7 +115,7 @@
                 <section class="sidebar-content">
                     <nav class="menu rounded-md">
                         <section class="menu-section px-4">
-                            <span class="menu-title">Welcome, Username</span>
+                            <span class="menu-title">Welcome, <?php echo $_SESSION['username']; ?></span>
                             <ul class="menu-items">
                                 <a href="../departments.php">
                                     <li class="menu-item ">
@@ -159,7 +164,7 @@
                                 </div>
 
                                 <div class="flex flex-col">
-                                    <span>Username</span>
+                                    <span><?php echo $_SESSION['username']; ?></span>
                                     <span class="text-xs">Administrator</span>
                                 </div>
                             </div>

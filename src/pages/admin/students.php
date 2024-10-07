@@ -328,7 +328,7 @@ if (isset($_GET['section_id'])) {
                                             <option value="" disabled>Select adviser</option>
                                             <?php
                                             // Query the 'teachers' table
-                                            $teachersql = "SELECT teacher_id, first_name, last_name FROM teachers";
+                                            $teachersql = "SELECT teacher_id, first_name, last_name FROM teachers WHERE is_archived = 0";
                                             $result = $conn->query($teachersql);
 
                                             // Loop through results and generate options

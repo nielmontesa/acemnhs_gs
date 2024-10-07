@@ -1,4 +1,45 @@
-<?php session_start(); ?>
+<?php
+session_start();
+include '../../connection/connection.php';
+
+// Check if department_id is passed via the URL
+if (isset($_GET['department_id'])) {
+    $department_id = $_GET['department_id'];
+
+    // Fetch all teachers and their respective department names from the specific department
+    $sql = "SELECT teachers.*, department.department_name 
+            FROM teachers 
+            JOIN department ON teachers.department_id = department.department_id 
+            WHERE teachers.is_archived = 0 AND teachers.department_id = ?";
+
+    // Prepare and bind the statement to avoid SQL injection
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $department_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+} else {
+    echo "Department ID is not provided.";
+}
+
+if (isset($_GET['department_id'])) {
+    $department_id = $_GET['department_id'];
+
+    // Fetch the department name based on the department_id
+    $sql_department = "SELECT department_name FROM department WHERE department_id = ?";
+    $stmt_department = $conn->prepare($sql_department);
+    $stmt_department->bind_param("i", $department_id);
+    $stmt_department->execute();
+    $stmt_department->bind_result($department_name);
+    $stmt_department->fetch();
+    $stmt_department->close();
+} else {
+    echo "Department ID is not provided.";
+    exit; // Exit if the department ID is not provided
+}
+?>
+
+
+
 
 <!DOCTYPE html>
 <html data-theme="light">
@@ -97,11 +138,11 @@
                 <label for="sidebar-mobile-fixed" class="btn-primary btn sm:hidden">Open Sidebar</label>
             </div>
 
-            <h1 class="text-xl font-bold">English Department</h1>
-            <p class="pt-2">This is the English department of the school.</p>
+            <h1 class="text-xl font-bold"><?php echo htmlspecialchars($department_name); ?> Department</h1>
+            <p class="pt-2">This is the <?php echo htmlspecialchars($department_name); ?> department of the school.</p>
 
 
-            <form class="mt-8">
+            <form method="post" action="../../connection/add_teacher.php" class="mt-8">
                 <input type="checkbox" id="drawer-right" class="drawer-toggle" />
                 <label for="drawer-right" class="btn btn-primary">Add Teacher</label>
                 <label class="overlay" for="drawer-right"></label>
@@ -115,18 +156,18 @@
                                 <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Teacher First
                                     Name</span>
                                 <input class="input-block input" placeholder="Please enter your first name."
-                                    name="teachername" type="text" />
+                                    name="teacherfname" type="text" />
                             </label>
                             <label for="teacherlastname">
                                 <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Teacher Last
                                     Name</span>
                                 <input class="input-block input" placeholder="Please enter your last name."
-                                    name="teachername" type="text" />
+                                    name="teacherlname" type="text" />
                             </label>
                             <label for="e-mail">
                                 <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">E-mail</span>
-                                <input class="input-block input" placeholder="Please enter your e-mail." name="e-mail"
-                                    type="email" />
+                                <input class="input-block input" placeholder="Please enter your e-mail."
+                                    name="teachermail" type="email" />
                             </label>
                             <label for="username">
                                 <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Username</span>
@@ -138,7 +179,29 @@
                                 <input class="input-block input" placeholder="Please enter your password."
                                     name="password" type="password" />
                             </label>
+                            <?php
+                            // Fetch department data from the database
+                            $department_query = "SELECT department_id, department_name FROM department WHERE is_archived = 0";
+                            $department_result = $conn->query($department_query);
+                            ?>
+                            <label for="department_id">
+    <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Department</span>
+    <select name="department_id" id="department_id" class="select">
+        <option value="">Select department...</option>
+        <?php if ($department_result->num_rows > 0): ?>
+                                        <?php while ($department = $department_result->fetch_assoc()): ?>
+                                            <option value="<?php echo $department['department_id']; ?>" <?php echo (isset($department_id) && $department['department_id'] == $department_id) ? 'selected' : ''; ?>>
+                                                <?php echo htmlspecialchars($department['department_name']); ?>
+                                            </option>
+                                        <?php endwhile; ?>
+                                    <?php else: ?>
+                                        <option value="">No departments available</option>
+                                    <?php endif; ?>
+                                </select>
+                            </label>
 
+            
+            
                         </div>
                         <div class="h-full flex flex-row justify-end items-end gap-2">
                             <button class="btn btn-ghost">Cancel</button>
@@ -154,97 +217,145 @@
                             <tr>
                                 <th>First Name</th>
                                 <th>Last Name</th>
+                                <th>Department</th>
                                 <th>E-mail</th>
                                 <th>Username</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <th>Roberto</th>
-                                <td>Dimagiba</td>
-                                <td>robertodimagiba@acemnhs.com</td>
-                                <td>rdimagiba</td>
-                                <td>
-                                    <input type="checkbox" id="drawer-right-2" class="drawer-toggle" />
-                                    <label for="drawer-right-2" class="btn btn-secondary">Edit</label>
-                                    <label class="overlay" for="drawer-right-2"></label>
-                                    <form class="drawer drawer-right">
-                                        <div class="drawer-content pt-10 flex flex-col h-full">
-                                            <label for="drawer-right-2"
-                                                class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
-                                            <div>
-                                                <h2 class="text-xl font-medium">Edit Teacher</h2>
-                                                <div class="flex flex-col gap-2">
-                                                    <label for="teacherfirstname">
-                                                        <span
-                                                            class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Teacher
-                                                            First
-                                                            Name</span> <br>
-                                                        <input class="input-block block input"
-                                                            placeholder="Please enter your first name."
-                                                            name="teachername" type="text" />
-                                                    </label>
-                                                    <label for="teacherlastname">
-                                                        <span
-                                                            class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Teacher
-                                                            Last
-                                                            Name</span> <br>
-                                                        <input class="input-block input"
-                                                            placeholder="Please enter your last name."
-                                                            name="teachername" type="text" />
-                                                    </label>
-                                                    <label for="e-mail">
-                                                        <span
-                                                            class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">E-mail</span>
-                                                        <br>
-                                                        <input class="input-block input"
-                                                            placeholder="Please enter your e-mail." name="e-mail"
-                                                            type="email" />
-                                                    </label>
-                                                    <label for="username">
-                                                        <span
-                                                            class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Username</span>
-                                                        <br>
-                                                        <input class="input-block input"
-                                                            placeholder="Please enter your username." name="username"
-                                                            type="text" />
-                                                    </label>
-                                                    <label for="Password">
-                                                        <span
-                                                            class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Password</span>
-                                                        <br>
-                                                        <input class="input-block input"
-                                                            placeholder="Please enter your password." name="password"
-                                                            type="password" />
-                                                    </label>
+                            <?php if ($result->num_rows > 0): ?>
+                                <?php while ($row = $result->fetch_assoc()): ?>
+                                    <tr>
+                                        <th><?php echo $row['first_name']; ?></th>
+                                        <td><?php echo $row['last_name']; ?></td>
+                                        <td><?php echo $row['department_name']; ?></td>
+                                        <td><?php echo $row['email']; ?></td>
+                                        <td><?php echo $row['username']; ?></td>
+                                        <td>
+                                            <?php
+                                            $teacher_id = $row['teacher_id'];
+                                            ?>
+
+                                            <!-- UPDATE TEACHER -->
+                                            <input type="checkbox" id="drawer-toggle-<?php echo $teacher_id; ?>"
+                                                class="drawer-toggle" />
+                                            <label for="drawer-toggle-<?php echo $teacher_id; ?>"
+                                                class="btn btn-secondary">Edit</label>
+                                            <label class="overlay" for="drawer-toggle-<?php echo $teacher_id; ?>"></label>
+
+                                            <?php
+                                                // Fetch department data from the database
+                                                $department_query = "SELECT department_id, department_name FROM department WHERE is_archived = 0";
+                                                $department_result = $conn->query($department_query);
+
+                                                // Fetch current teacher's department_id
+                                                $current_department_query = "SELECT department_id FROM teachers WHERE teacher_id = {$row['teacher_id']}";
+                                                $current_department_result = $conn->query($current_department_query);
+                                                $current_department = $current_department_result->fetch_assoc()['department_id'];
+                                                ?>
+                                            
+                                            <form method="post" action="../../connection/update_teacher.php" class="drawer drawer-right">
+                                                <input type="hidden" name="teacher_id" value="<?php echo $row['teacher_id']; ?>" />
+                                                <div class="drawer-content pt-10 flex flex-col h-full">
+                                                    <label for="drawer-toggle-<?php echo $teacher_id; ?>"
+                                                        class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
+                                                    <div>
+                                                        <h2 class="text-xl font-medium">Edit Teacher</h2>
+                                                        <div class="flex flex-col gap-2">
+                                                            <!-- Teacher First Name -->
+                                                            <label for="teacherfirstname-<?php echo $teacher_id; ?>">
+                                                                <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Teacher First Name</span> <br>
+                                                                <input class="input-block block input" name="teacherfname" type="text" id="teacherfirstname-<?php echo $teacher_id; ?>" value="<?php echo $row['first_name']; ?>" />
+                                                            </label>
+                                            
+                                                            <!-- Teacher Last Name -->
+                                                            <label for="teacherlastname-<?php echo $teacher_id; ?>">
+                                                                <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Teacher Last Name</span> <br>
+                                                                <input class="input-block input" placeholder="Please enter your last name." name="teacherlname"
+                                                                    type="text" id="teacherlastname-<?php echo $teacher_id; ?>"
+                                                                    value="<?php echo $row['last_name']; ?>" />
+                                                            </label>
+                                            
+                                                            <!-- Teacher E-mail -->
+                                                            <label for="email-<?php echo $teacher_id; ?>">
+                                                                <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">E-mail</span><br>
+                                                                <input class="input-block input" placeholder="Please enter your e-mail." name="teachermail"
+                                                                    type="email" id="email-<?php echo $teacher_id; ?>" value="<?php echo $row['email']; ?>" />
+                                                            </label>
+                                            
+                                                            <!-- Username -->
+                                                            <label for="username-<?php echo $teacher_id; ?>">
+                                                                <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Username</span><br>
+                                                                <input class="input-block input" placeholder="Please enter your username." name="username"
+                                                                    type="text" id="username-<?php echo $teacher_id; ?>" value="<?php echo $row['username']; ?>" />
+                                                            </label>
+                                            
+                                                            <!-- Password -->
+                                                            <label for="password-<?php echo $teacher_id; ?>">
+                                                                <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Password</span><br>
+                                                                <input class="input-block input" placeholder="Please enter your password." name="password"
+                                                                    type="password" id="password-<?php echo $teacher_id; ?>" />
+                                                            </label>
+                                            
+                                                            <!-- Department Select Input -->
+                                                            <label for="department_id-<?php echo $teacher_id; ?>">
+                                                                <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Department</span><br>
+                                                                <select name="department_id" id="department_id-<?php echo $teacher_id; ?>" class="select">
+                                                                    <?php if ($department_result->num_rows > 0): ?>
+                                                                        <?php while ($department = $department_result->fetch_assoc()): ?>
+                                                                            <option value="<?php echo $department['department_id']; ?>" <?php echo $department['department_id'] == $current_department ? 'selected' : ''; ?>>
+                                                                                <?php echo htmlspecialchars($department['department_name']); ?>
+                                                                            </option>
+                                                                        <?php endwhile; ?>
+                                                                    <?php else: ?>
+                                                                        <option value="">No departments available</option>
+                                                                    <?php endif; ?>
+                                                                </select>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="h-full flex flex-row justify-end items-end gap-2">
+                                                        <button class="btn btn-ghost">Cancel</button>
+                                                        <button type="submit" class="btn btn-primary">Update</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+
+
+                                            <label class="btn btn-error" for="modal-<?php echo $teacher_id; ?>">Archive</label>
+                                            <input class="modal-state" id="modal-<?php echo $teacher_id; ?>" type="checkbox" />
+                                            <div class="modal">
+                                                <label class="modal-overlay" for="modal-<?php echo $teacher_id; ?>"></label>
+                                                <div class="modal-content flex flex-col gap-5">
+                                                    <label for="modal-<?php echo $teacher_id; ?>"
+                                                        class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
+                                                    <h2 class="text-xl">Archive department?</h2>
+                                                    <span>Are you sure you want to Archive this department?</span>
+                                                    <form method="post" action="../../connection/archive_teacher.php">
+                                                        <input type="hidden" name="archive_teacher_id"
+                                                            value="<?php echo $row['teacher_id']; ?>" />
+                                                        <div class="flex gap-3">
+                                                            <button type="submit"
+                                                                class="btn btn-error btn-block">Archive</button>
+                                                            <label for="modal-<?php echo $teacher_id; ?>"
+                                                                class="btn btn-block">Cancel</label>
+                                                        </div>
+                                                    </form>
                                                 </div>
                                             </div>
-                                            <div class="h-full flex flex-row justify-end items-end gap-2">
-                                                <button class="btn btn-ghost">Cancel</button>
-                                                <button class="btn btn-primary">Create</button>
-                                            </div>
-                                        </div>
-                                    </form>
-
-                                    <label class="btn btn-error" for="modal-1">Archive</label>
-                                    <input class="modal-state" id="modal-1" type="checkbox" />
-                                    <div class="modal">
-                                        <label class="modal-overlay" for="modal-1"></label>
-                                        <div class="modal-content flex flex-col gap-5">
-                                            <label for="modal-1"
-                                                class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
-                                            <h2 class="text-xl">Archive department?</h2>
-                                            <span>Are you sure you want to Archive this department?</span>
-                                            <div class="flex gap-3">
-                                                <button class="btn btn-error btn-block">Archive</button>
-
-                                                <label for="modal-1" class="btn btn-block">Cancel</label>
-                                            </div>
-                                        </div>
+                                        </td>
+                                    </tr>
+                            <?php endwhile; ?>
+                            <?php else: ?>
+                            <tr>
+                                <td colspan="6" class="text-center text-gray-500">
+                                    No teachers found in this view.
                                 </td>
                             </tr>
+                            <?php endif; ?>
                         </tbody>
+
                     </table>
                 </div>
             </div>

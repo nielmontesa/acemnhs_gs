@@ -8,7 +8,13 @@ if (!isset($_SESSION['logged_in']) || ($_SESSION['logged_in']) !== true || $_SES
     exit(); // End script after redirection
 }
 
-$sql = "SELECT department_id, department_name, is_archived FROM department WHERE is_archived = 0";
+$sql = "
+    SELECT d.department_id, d.department_name, COUNT(t.teacher_id) AS teacher_count 
+    FROM department d 
+    LEFT JOIN teachers t ON d.department_id = t.department_id AND t.is_archived = 0 
+    WHERE d.is_archived = 0 
+    GROUP BY d.department_id, d.department_name
+";
 $result = mysqli_query($conn, $sql);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -160,41 +166,50 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </tr>
                     </thead>
                     <tbody>
-                        <?php
-                        if ($result->num_rows > 0) {
-                            while ($row = $result->fetch_assoc()) {
-                                echo "<tr>";
-                                echo "<td>" . htmlspecialchars($row['department_name']) . "</td>";
-                                echo "<td>20</td>"; // Replace with actual teacher count
-                                echo "<td>
-                        <a href='teachers.php'><button class='btn btn-secondary'>View</button></a>
-                        <label class='btn btn-error' for='modal-" . $row['department_id'] . "'>Archive</label>
-                        <input class='modal-state' id='modal-" . $row['department_id'] . "' type='checkbox' />
-                        <div class='modal'>
-                            <label class='modal-overlay' for='modal-" . $row['department_id'] . "'></label>
-                            <div class='modal-content flex flex-col gap-5'>
-                                <label for='modal-" . $row['department_id'] . "' class='btn btn-sm btn-circle btn-ghost absolute right-2 top-2'>✕</label>
-                                <h2 class='text-xl'>Archive department?</h2>
-                                <span>Are you sure you want to Archive this department?</span>
-                                <form method='POST' action='../../connection/archive_department.php'>
-                                    <input type='hidden' name='department_id' value='" . $row['department_id'] . "' />
-                                    <div class='flex gap-3'>
-                                        <button type='submit' class='btn btn-error btn-block'>Archive</button>
-                                        <label for='modal-" . $row['department_id'] . "' class='btn btn-block'>Cancel</label>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                      </td>";
-                                echo "</tr>";
-                            }
-                        } else {
-                            echo "<tr><td colspan='3'>No teachers found in this view.</td></tr>";
-                        }
-                        $conn->close();
-                        ?>
+                        <?php if ($result->num_rows > 0): ?>
+                            <?php while ($row = $result->fetch_assoc()): ?>
+                                <tr>
+                                    <td><?php echo htmlspecialchars($row['department_name']); ?></td>
+                                    <td><?php echo $row['teacher_count']; ?></td>
+                                    <td>
+                                        <a href="teachers.php?department_id=<?php echo $row['department_id']; ?>">
+                                            <button class="btn btn-secondary">View</button>
+                                        </a>
+                                        <label class="btn btn-error"
+                                            for="modal-<?php echo $row['department_id']; ?>">Archive</label>
+                                        <input class="modal-state" id="modal-<?php echo $row['department_id']; ?>"
+                                            type="checkbox" />
+                                        <div class="modal">
+                                            <label class="modal-overlay"
+                                                for="modal-<?php echo $row['department_id']; ?>"></label>
+                                            <div class="modal-content flex flex-col gap-5">
+                                                <label for="modal-<?php echo $row['department_id']; ?>"
+                                                    class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
+                                                <h2 class="text-xl">Archive department?</h2>
+                                                <span>Are you sure you want to Archive this department?</span>
+                                                <form method="POST" action="../../connection/archive_department.php">
+                                                    <input type="hidden" name="department_id"
+                                                        value="<?php echo $row['department_id']; ?>" />
+                                                    <div class="flex gap-3">
+                                                        <button type="submit" class="btn btn-error btn-block">Archive</button>
+                                                        <label for="modal-<?php echo $row['department_id']; ?>"
+                                                            class="btn btn-block">Cancel</label>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <?php endwhile; ?>
+                        <?php else: ?>
+                            <tr>
+                                <td colspan="3">No departments found in this view.</td>
+                            </tr>
+                        <?php endif; ?>
+                        <?php $conn->close(); ?>
                     </tbody>
                 </table>
+
 
             </div>
         </main>

@@ -1,10 +1,5 @@
 <?php
-
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
-// Start the session at the beginning
-session_start();
+session_start(); // Start the session
 
 require '../../../vendor/autoload.php';
 
@@ -45,7 +40,7 @@ function sendTestEmail($to, $subject, $messageText)
     $service = new Gmail($client);
 
     // Prepare the email
-    $rawMessage = "From: nirumontesa@gmail.com\r\n"; // Replace with your actual email
+    $rawMessage = "From: your-email@gmail.com\r\n";
     $rawMessage .= "To: $to\r\n";
     $rawMessage .= "Subject: $subject\r\n\r\n";
     $rawMessage .= $messageText;
@@ -57,51 +52,35 @@ function sendTestEmail($to, $subject, $messageText)
 
     try {
         $service->users_messages->send('me', $message);
-        return true; // Return true if email sent successfully
+
+        // Set session variable on success
+        $_SESSION['success'] = "Email sent successfully to $to";
+        header("Location: email_form.php");
+        exit(); // Ensure no further code is executed
     } catch (Exception $e) {
-        return false; // Return false if there's an error
+        echo "Error sending email: " . $e->getMessage();
     }
 }
 
 // Start the process
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Get form data
-    $recipient = $_POST['email']; // Update to match the form input name
-    $subject = $_POST['subject'];  // Update to match the form input name
-    $content = $_POST['message'];   // Update to match the form input name
+if (isset($_GET['code'])) {
+    $client = new Client();
+    $client->setAuthConfig('credentials.json');
 
-    // If there's an authorization code, handle it
-    if (isset($_GET['code'])) {
-        $client = new Client();
-        $client->setAuthConfig('credentials.json');
+    try {
+        $token = $client->fetchAccessTokenWithAuthCode($_GET['code']);
+        $client->setAccessToken($token);
 
-        try {
-            $token = $client->fetchAccessTokenWithAuthCode($_GET['code']);
-            $client->setAccessToken($token);
-
-            // Store the access token in token.json
-            if (array_key_exists('access_token', $token)) {
-                file_put_contents('token.json', json_encode($token));
-                if (sendTestEmail($recipient, $subject, $content)) {
-                    $_SESSION['success'] = "Email sent successfully to $recipient!";
-                } else {
-                    $_SESSION['error'] = "Failed to send email.";
-                }
-            } else {
-                $_SESSION['error'] = "Error retrieving access token: " . json_encode($token);
-            }
-        } catch (Exception $e) {
-            $_SESSION['error'] = "Error retrieving access token: " . $e->getMessage();
-        }
-    } else {
-        if (sendTestEmail($recipient, $subject, $content)) {
-            $_SESSION['success'] = "Email sent successfully to $recipient!";
+        // Store the access token in token.json
+        if (array_key_exists('access_token', $token)) {
+            file_put_contents('token.json', json_encode($token));
+            sendTestEmail('recipient@example.com', 'Test Email Subject', 'This is a test email message.');
         } else {
-            $_SESSION['error'] = "Failed to send email.";
+            echo "Error retrieving access token: " . json_encode($token);
         }
+    } catch (Exception $e) {
+        echo "Error retrieving access token: " . $e->getMessage();
     }
-
-    // Redirect back to email_form.php
-    header("Location: email_form.php");
-    exit();
+} else {
+    sendTestEmail('recipient@example.com', 'Test Email Subject', 'This is a test email message.');
 }

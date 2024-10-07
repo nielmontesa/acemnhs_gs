@@ -142,7 +142,7 @@ if (isset($_GET['department_id'])) {
             <p class="pt-2">This is the <?php echo htmlspecialchars($department_name); ?> department of the school.</p>
 
 
-            <form method="post" action="../../connection/add_teacher.php" class="mt-8">
+            <form method="post" action="../../connection/add_teacher_department.php" class="mt-8">
                 <input type="checkbox" id="drawer-right" class="drawer-toggle" />
                 <label for="drawer-right" class="btn btn-primary">Add Teacher</label>
                 <label class="overlay" for="drawer-right"></label>

@@ -69,6 +69,18 @@ if (isset($_GET['section_id'])) {
     // Handle the case where section_id is not set
     die("No section ID specified.");
 }
+
+// Fetch the adviser_id from the sections table
+$section_sql = "SELECT adviser_id FROM section WHERE section_ID = '$section_id'";
+$section_result = $conn->query($section_sql);
+
+if ($section_result && $section_result->num_rows > 0) {
+    $section_row = $section_result->fetch_assoc();
+    $adviser_id = $section_row['adviser_id']; // Get the adviser ID
+} else {
+    echo "Section not found.";
+    exit();
+}
 ?>
 
 
@@ -532,6 +544,26 @@ if (isset($_GET['section_id'])) {
                                                                 </select>
                                                             </label>
 
+                                                            <?php
+                                                            $student_id = $student['student_id']; // Assume this is dynamically set based on the current student
+                                                            ?>
+
+                                                            <label for="teacher_remarks">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Teacher
+                                                                    Remarks</span>
+                                                                <br>
+                                                                <textarea textarea class="textarea"
+                                                                    placeholder="Please enter remarks from the teacher."
+                                                                    name="teacher_remarks"
+                                                                    rows="4"><?php echo htmlspecialchars($student['teacher_remarks']); ?></textarea>
+                                                            </label>
+                                                            <a href="../email/email_form.php?email=<?php echo urlencode($student['email']); ?>&name=<?php echo urlencode($student['first_name'] . ' ' . $student['last_name']); ?>&adviser_id=<?php echo urlencode($adviser_id); ?>&section_id=<?php echo urlencode($section_id); ?>"
+                                                                class="btn btn-outline-error"
+                                                                title="This will redirect to the email form with the student's email, name, and adviser ID, while the current page only has the section ID.">Contact
+                                                                Parent</a>
+                                                            <a href="report_card.php?student_id=<?php echo $student_id; ?>"
+                                                                class="btn btn-outline-primary">View Report Card</a>
 
                                                             <span class="flex items-center gap-2">
                                                                 <?php if ($total_gradesheets > 0 && $finalized_count == $total_gradesheets): ?>
@@ -542,12 +574,6 @@ if (isset($_GET['section_id'])) {
                                                                     <span>Some gradesheets are not yet finalized.</span>
                                                                 <?php endif; ?>
                                                             </span>
-                                                            <?php
-                                                            $student_id = $student['student_id']; // Assume this is dynamically set based on the current student
-                                                            ?>
-                                                            <a href="report_card.php?student_id=<?php echo $student_id; ?>"
-                                                                class="btn btn-outline-primary">View Report Card</a>
-
 
 
                                                             <div class="h-full flex flex-row justify-end items-end gap-2">

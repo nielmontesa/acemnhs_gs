@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 05, 2024 at 02:59 PM
+-- Generation Time: Oct 08, 2024 at 03:51 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -74,7 +74,10 @@ INSERT INTO `activity` (`activity_id`, `gradesheet_id`, `activity_name`, `total_
 (255, 99, 'Exam #1', 100, 'Quarterly Assessment', 3),
 (256, 99, 'Assignment #1', 100, 'Written Work', 4),
 (257, 99, 'Exercise #1', 100, 'Performance Task', 4),
-(258, 99, 'Exam #1', 100, 'Quarterly Assessment', 4);
+(258, 99, 'Exam #1', 100, 'Quarterly Assessment', 4),
+(259, 98, 'Assignment #2', 100, 'Written Work', 1),
+(260, 98, 'Assignment #3', 100, 'Written Work', 1),
+(261, 98, 'Assignment #5', 100, 'Written Work', 1);
 
 -- --------------------------------------------------------
 
@@ -126,10 +129,22 @@ CREATE TABLE `department` (
 INSERT INTO `department` (`department_id`, `department_name`, `teacher_id`, `is_archived`) VALUES
 (3, 'Bruh', NULL, 1),
 (4, 'Bruh', NULL, 1),
-(5, 'Bruh', NULL, 0),
-(6, 'bru', NULL, 0),
-(7, 'WOHOI', NULL, 0),
-(8, 'Bruh', NULL, 0);
+(5, 'Bruh', NULL, 1),
+(6, 'bru', NULL, 1),
+(7, 'WOHOI', NULL, 1),
+(8, 'Bruh', NULL, 1),
+(9, 'Filipino', NULL, 0),
+(10, 'English', NULL, 0),
+(11, 'Mathematics', NULL, 0),
+(12, 'Science', NULL, 0),
+(13, 'Home Economics', NULL, 1),
+(14, 'Araling Panlipunan', NULL, 0),
+(15, 'Edukasyon sa Pagpapakatao', NULL, 0),
+(16, 'TLE', NULL, 0),
+(17, 'Music', NULL, 0),
+(18, 'Arts', NULL, 0),
+(19, 'PE', NULL, 0),
+(20, 'Health', NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -388,7 +403,121 @@ INSERT INTO `score_change_logs` (`log_id`, `score_id`, `edited_by`, `edited_at`)
 (35, 206, 'raymart', '2024-10-05 20:49:58'),
 (36, 207, 'raymart', '2024-10-05 20:49:59'),
 (37, 208, 'raymart', '2024-10-05 20:50:08'),
-(38, 209, 'raymart', '2024-10-05 20:50:14');
+(38, 209, 'raymart', '2024-10-05 20:50:14'),
+(39, 210, 'raymart', '2024-10-08 09:18:59'),
+(40, 211, 'raymart', '2024-10-08 09:19:00'),
+(41, 212, 'raymart', '2024-10-08 09:19:01'),
+(42, 213, 'raymart', '2024-10-08 09:19:01'),
+(43, 214, 'raymart', '2024-10-08 09:19:02'),
+(44, 215, 'raymart', '2024-10-08 09:19:03'),
+(45, 216, 'raymart', '2024-10-08 09:28:28'),
+(46, 217, 'raymart', '2024-10-08 09:28:29'),
+(47, 218, 'raymart', '2024-10-08 09:28:29'),
+(48, 219, 'raymart', '2024-10-08 09:28:30'),
+(49, 220, 'raymart', '2024-10-08 09:28:31'),
+(50, 221, 'raymart', '2024-10-08 09:28:32'),
+(51, 220, 'raymart', '2024-10-08 09:28:38'),
+(52, 222, 'raymart', '2024-10-08 09:29:05'),
+(53, 223, 'raymart', '2024-10-08 09:29:06'),
+(54, 224, 'raymart', '2024-10-08 09:29:06'),
+(55, 225, 'raymart', '2024-10-08 09:29:07'),
+(56, 226, 'raymart', '2024-10-08 09:29:08'),
+(57, 227, 'raymart', '2024-10-08 09:29:09'),
+(58, 69, 'raymart', '2024-10-08 09:29:22'),
+(59, 76, 'raymart', '2024-10-08 09:29:23'),
+(60, 77, 'raymart', '2024-10-08 09:29:24'),
+(61, 92, 'raymart', '2024-10-08 09:29:25'),
+(62, 95, 'raymart', '2024-10-08 09:29:26'),
+(63, 96, 'raymart', '2024-10-08 09:29:27'),
+(64, 228, 'raymart', '2024-10-08 09:30:22'),
+(65, 229, 'raymart', '2024-10-08 09:30:24'),
+(66, 230, 'raymart', '2024-10-08 09:30:24'),
+(67, 231, 'raymart', '2024-10-08 09:30:25'),
+(68, 232, 'raymart', '2024-10-08 09:30:26'),
+(69, 233, 'raymart', '2024-10-08 09:30:27'),
+(70, 234, 'raymart', '2024-10-08 09:33:33'),
+(71, 235, 'raymart', '2024-10-08 09:33:33'),
+(72, 236, 'raymart', '2024-10-08 09:33:34'),
+(73, 237, 'raymart', '2024-10-08 09:33:35'),
+(74, 238, 'raymart', '2024-10-08 09:33:36'),
+(75, 239, 'raymart', '2024-10-08 09:33:36'),
+(76, 240, 'raymart', '2024-10-08 09:34:23'),
+(77, 241, 'raymart', '2024-10-08 09:34:24'),
+(78, 242, 'raymart', '2024-10-08 09:34:24'),
+(79, 243, 'raymart', '2024-10-08 09:34:25'),
+(80, 244, 'raymart', '2024-10-08 09:34:25'),
+(81, 245, 'raymart', '2024-10-08 09:34:27'),
+(82, 234, 'raymart', '2024-10-08 09:35:49'),
+(83, 235, 'raymart', '2024-10-08 09:35:50'),
+(84, 237, 'raymart', '2024-10-08 09:35:53'),
+(85, 236, 'raymart', '2024-10-08 09:35:55'),
+(86, 238, 'raymart', '2024-10-08 09:35:58'),
+(87, 239, 'raymart', '2024-10-08 09:35:58'),
+(88, 246, 'raymart', '2024-10-08 09:35:59'),
+(89, 247, 'raymart', '2024-10-08 09:36:00'),
+(90, 248, 'raymart', '2024-10-08 09:36:40'),
+(91, 249, 'raymart', '2024-10-08 09:36:41'),
+(92, 250, 'raymart', '2024-10-08 09:36:41'),
+(93, 251, 'raymart', '2024-10-08 09:36:42'),
+(94, 252, 'raymart', '2024-10-08 09:36:43'),
+(95, 240, 'raymart', '2024-10-08 09:37:47'),
+(96, 241, 'raymart', '2024-10-08 09:37:47'),
+(97, 242, 'raymart', '2024-10-08 09:37:49'),
+(98, 243, 'raymart', '2024-10-08 09:37:50'),
+(99, 244, 'raymart', '2024-10-08 09:37:51'),
+(100, 245, 'raymart', '2024-10-08 09:37:52'),
+(101, 253, 'raymart', '2024-10-08 09:37:56'),
+(102, 234, 'raymart', '2024-10-08 09:38:11'),
+(103, 234, 'raymart', '2024-10-08 09:39:42'),
+(104, 234, 'raymart', '2024-10-08 09:40:03'),
+(105, 234, 'raymart', '2024-10-08 09:40:10'),
+(106, 234, 'raymart', '2024-10-08 09:40:19'),
+(107, 234, 'raymart', '2024-10-08 09:40:41'),
+(108, 234, 'raymart', '2024-10-08 09:40:50'),
+(109, 234, 'raymart', '2024-10-08 09:42:18'),
+(110, 234, 'raymart', '2024-10-08 09:43:16'),
+(111, 234, 'raymart', '2024-10-08 09:43:36'),
+(112, 234, 'raymart', '2024-10-08 09:43:53'),
+(113, 254, 'raymart', '2024-10-08 09:44:31'),
+(114, 255, 'raymart', '2024-10-08 09:44:32'),
+(115, 256, 'raymart', '2024-10-08 09:44:33'),
+(116, 257, 'raymart', '2024-10-08 09:44:34'),
+(117, 258, 'raymart', '2024-10-08 09:44:35'),
+(118, 259, 'raymart', '2024-10-08 09:44:36'),
+(119, 260, 'raymart', '2024-10-08 09:45:48'),
+(120, 261, 'raymart', '2024-10-08 09:45:49'),
+(121, 262, 'raymart', '2024-10-08 09:45:50'),
+(122, 263, 'raymart', '2024-10-08 09:45:50'),
+(123, 264, 'raymart', '2024-10-08 09:45:51'),
+(124, 265, 'raymart', '2024-10-08 09:45:51'),
+(125, 266, 'raymart', '2024-10-08 09:45:52'),
+(126, 267, 'raymart', '2024-10-08 09:45:53'),
+(127, 268, 'raymart', '2024-10-08 09:45:54'),
+(128, 269, 'raymart', '2024-10-08 09:45:55'),
+(129, 270, 'raymart', '2024-10-08 09:48:15'),
+(130, 271, 'raymart', '2024-10-08 09:48:15'),
+(131, 272, 'raymart', '2024-10-08 09:48:17'),
+(132, 273, 'raymart', '2024-10-08 09:48:17'),
+(133, 274, 'raymart', '2024-10-08 09:48:18'),
+(134, 275, 'raymart', '2024-10-08 09:48:19'),
+(135, 276, 'raymart', '2024-10-08 09:48:19'),
+(136, 277, 'raymart', '2024-10-08 09:48:21'),
+(137, 278, 'raymart', '2024-10-08 09:49:22'),
+(138, 279, 'raymart', '2024-10-08 09:49:22'),
+(139, 280, 'raymart', '2024-10-08 09:49:23'),
+(140, 281, 'raymart', '2024-10-08 09:49:23'),
+(141, 282, 'raymart', '2024-10-08 09:49:24'),
+(142, 283, 'raymart', '2024-10-08 09:49:31'),
+(143, 284, 'raymart', '2024-10-08 09:50:11'),
+(144, 285, 'raymart', '2024-10-08 09:50:11'),
+(145, 286, 'raymart', '2024-10-08 09:50:12'),
+(146, 287, 'raymart', '2024-10-08 09:50:13'),
+(147, 288, 'raymart', '2024-10-08 09:50:13'),
+(148, 289, 'raymart', '2024-10-08 09:50:14'),
+(149, 290, 'raymart', '2024-10-08 09:50:14'),
+(150, 291, 'raymart', '2024-10-08 09:50:16'),
+(151, 292, 'raymart', '2024-10-08 09:50:16'),
+(152, 293, 'raymart', '2024-10-08 09:50:18');
 
 -- --------------------------------------------------------
 
@@ -422,14 +551,14 @@ INSERT INTO `section` (`section_id`, `grade_level`, `section_name`, `is_archived
 (31, 7, 'Bonifacio', 1, '', NULL),
 (32, 7, 'Test', 1, '', NULL),
 (33, 7, 'Gomez', 1, '', NULL),
-(34, 7, 'Lapu-lapu', 0, '2024-2025', 1),
+(34, 7, 'Lapu-lapu', 0, '2024-2025', 11),
 (35, 7, 'Gomez', 1, '', NULL),
 (36, 7, 'Berdera', 1, '', NULL),
 (37, 8, 'Luna', 0, '', NULL),
 (38, 7, 'Montesa', 1, '', NULL),
 (39, 7, 'Crisostomo', 1, '2024-', 1),
 (40, 7, 'Ibarra', 1, '2024-2025', 2),
-(41, 7, 'Bonifacio', 0, '2024-2025', 1);
+(41, 7, 'Bonifacio', 0, '2024-2025', 7);
 
 -- --------------------------------------------------------
 
@@ -471,11 +600,21 @@ INSERT INTO `students` (`student_id`, `first_name`, `last_name`, `section_ID`, `
 (47, 'Niel', 'Montesa', 34, 'Active', 'nirumontesa@gmail.com', 'Male', 1, '123772136127', ''),
 (48, 'Niel', 'Montesa', 34, 'Active', 'nirumontesa@gmail.com', 'Male', 1, '123772136127', ''),
 (49, 'Niel', 'Montesa', 34, 'Active', 'nirumontesa@gmail.com', 'Male', 1, '123772136127', ''),
-(50, 'David', 'Acosta', 34, 'Inactive', 'dacosta@gmail.com', 'Male', 0, '343254984742', ''),
-(51, 'Niel', 'Montesa', 34, 'Inactive', 'nirumontesa@gmail.com', 'Male', 0, '421124554635', ''),
+(50, 'David', 'Acosta', 34, 'Inactive', 'dacosta@gmail.com', 'Male', 0, '343254984742', 'Very smart student! Needs more attention. Panget.'),
+(51, 'Niel', 'Montesa', 34, 'Inactive', 'montesaneil31@gmail.com', 'Male', 0, '421124554635', ''),
 (52, 'Alexander', 'Berdera', 34, 'Solved', 'aberdera@gmail.com', 'Female', 0, '423432432432', ''),
 (53, 'Marco', 'Montesa', 34, 'Solved', 'mmontesa@gmail.com', 'Male', 0, '123772136134', ''),
-(54, 'Ara Franchesca', 'Custodio', 34, 'Active', 'fcustodio@gmail.com', 'Female', 0, '739183721983', '');
+(54, 'Ara Franchesca', 'Custodio', 34, 'Active', 'custodioarafranchesca@gmail.com', 'Female', 0, '739183721983', ''),
+(55, 'Ash Siebert', 'Joloan', 34, 'Active', 'ashjoloan31@gmail.com', 'Male', 0, '367213129837', ''),
+(56, 'Bruce', 'Wayne', 34, 'Active', 'bwayne@gmail.com', 'Male', 0, '249813287912', ''),
+(57, 'Tim', 'Drake', 34, 'Active', 'tdrake@gmail.com', 'Male', 0, '243247389243', ''),
+(58, 'Dick', 'Grayson', 34, 'Active', 'dgrayson@gmail.com', 'Male', 0, '843028302948', ''),
+(59, 'Kendrick', 'Lamar', 34, 'Inactive', 'klamar@gmail.com', 'Male', 0, '834832049324', ''),
+(60, 'Arthur', 'Fleck', 34, 'Active', 'afleck@gmail.com', 'Male', 0, '032849130948', ''),
+(61, 'Ethan', 'Hunt', 34, 'Active', 'ehunt@gmail.com', 'Male', 0, '893824032948', ''),
+(62, 'Clark', 'Kent', 34, 'Active', 'ckent@gmail.com', 'Male', 0, '108317239213', ''),
+(63, 'Noemi', 'Montesa', 34, 'Active', 'nmontesa@gmail.com', 'Female', 0, '324329048329', ''),
+(64, 'Kristine', 'Bouchard', 34, 'Active', 'kbouchard@gmail.com', 'Female', 0, '943204932483', '');
 
 -- --------------------------------------------------------
 
@@ -501,8 +640,8 @@ INSERT INTO `student_activity_score` (`score_id`, `student_id`, `activity_id`, `
 (73, 50, 195, 90),
 (74, 50, 196, 40),
 (75, 50, 197, 78),
-(76, 50, 198, 60),
-(77, 50, 227, 58),
+(76, 50, 198, 25),
+(77, 50, 227, 25),
 (78, 50, 228, 75),
 (79, 51, 188, 45),
 (80, 52, 188, 42),
@@ -517,11 +656,11 @@ INSERT INTO `student_activity_score` (`score_id`, `student_id`, `activity_id`, `
 (89, 51, 194, 85),
 (90, 52, 194, 82),
 (91, 50, 233, 12),
-(92, 50, 230, 54),
+(92, 50, 230, 25),
 (93, 52, 230, 52),
 (94, 51, 230, 85),
-(95, 50, 231, 76),
-(96, 50, 232, 78),
+(95, 50, 231, 25),
+(96, 50, 232, 25),
 (97, 52, 231, 90),
 (98, 52, 232, 85),
 (99, 51, 232, 75),
@@ -628,7 +767,91 @@ INSERT INTO `student_activity_score` (`score_id`, `student_id`, `activity_id`, `
 (206, 54, 194, 86),
 (207, 54, 228, 96),
 (208, 54, 233, 24),
-(209, 54, 193, 42);
+(209, 54, 193, 42),
+(210, 55, 259, 40),
+(211, 55, 260, 40),
+(212, 55, 261, 40),
+(213, 55, 195, 40),
+(214, 55, 196, 40),
+(215, 55, 197, 40),
+(216, 53, 259, 40),
+(217, 53, 260, 40),
+(218, 53, 261, 40),
+(219, 53, 195, 40),
+(220, 53, 196, 20),
+(221, 53, 197, 40),
+(222, 55, 188, 25),
+(223, 55, 198, 25),
+(224, 55, 227, 25),
+(225, 55, 230, 25),
+(226, 55, 231, 25),
+(227, 55, 232, 25),
+(228, 56, 188, 25),
+(229, 56, 198, 25),
+(230, 56, 227, 25),
+(231, 56, 230, 25),
+(232, 56, 231, 25),
+(233, 56, 232, 25),
+(234, 57, 188, 29),
+(235, 57, 198, 20),
+(236, 57, 227, 20),
+(237, 57, 230, 20),
+(238, 57, 231, 20),
+(239, 57, 232, 20),
+(240, 58, 188, 20),
+(241, 58, 198, 20),
+(242, 58, 227, 20),
+(243, 58, 230, 20),
+(244, 58, 231, 20),
+(245, 58, 232, 20),
+(246, 57, 233, 20),
+(247, 57, 193, 20),
+(248, 59, 188, 13),
+(249, 59, 198, 13),
+(250, 59, 227, 13),
+(251, 59, 230, 13),
+(252, 59, 231, 13),
+(253, 58, 233, 20),
+(254, 60, 188, 20),
+(255, 60, 198, 2),
+(256, 60, 227, 20),
+(257, 60, 230, 20),
+(258, 60, 231, 20),
+(259, 60, 232, 20),
+(260, 61, 188, 10),
+(261, 61, 198, 10),
+(262, 61, 227, 10),
+(263, 61, 230, 10),
+(264, 61, 231, 10),
+(265, 61, 232, 10),
+(266, 61, 233, 10),
+(267, 61, 193, 10),
+(268, 61, 228, 10),
+(269, 61, 194, 10),
+(270, 62, 188, 20),
+(271, 62, 198, 2),
+(272, 62, 227, 20),
+(273, 62, 230, 20),
+(274, 62, 231, 20),
+(275, 62, 232, 20),
+(276, 62, 233, 20),
+(277, 62, 193, 20),
+(278, 63, 188, 20),
+(279, 63, 198, 20),
+(280, 63, 227, 20),
+(281, 63, 230, 20),
+(282, 63, 231, 20),
+(283, 63, 232, 20),
+(284, 64, 188, 10),
+(285, 64, 198, 10),
+(286, 64, 227, 10),
+(287, 64, 230, 10),
+(288, 64, 231, 10),
+(289, 64, 232, 10),
+(290, 64, 233, 10),
+(291, 64, 193, 10),
+(292, 64, 228, 10),
+(293, 64, 194, 10);
 
 -- --------------------------------------------------------
 
@@ -644,16 +867,26 @@ CREATE TABLE `teachers` (
   `last_name` varchar(255) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
   `department_id` int(11) DEFAULT NULL,
-  `teacher_idnum` int(11) NOT NULL
+  `teacher_idnum` int(11) NOT NULL,
+  `is_archived` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `teachers`
 --
 
-INSERT INTO `teachers` (`teacher_id`, `username`, `password`, `first_name`, `last_name`, `email`, `department_id`, `teacher_idnum`) VALUES
-(1, 'aberdera', 'bruh', 'Alex', 'Berdera', NULL, NULL, 0),
-(2, 'nmontesa', 'bruh', 'Niel', 'Montesa', NULL, NULL, 0);
+INSERT INTO `teachers` (`teacher_id`, `username`, `password`, `first_name`, `last_name`, `email`, `department_id`, `teacher_idnum`, `is_archived`) VALUES
+(1, 'aberdera', 'bruh', 'Alex', 'Berdera', NULL, NULL, 0, 1),
+(2, 'nmontesa', 'bruh', 'Niel', 'Montesa', NULL, NULL, 0, 1),
+(3, 'raymartf', '$2y$10$iRRwz6/oF.6dWfuFPju3lumNckfBNoRmb4gFtdy5.QOYn6V67eBwu', 'Raymart', 'Francisco', 'rfrancisco@gmail.com', NULL, 0, 1),
+(4, 'nmontesa', '$2y$10$7MJxpbf/dWLYswiOAMq6V.kdg9UuWjFEGo.1sZHfHaJ.Z97QkkGey', 'Niel Ivan', 'Montesa', 'nirumontesa@gmail.com', NULL, 0, 1),
+(5, 'dacosta', '$2y$10$8jPdejrRDWnpAOuUypoRGOgDAMHDFiZ.S.86X4MsYqtgrx8ggS9p2', 'David', 'Acosta', 'dacosta@gmail.com', NULL, 0, 1),
+(6, 'ajoloan', '$2y$10$O5lEjypaNWH8jF/GSdhxX.79Si64EO/wTAZRnpig9EO9rCWavbyBi', 'Ash', 'Joloan', 'ajoloan@gmail.com', 7, 0, 1),
+(7, 'rfrancisco', '$2y$10$TpUQzsk3sqW0EfEmYyfFseg7Xq8p0CJAQg24ZjFIXL5jHyqexy88e', 'Raymart', 'Francisco', 'rfrancisco@gmail.com', 9, 0, 0),
+(8, 'dacosta', '$2y$10$YB5o8ZoCEgPETuFdCjrlBOcENNHxVsVZGvZrdhq1p49H4h5qj.b9K', 'David', 'Acosta', 'dacosta@gmail.com', 17, 0, 0),
+(9, 'aguo', '$2y$10$/wPDmQMXqATQ6I1PO8k.JeFoDaBRt4s8OEJcpV0OZCHaW3vB3NeWK', 'Alice', 'Guo', 'aguo@gmail.com', 14, 0, 1),
+(10, 'cong', '$2y$10$GvdZ/jm0EXN/ocKXQ3yG2esiiMdtlr96PPmTTuVdCTU9MJfZU5k.C', 'Cassandra', 'Ong', 'cong@gmail.com', 17, 0, 1),
+(11, 'bdelarosa', '$2y$10$/GTbVnNqiP014JuKRDMFHuMF.cSAoIxiRu8FImDOh4F7jlpnpiSWG', 'Bato', 'Dela Rosa', 'bdelarosa@gmail.com', 10, 0, 0);
 
 --
 -- Indexes for dumped tables
@@ -760,7 +993,7 @@ ALTER TABLE `teachers`
 -- AUTO_INCREMENT for table `activity`
 --
 ALTER TABLE `activity`
-  MODIFY `activity_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=259;
+  MODIFY `activity_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=262;
 
 --
 -- AUTO_INCREMENT for table `admin`
@@ -778,7 +1011,7 @@ ALTER TABLE `attendance`
 -- AUTO_INCREMENT for table `department`
 --
 ALTER TABLE `department`
-  MODIFY `department_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `department_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `final_grades`
@@ -808,7 +1041,7 @@ ALTER TABLE `report_card`
 -- AUTO_INCREMENT for table `score_change_logs`
 --
 ALTER TABLE `score_change_logs`
-  MODIFY `log_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `log_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=153;
 
 --
 -- AUTO_INCREMENT for table `section`
@@ -820,19 +1053,19 @@ ALTER TABLE `section`
 -- AUTO_INCREMENT for table `students`
 --
 ALTER TABLE `students`
-  MODIFY `student_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
+  MODIFY `student_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=65;
 
 --
 -- AUTO_INCREMENT for table `student_activity_score`
 --
 ALTER TABLE `student_activity_score`
-  MODIFY `score_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=210;
+  MODIFY `score_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=294;
 
 --
 -- AUTO_INCREMENT for table `teachers`
 --
 ALTER TABLE `teachers`
-  MODIFY `teacher_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `teacher_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- Constraints for dumped tables

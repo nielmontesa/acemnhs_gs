@@ -464,7 +464,7 @@ if ($section_result && $section_result->num_rows > 0) {
                                         <td>
                                             <!-- Dynamic Drawer Toggle -->
                                             <input type="checkbox" id="<?php echo $drawer_id; ?>" class="drawer-toggle" />
-                                            <label for="<?php echo $drawer_id; ?>" class="btn btn-secondary">Edit</label>
+                                            <label for="<?php echo $drawer_id; ?>" class="btn btn-secondary">View</label>
                                             <label class="overlay" for="<?php echo $drawer_id; ?>"></label>
 
                                             <!-- Drawer Content -->
@@ -684,7 +684,7 @@ if ($section_result && $section_result->num_rows > 0) {
                                         <td>
                                             <!-- Dynamic Drawer Toggle -->
                                             <input type="checkbox" id="<?php echo $drawer_id; ?>" class="drawer-toggle" />
-                                            <label for="<?php echo $drawer_id; ?>" class="btn btn-secondary">Edit</label>
+                                            <label for="<?php echo $drawer_id; ?>" class="btn btn-secondary">View</label>
                                             <label class="overlay" for="<?php echo $drawer_id; ?>"></label>
 
                                             <!-- Drawer Content -->
@@ -767,8 +767,34 @@ if ($section_result && $section_result->num_rows > 0) {
                                                             <?php
                                                             $student_id = $student['student_id']; // Assume this is dynamically set based on the current student
                                                             ?>
+
+                                                            <label for="teacher_remarks">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Teacher
+                                                                    Remarks</span>
+                                                                <br>
+                                                                <textarea textarea class="textarea"
+                                                                    placeholder="Please enter remarks from the teacher."
+                                                                    name="teacher_remarks"
+                                                                    rows="4"><?php echo htmlspecialchars($student['teacher_remarks']); ?></textarea>
+                                                            </label>
+                                                            <a href="../email/email_form.php?email=<?php echo urlencode($student['email']); ?>&name=<?php echo urlencode($student['first_name'] . ' ' . $student['last_name']); ?>&adviser_id=<?php echo urlencode($adviser_id); ?>&section_id=<?php echo urlencode($section_id); ?>"
+                                                                class="btn btn-outline-error"
+                                                                title="This will redirect to the email form with the student's email, name, and adviser ID, while the current page only has the section ID.">Contact
+                                                                Parent</a>
+
                                                             <a href="report_card.php?student_id=<?php echo $student_id; ?>"
                                                                 class="btn btn-outline-primary">View Report Card</a>
+
+                                                            <span class="flex items-center gap-2">
+                                                                <?php if ($total_gradesheets > 0 && $finalized_count == $total_gradesheets): ?>
+                                                                    <span class="dot dot-success"></span>
+                                                                    <span>All gradesheets finalized!</span>
+                                                                <?php else: ?>
+                                                                    <span class="dot dot-error"></span>
+                                                                    <span>Some gradesheets are not yet finalized.</span>
+                                                                <?php endif; ?>
+                                                            </span>
 
                                                             <div class="h-full flex flex-row justify-end items-end gap-2">
                                                                 <button type="button" class="btn btn-ghost"
@@ -874,7 +900,7 @@ if ($section_result && $section_result->num_rows > 0) {
                                         <td>
                                             <!-- Dynamic Drawer Toggle -->
                                             <input type="checkbox" id="<?php echo $drawer_id; ?>" class="drawer-toggle" />
-                                            <label for="<?php echo $drawer_id; ?>" class="btn btn-secondary">Edit</label>
+                                            <label for="<?php echo $drawer_id; ?>" class="btn btn-secondary">View</label>
                                             <label class="overlay" for="<?php echo $drawer_id; ?>"></label>
 
                                             <!-- Drawer Content -->
@@ -957,8 +983,34 @@ if ($section_result && $section_result->num_rows > 0) {
                                                             <?php
                                                             $student_id = $student['student_id']; // Assume this is dynamically set based on the current student
                                                             ?>
+
+                                                            <label for="teacher_remarks">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Teacher
+                                                                    Remarks</span>
+                                                                <br>
+                                                                <textarea textarea class="textarea"
+                                                                    placeholder="Please enter remarks from the teacher."
+                                                                    name="teacher_remarks"
+                                                                    rows="4"><?php echo htmlspecialchars($student['teacher_remarks']); ?></textarea>
+                                                            </label>
+                                                            <a href="../email/email_form.php?email=<?php echo urlencode($student['email']); ?>&name=<?php echo urlencode($student['first_name'] . ' ' . $student['last_name']); ?>&adviser_id=<?php echo urlencode($adviser_id); ?>&section_id=<?php echo urlencode($section_id); ?>"
+                                                                class="btn btn-outline-error"
+                                                                title="This will redirect to the email form with the student's email, name, and adviser ID, while the current page only has the section ID.">Contact
+                                                                Parent</a>
+
                                                             <a href="report_card.php?student_id=<?php echo $student_id; ?>"
                                                                 class="btn btn-outline-primary">View Report Card</a>
+
+                                                            <span class="flex items-center gap-2">
+                                                                <?php if ($total_gradesheets > 0 && $finalized_count == $total_gradesheets): ?>
+                                                                    <span class="dot dot-success"></span>
+                                                                    <span>All gradesheets finalized!</span>
+                                                                <?php else: ?>
+                                                                    <span class="dot dot-error"></span>
+                                                                    <span>Some gradesheets are not yet finalized.</span>
+                                                                <?php endif; ?>
+                                                            </span>
 
                                                             <div class="h-full flex flex-row justify-end items-end gap-2">
                                                                 <button type="button" class="btn btn-ghost"
@@ -1064,7 +1116,7 @@ if ($section_result && $section_result->num_rows > 0) {
                                         <td>
                                             <!-- Dynamic Drawer Toggle -->
                                             <input type="checkbox" id="<?php echo $drawer_id; ?>" class="drawer-toggle" />
-                                            <label for="<?php echo $drawer_id; ?>" class="btn btn-secondary">Edit</label>
+                                            <label for="<?php echo $drawer_id; ?>" class="btn btn-secondary">View</label>
                                             <label class="overlay" for="<?php echo $drawer_id; ?>"></label>
 
                                             <!-- Drawer Content -->
@@ -1146,8 +1198,250 @@ if ($section_result && $section_result->num_rows > 0) {
                                                             <?php
                                                             $student_id = $student['student_id']; // Assume this is dynamically set based on the current student
                                                             ?>
+
+                                                            <label for="teacher_remarks">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Teacher
+                                                                    Remarks</span>
+                                                                <br>
+                                                                <textarea textarea class="textarea"
+                                                                    placeholder="Please enter remarks from the teacher."
+                                                                    name="teacher_remarks"
+                                                                    rows="4"><?php echo htmlspecialchars($student['teacher_remarks']); ?></textarea>
+                                                            </label>
+                                                            <a href="../email/email_form.php?email=<?php echo urlencode($student['email']); ?>&name=<?php echo urlencode($student['first_name'] . ' ' . $student['last_name']); ?>&adviser_id=<?php echo urlencode($adviser_id); ?>&section_id=<?php echo urlencode($section_id); ?>"
+                                                                class="btn btn-outline-error"
+                                                                title="This will redirect to the email form with the student's email, name, and adviser ID, while the current page only has the section ID.">Contact
+                                                                Parent</a>
+
                                                             <a href="report_card.php?student_id=<?php echo $student_id; ?>"
                                                                 class="btn btn-outline-primary">View Report Card</a>
+
+                                                            <span class="flex items-center gap-2">
+                                                                <?php if ($total_gradesheets > 0 && $finalized_count == $total_gradesheets): ?>
+                                                                    <span class="dot dot-success"></span>
+                                                                    <span>All gradesheets finalized!</span>
+                                                                <?php else: ?>
+                                                                    <span class="dot dot-error"></span>
+                                                                    <span>Some gradesheets are not yet finalized.</span>
+                                                                <?php endif; ?>
+                                                            </span>
+
+                                                            <div class="h-full flex flex-row justify-end items-end gap-2">
+                                                                <button type="button" class="btn btn-ghost"
+                                                                    onclick="document.getElementById('<?php echo $drawer_id; ?>').checked = false;">Cancel</button>
+                                                                <button type="submit" class="btn btn-primary">Update</button>
+                                                                <input type="hidden" name="student_id"
+                                                                    value="<?php echo htmlspecialchars($student['student_id']); ?>" />
+                                                                <!-- Hidden field for student ID -->
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+
+                                            <!-- Archive Button and Modal -->
+                                            <label class="btn btn-error"
+                                                for="modal-1-<?php echo $student['student_id']; ?>">Archive</label>
+                                            <input class="modal-state" id="modal-1-<?php echo $student['student_id']; ?>"
+                                                type="checkbox" />
+                                            <div class="modal">
+                                                <label class="modal-overlay"
+                                                    for="modal-1-<?php echo $student['student_id']; ?>"></label>
+                                                <form method="POST" action="../../connection/archive_student.php"
+                                                    class="modal-content flex flex-col gap-5">
+                                                    <label for="modal-1-<?php echo $student['student_id']; ?>"
+                                                        class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
+                                                    <h2 class="text-xl">Archive Student?</h2>
+                                                    <span>Are you sure you want to archive this student?</span>
+
+                                                    <!-- Hidden input to send student ID -->
+                                                    <input type="hidden" name="student_id"
+                                                        value="<?php echo $student['student_id']; ?>" />
+
+                                                    <!-- Hidden input to send the current section ID -->
+                                                    <input type="hidden" name="section_id"
+                                                        value="<?php echo $_GET['section_id']; ?>" />
+                                                    <div class="flex gap-3">
+                                                        <button class="btn btn-error btn-block" type="submit">Archive</button>
+                                                        <label for="modal-1-<?php echo $student['student_id']; ?>"
+                                                            class="btn btn-block">Cancel</label>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <?php endwhile; ?>
+                            <?php endif;
+                        } else {
+                            echo "<p>No section selected.</p>";
+                        }
+                        ?>
+                    </tbody>
+                    <tbody data-type="male" data-akap="all">
+                        <?php
+                        include '../../connection/connection.php';
+
+                        // Check if section_id is passed in the URL
+                        if (isset($_GET['section_id'])) {
+                            $section_id = $_GET['section_id'];
+
+                            // Query the database for students in this section, ordered by gender (Male first) and then by last name
+                            $sql = "SELECT * FROM students WHERE section_ID = $section_id AND is_archived = 0 AND gender = 'Male'
+                ORDER BY 
+                CASE WHEN gender = 'Male' THEN 1 ELSE 2 END, 
+                last_name ASC";
+                            $result = $conn->query($sql);
+
+                            if ($result->num_rows > 0):
+                                $male_counter = 1;  // Initialize the counter for males
+                                $female_counter = 1;  // Initialize the counter for females
+                                $current_gender = 'Male';  // Track the current gender
+                        
+                                while ($student = $result->fetch_assoc()):
+                                    $drawer_id = "drawer-right-4-" . $student['student_id'];
+
+                                    // Reset counter when switching from male to female or vice versa
+                                    if ($student['gender'] !== $current_gender) {
+                                        $current_gender = $student['gender'];
+                                        if ($current_gender == 'Male') {
+                                            $male_counter = 1;  // Reset male counter
+                                        } else {
+                                            $female_counter = 1;  // Reset female counter
+                                        }
+                                    }
+                                    ?>
+                                    <tr>
+                                        <th>
+                                            <!-- Display male or female counter -->
+                                            <?php
+                                            if ($student['gender'] == 'Male') {
+                                                echo $male_counter++;  // Increment and display male counter
+                                            } else {
+                                                echo $female_counter++;  // Increment and display female counter
+                                            }
+                                            ?>
+                                        </th>
+                                        <th><?php echo $student['LRN']; ?></th>
+                                        <th><?php echo $student['first_name']; ?></th>
+                                        <td><?php echo $student['last_name']; ?></td>
+                                        <td><?php echo $student['email']; ?></td>
+                                        <td><?php echo $student['gender']; ?></td>
+                                        <td><?php echo $student['akap_status']; ?></td>
+                                        <td>
+                                            <!-- Dynamic Drawer Toggle -->
+                                            <input type="checkbox" id="<?php echo $drawer_id; ?>" class="drawer-toggle" />
+                                            <label for="<?php echo $drawer_id; ?>" class="btn btn-secondary">View</label>
+                                            <label class="overlay" for="<?php echo $drawer_id; ?>"></label>
+
+                                            <!-- Drawer Content -->
+                                            <div class="drawer drawer-right">
+                                                <form method="POST" action="../../connection/update_student.php"
+                                                    class="drawer-content pt-10 flex flex-col h-full">
+                                                    <label for="<?php echo $drawer_id; ?>"
+                                                        class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
+                                                    <div>
+                                                        <h2 class="text-xl font-medium">Edit Student</h2>
+                                                        <div class="flex flex-col gap-2">
+                                                            <label for="student_lrn">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">LRN</span>
+                                                                <br>
+                                                                <input class="input-block input" placeholder="Please enter the LRN."
+                                                                    name="student_lrn" type="text"
+                                                                    value="<?php echo htmlspecialchars($student['LRN']); ?>"
+                                                                    required />
+                                                            </label>
+                                                            <label for="student_firstname">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Student
+                                                                    First
+                                                                    Name</span>
+                                                                <br>
+                                                                <input class="input-block input"
+                                                                    placeholder="Please enter first name." name="student_firstname"
+                                                                    type="text"
+                                                                    value="<?php echo htmlspecialchars($student['first_name']); ?>"
+                                                                    required />
+                                                            </label>
+                                                            <label for="student_lastname">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Student
+                                                                    Last
+                                                                    Name</span>
+                                                                <br>
+                                                                <input class="input-block input"
+                                                                    placeholder="Please enter last name." name="student_lastname"
+                                                                    type="text"
+                                                                    value="<?php echo htmlspecialchars($student['last_name']); ?>"
+                                                                    required />
+                                                            </label>
+                                                            <label for="email">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">E-mail</span>
+                                                                <br>
+                                                                <input class="input-block input" placeholder="Please enter e-mail."
+                                                                    name="email" type="email"
+                                                                    value="<?php echo htmlspecialchars($student['email']); ?>"
+                                                                    required />
+                                                            </label>
+                                                            <label for="gender">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Gender</span>
+                                                                <br>
+                                                                <select class="select" name="gender" required>
+                                                                    <option value="">Select Gender...</option>
+                                                                    <option value="Male" <?php echo ($student['gender'] == 'Male') ? 'selected' : ''; ?>>
+                                                                        Male</option>
+                                                                    <option value="Female" <?php echo ($student['gender'] == 'Female') ? 'selected' : ''; ?>>Female</option>
+                                                                </select>
+                                                            </label>
+                                                            <label for="akap_status">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">AKAP</span>
+                                                                <br>
+                                                                <select class="select" name="akap_status" required>
+                                                                    <option value="">Select Status...</option>
+                                                                    <option value="Active" <?php echo ($student['akap_status'] == 'Active') ? 'selected' : ''; ?>>
+                                                                        Active</option>
+                                                                    <option value="Inactive" <?php echo ($student['akap_status'] == 'Inactive') ? 'selected' : ''; ?>>
+                                                                        Inactive</option>
+                                                                    <option value="Solved" <?php echo ($student['akap_status'] == 'Solved') ? 'selected' : ''; ?>>
+                                                                        Solved</option>
+                                                                </select>
+                                                            </label>
+
+                                                            <?php
+                                                            $student_id = $student['student_id']; // Assume this is dynamically set based on the current student
+                                                            ?>
+
+                                                            <label for="teacher_remarks">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Teacher
+                                                                    Remarks</span>
+                                                                <br>
+                                                                <textarea textarea class="textarea"
+                                                                    placeholder="Please enter remarks from the teacher."
+                                                                    name="teacher_remarks"
+                                                                    rows="4"><?php echo htmlspecialchars($student['teacher_remarks']); ?></textarea>
+                                                            </label>
+                                                            <a href="../email/email_form.php?email=<?php echo urlencode($student['email']); ?>&name=<?php echo urlencode($student['first_name'] . ' ' . $student['last_name']); ?>&adviser_id=<?php echo urlencode($adviser_id); ?>&section_id=<?php echo urlencode($section_id); ?>"
+                                                                class="btn btn-outline-error"
+                                                                title="This will redirect to the email form with the student's email, name, and adviser ID, while the current page only has the section ID.">Contact
+                                                                Parent</a>
+
+                                                            <a href="report_card.php?student_id=<?php echo $student_id; ?>"
+                                                                class="btn btn-outline-primary">View Report Card</a>
+
+                                                            <span class="flex items-center gap-2">
+                                                                <?php if ($total_gradesheets > 0 && $finalized_count == $total_gradesheets): ?>
+                                                                    <span class="dot dot-success"></span>
+                                                                    <span>All gradesheets finalized!</span>
+                                                                <?php else: ?>
+                                                                    <span class="dot dot-error"></span>
+                                                                    <span>Some gradesheets are not yet finalized.</span>
+                                                                <?php endif; ?>
+                                                            </span>
 
                                                             <div class="h-full flex flex-row justify-end items-end gap-2">
                                                                 <button type="button" class="btn btn-ghost"
@@ -1253,7 +1547,7 @@ if ($section_result && $section_result->num_rows > 0) {
                                         <td>
                                             <!-- Dynamic Drawer Toggle -->
                                             <input type="checkbox" id="<?php echo $drawer_id; ?>" class="drawer-toggle" />
-                                            <label for="<?php echo $drawer_id; ?>" class="btn btn-secondary">Edit</label>
+                                            <label for="<?php echo $drawer_id; ?>" class="btn btn-secondary">View</label>
                                             <label class="overlay" for="<?php echo $drawer_id; ?>"></label>
 
                                             <!-- Drawer Content -->
@@ -1336,8 +1630,34 @@ if ($section_result && $section_result->num_rows > 0) {
                                                             <?php
                                                             $student_id = $student['student_id']; // Assume this is dynamically set based on the current student
                                                             ?>
+
+                                                            <label for="teacher_remarks">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Teacher
+                                                                    Remarks</span>
+                                                                <br>
+                                                                <textarea textarea class="textarea"
+                                                                    placeholder="Please enter remarks from the teacher."
+                                                                    name="teacher_remarks"
+                                                                    rows="4"><?php echo htmlspecialchars($student['teacher_remarks']); ?></textarea>
+                                                            </label>
+                                                            <a href="../email/email_form.php?email=<?php echo urlencode($student['email']); ?>&name=<?php echo urlencode($student['first_name'] . ' ' . $student['last_name']); ?>&adviser_id=<?php echo urlencode($adviser_id); ?>&section_id=<?php echo urlencode($section_id); ?>"
+                                                                class="btn btn-outline-error"
+                                                                title="This will redirect to the email form with the student's email, name, and adviser ID, while the current page only has the section ID.">Contact
+                                                                Parent</a>
+
                                                             <a href="report_card.php?student_id=<?php echo $student_id; ?>"
                                                                 class="btn btn-outline-primary">View Report Card</a>
+
+                                                            <span class="flex items-center gap-2">
+                                                                <?php if ($total_gradesheets > 0 && $finalized_count == $total_gradesheets): ?>
+                                                                    <span class="dot dot-success"></span>
+                                                                    <span>All gradesheets finalized!</span>
+                                                                <?php else: ?>
+                                                                    <span class="dot dot-error"></span>
+                                                                    <span>Some gradesheets are not yet finalized.</span>
+                                                                <?php endif; ?>
+                                                            </span>
 
                                                             <div class="h-full flex flex-row justify-end items-end gap-2">
                                                                 <button type="button" class="btn btn-ghost"
@@ -1443,7 +1763,7 @@ if ($section_result && $section_result->num_rows > 0) {
                                         <td>
                                             <!-- Dynamic Drawer Toggle -->
                                             <input type="checkbox" id="<?php echo $drawer_id; ?>" class="drawer-toggle" />
-                                            <label for="<?php echo $drawer_id; ?>" class="btn btn-secondary">Edit</label>
+                                            <label for="<?php echo $drawer_id; ?>" class="btn btn-secondary">View</label>
                                             <label class="overlay" for="<?php echo $drawer_id; ?>"></label>
 
                                             <!-- Drawer Content -->
@@ -1526,8 +1846,34 @@ if ($section_result && $section_result->num_rows > 0) {
                                                             <?php
                                                             $student_id = $student['student_id']; // Assume this is dynamically set based on the current student
                                                             ?>
+
+                                                            <label for="teacher_remarks">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Teacher
+                                                                    Remarks</span>
+                                                                <br>
+                                                                <textarea textarea class="textarea"
+                                                                    placeholder="Please enter remarks from the teacher."
+                                                                    name="teacher_remarks"
+                                                                    rows="4"><?php echo htmlspecialchars($student['teacher_remarks']); ?></textarea>
+                                                            </label>
+                                                            <a href="../email/email_form.php?email=<?php echo urlencode($student['email']); ?>&name=<?php echo urlencode($student['first_name'] . ' ' . $student['last_name']); ?>&adviser_id=<?php echo urlencode($adviser_id); ?>&section_id=<?php echo urlencode($section_id); ?>"
+                                                                class="btn btn-outline-error"
+                                                                title="This will redirect to the email form with the student's email, name, and adviser ID, while the current page only has the section ID.">Contact
+                                                                Parent</a>
+
                                                             <a href="report_card.php?student_id=<?php echo $student_id; ?>"
                                                                 class="btn btn-outline-primary">View Report Card</a>
+
+                                                            <span class="flex items-center gap-2">
+                                                                <?php if ($total_gradesheets > 0 && $finalized_count == $total_gradesheets): ?>
+                                                                    <span class="dot dot-success"></span>
+                                                                    <span>All gradesheets finalized!</span>
+                                                                <?php else: ?>
+                                                                    <span class="dot dot-error"></span>
+                                                                    <span>Some gradesheets are not yet finalized.</span>
+                                                                <?php endif; ?>
+                                                            </span>
 
                                                             <div class="h-full flex flex-row justify-end items-end gap-2">
                                                                 <button type="button" class="btn btn-ghost"
@@ -1633,7 +1979,7 @@ if ($section_result && $section_result->num_rows > 0) {
                                         <td>
                                             <!-- Dynamic Drawer Toggle -->
                                             <input type="checkbox" id="<?php echo $drawer_id; ?>" class="drawer-toggle" />
-                                            <label for="<?php echo $drawer_id; ?>" class="btn btn-secondary">Edit</label>
+                                            <label for="<?php echo $drawer_id; ?>" class="btn btn-secondary">View</label>
                                             <label class="overlay" for="<?php echo $drawer_id; ?>"></label>
 
                                             <!-- Drawer Content -->
@@ -1716,9 +2062,250 @@ if ($section_result && $section_result->num_rows > 0) {
                                                             <?php
                                                             $student_id = $student['student_id']; // Assume this is dynamically set based on the current student
                                                             ?>
+
+                                                            <label for="teacher_remarks">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Teacher
+                                                                    Remarks</span>
+                                                                <br>
+                                                                <textarea textarea class="textarea"
+                                                                    placeholder="Please enter remarks from the teacher."
+                                                                    name="teacher_remarks"
+                                                                    rows="4"><?php echo htmlspecialchars($student['teacher_remarks']); ?></textarea>
+                                                            </label>
+                                                            <a href="../email/email_form.php?email=<?php echo urlencode($student['email']); ?>&name=<?php echo urlencode($student['first_name'] . ' ' . $student['last_name']); ?>&adviser_id=<?php echo urlencode($adviser_id); ?>&section_id=<?php echo urlencode($section_id); ?>"
+                                                                class="btn btn-outline-error"
+                                                                title="This will redirect to the email form with the student's email, name, and adviser ID, while the current page only has the section ID.">Contact
+                                                                Parent</a>
+
                                                             <a href="report_card.php?student_id=<?php echo $student_id; ?>"
                                                                 class="btn btn-outline-primary">View Report Card</a>
 
+                                                            <span class="flex items-center gap-2">
+                                                                <?php if ($total_gradesheets > 0 && $finalized_count == $total_gradesheets): ?>
+                                                                    <span class="dot dot-success"></span>
+                                                                    <span>All gradesheets finalized!</span>
+                                                                <?php else: ?>
+                                                                    <span class="dot dot-error"></span>
+                                                                    <span>Some gradesheets are not yet finalized.</span>
+                                                                <?php endif; ?>
+                                                            </span>
+
+                                                            <div class="h-full flex flex-row justify-end items-end gap-2">
+                                                                <button type="button" class="btn btn-ghost"
+                                                                    onclick="document.getElementById('<?php echo $drawer_id; ?>').checked = false;">Cancel</button>
+                                                                <button type="submit" class="btn btn-primary">Update</button>
+                                                                <input type="hidden" name="student_id"
+                                                                    value="<?php echo htmlspecialchars($student['student_id']); ?>" />
+                                                                <!-- Hidden field for student ID -->
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+
+                                            <!-- Archive Button and Modal -->
+                                            <label class="btn btn-error"
+                                                for="modal-1-<?php echo $student['student_id']; ?>">Archive</label>
+                                            <input class="modal-state" id="modal-1-<?php echo $student['student_id']; ?>"
+                                                type="checkbox" />
+                                            <div class="modal">
+                                                <label class="modal-overlay"
+                                                    for="modal-1-<?php echo $student['student_id']; ?>"></label>
+                                                <form method="POST" action="../../connection/archive_student.php"
+                                                    class="modal-content flex flex-col gap-5">
+                                                    <label for="modal-1-<?php echo $student['student_id']; ?>"
+                                                        class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
+                                                    <h2 class="text-xl">Archive Student?</h2>
+                                                    <span>Are you sure you want to archive this student?</span>
+
+                                                    <!-- Hidden input to send student ID -->
+                                                    <input type="hidden" name="student_id"
+                                                        value="<?php echo $student['student_id']; ?>" />
+
+                                                    <!-- Hidden input to send the current section ID -->
+                                                    <input type="hidden" name="section_id"
+                                                        value="<?php echo $_GET['section_id']; ?>" />
+                                                    <div class="flex gap-3">
+                                                        <button class="btn btn-error btn-block" type="submit">Archive</button>
+                                                        <label for="modal-1-<?php echo $student['student_id']; ?>"
+                                                            class="btn btn-block">Cancel</label>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <?php endwhile; ?>
+                            <?php endif;
+                        } else {
+                            echo "<p>No section selected.</p>";
+                        }
+                        ?>
+                    </tbody>
+                    <tbody data-type="female" data-akap="all">
+                        <?php
+                        include '../../connection/connection.php';
+
+                        // Check if section_id is passed in the URL
+                        if (isset($_GET['section_id'])) {
+                            $section_id = $_GET['section_id'];
+
+                            // Query the database for students in this section, ordered by gender (Male first) and then by last name
+                            $sql = "SELECT * FROM students WHERE section_ID = $section_id AND is_archived = 0  AND gender = 'Female'
+                ORDER BY 
+                CASE WHEN gender = 'Male' THEN 1 ELSE 2 END, 
+                last_name ASC";
+                            $result = $conn->query($sql);
+
+                            if ($result->num_rows > 0):
+                                $male_counter = 1;  // Initialize the counter for males
+                                $female_counter = 1;  // Initialize the counter for females
+                                $current_gender = 'Male';  // Track the current gender
+                        
+                                while ($student = $result->fetch_assoc()):
+                                    $drawer_id = "drawer-right-7-" . $student['student_id'];
+
+                                    // Reset counter when switching from male to female or vice versa
+                                    if ($student['gender'] !== $current_gender) {
+                                        $current_gender = $student['gender'];
+                                        if ($current_gender == 'Male') {
+                                            $male_counter = 1;  // Reset male counter
+                                        } else {
+                                            $female_counter = 1;  // Reset female counter
+                                        }
+                                    }
+                                    ?>
+                                    <tr>
+                                        <td>
+                                            <!-- Display male or female counter -->
+                                            <?php
+                                            if ($student['gender'] == 'Male') {
+                                                echo $male_counter++;  // Increment and display male counter
+                                            } else {
+                                                echo $female_counter++;  // Increment and display female counter
+                                            }
+                                            ?>
+                                        </td>
+                                        <th><?php echo $student['LRN']; ?></th>
+                                        <th><?php echo $student['first_name']; ?></th>
+                                        <td><?php echo $student['last_name']; ?></td>
+                                        <td><?php echo $student['email']; ?></td>
+                                        <td><?php echo $student['gender']; ?></td>
+                                        <td><?php echo $student['akap_status']; ?></td>
+                                        <td>
+                                            <!-- Dynamic Drawer Toggle -->
+                                            <input type="checkbox" id="<?php echo $drawer_id; ?>" class="drawer-toggle" />
+                                            <label for="<?php echo $drawer_id; ?>" class="btn btn-secondary">View</label>
+                                            <label class="overlay" for="<?php echo $drawer_id; ?>"></label>
+
+                                            <!-- Drawer Content -->
+                                            <div class="drawer drawer-right">
+                                                <form method="POST" action="../../connection/update_student.php"
+                                                    class="drawer-content pt-10 flex flex-col h-full">
+                                                    <label for="<?php echo $drawer_id; ?>"
+                                                        class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
+                                                    <div>
+                                                        <h2 class="text-xl font-medium">Edit Student</h2>
+                                                        <div class="flex flex-col gap-2">
+                                                            <label for="student_lrn">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">LRN</span>
+                                                                <br>
+                                                                <input class="input-block input" placeholder="Please enter the LRN."
+                                                                    name="student_lrn" type="text"
+                                                                    value="<?php echo htmlspecialchars($student['LRN']); ?>"
+                                                                    required />
+                                                            </label>
+                                                            <label for="student_firstname">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Student
+                                                                    First
+                                                                    Name</span>
+                                                                <br>
+                                                                <input class="input-block input"
+                                                                    placeholder="Please enter first name." name="student_firstname"
+                                                                    type="text"
+                                                                    value="<?php echo htmlspecialchars($student['first_name']); ?>"
+                                                                    required />
+                                                            </label>
+                                                            <label for="student_lastname">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Student
+                                                                    Last
+                                                                    Name</span>
+                                                                <br>
+                                                                <input class="input-block input"
+                                                                    placeholder="Please enter last name." name="student_lastname"
+                                                                    type="text"
+                                                                    value="<?php echo htmlspecialchars($student['last_name']); ?>"
+                                                                    required />
+                                                            </label>
+                                                            <label for="email">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">E-mail</span>
+                                                                <br>
+                                                                <input class="input-block input" placeholder="Please enter e-mail."
+                                                                    name="email" type="email"
+                                                                    value="<?php echo htmlspecialchars($student['email']); ?>"
+                                                                    required />
+                                                            </label>
+                                                            <label for="gender">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Gender</span>
+                                                                <br>
+                                                                <select class="select" name="gender" required>
+                                                                    <option value="">Select Gender...</option>
+                                                                    <option value="Male" <?php echo ($student['gender'] == 'Male') ? 'selected' : ''; ?>>
+                                                                        Male</option>
+                                                                    <option value="Female" <?php echo ($student['gender'] == 'Female') ? 'selected' : ''; ?>>Female</option>
+                                                                </select>
+                                                            </label>
+                                                            <label for="akap_status">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">AKAP</span>
+                                                                <br>
+                                                                <select class="select" name="akap_status" required>
+                                                                    <option value="">Select Status...</option>
+                                                                    <option value="Active" <?php echo ($student['akap_status'] == 'Active') ? 'selected' : ''; ?>>
+                                                                        Active</option>
+                                                                    <option value="Inactive" <?php echo ($student['akap_status'] == 'Inactive') ? 'selected' : ''; ?>>
+                                                                        Inactive</option>
+                                                                    <option value="Solved" <?php echo ($student['akap_status'] == 'Solved') ? 'selected' : ''; ?>>
+                                                                        Solved</option>
+                                                                </select>
+                                                            </label>
+
+                                                            <?php
+                                                            $student_id = $student['student_id']; // Assume this is dynamically set based on the current student
+                                                            ?>
+
+                                                            <label for="teacher_remarks">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Teacher
+                                                                    Remarks</span>
+                                                                <br>
+                                                                <textarea textarea class="textarea"
+                                                                    placeholder="Please enter remarks from the teacher."
+                                                                    name="teacher_remarks"
+                                                                    rows="4"><?php echo htmlspecialchars($student['teacher_remarks']); ?></textarea>
+                                                            </label>
+                                                            <a href="../email/email_form.php?email=<?php echo urlencode($student['email']); ?>&name=<?php echo urlencode($student['first_name'] . ' ' . $student['last_name']); ?>&adviser_id=<?php echo urlencode($adviser_id); ?>&section_id=<?php echo urlencode($section_id); ?>"
+                                                                class="btn btn-outline-error"
+                                                                title="This will redirect to the email form with the student's email, name, and adviser ID, while the current page only has the section ID.">Contact
+                                                                Parent</a>
+
+                                                            <a href="report_card.php?student_id=<?php echo $student_id; ?>"
+                                                                class="btn btn-outline-primary">View Report Card</a>
+
+                                                            <span class="flex items-center gap-2">
+                                                                <?php if ($total_gradesheets > 0 && $finalized_count == $total_gradesheets): ?>
+                                                                    <span class="dot dot-success"></span>
+                                                                    <span>All gradesheets finalized!</span>
+                                                                <?php else: ?>
+                                                                    <span class="dot dot-error"></span>
+                                                                    <span>Some gradesheets are not yet finalized.</span>
+                                                                <?php endif; ?>
+                                                            </span>
                                                             <div class="h-full flex flex-row justify-end items-end gap-2">
                                                                 <button type="button" class="btn btn-ghost"
                                                                     onclick="document.getElementById('<?php echo $drawer_id; ?>').checked = false;">Cancel</button>
@@ -1823,7 +2410,7 @@ if ($section_result && $section_result->num_rows > 0) {
                                         <td>
                                             <!-- Dynamic Drawer Toggle -->
                                             <input type="checkbox" id="<?php echo $drawer_id; ?>" class="drawer-toggle" />
-                                            <label for="<?php echo $drawer_id; ?>" class="btn btn-secondary">Edit</label>
+                                            <label for="<?php echo $drawer_id; ?>" class="btn btn-secondary">View</label>
                                             <label class="overlay" for="<?php echo $drawer_id; ?>"></label>
 
                                             <!-- Drawer Content -->
@@ -1906,9 +2493,34 @@ if ($section_result && $section_result->num_rows > 0) {
                                                             <?php
                                                             $student_id = $student['student_id']; // Assume this is dynamically set based on the current student
                                                             ?>
+
+                                                            <label for="teacher_remarks">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Teacher
+                                                                    Remarks</span>
+                                                                <br>
+                                                                <textarea textarea class="textarea"
+                                                                    placeholder="Please enter remarks from the teacher."
+                                                                    name="teacher_remarks"
+                                                                    rows="4"><?php echo htmlspecialchars($student['teacher_remarks']); ?></textarea>
+                                                            </label>
+                                                            <a href="../email/email_form.php?email=<?php echo urlencode($student['email']); ?>&name=<?php echo urlencode($student['first_name'] . ' ' . $student['last_name']); ?>&adviser_id=<?php echo urlencode($adviser_id); ?>&section_id=<?php echo urlencode($section_id); ?>"
+                                                                class="btn btn-outline-error"
+                                                                title="This will redirect to the email form with the student's email, name, and adviser ID, while the current page only has the section ID.">Contact
+                                                                Parent</a>
+
                                                             <a href="report_card.php?student_id=<?php echo $student_id; ?>"
                                                                 class="btn btn-outline-primary">View Report Card</a>
 
+                                                            <span class="flex items-center gap-2">
+                                                                <?php if ($total_gradesheets > 0 && $finalized_count == $total_gradesheets): ?>
+                                                                    <span class="dot dot-success"></span>
+                                                                    <span>All gradesheets finalized!</span>
+                                                                <?php else: ?>
+                                                                    <span class="dot dot-error"></span>
+                                                                    <span>Some gradesheets are not yet finalized.</span>
+                                                                <?php endif; ?>
+                                                            </span>
                                                             <div class="h-full flex flex-row justify-end items-end gap-2">
                                                                 <button type="button" class="btn btn-ghost"
                                                                     onclick="document.getElementById('<?php echo $drawer_id; ?>').checked = false;">Cancel</button>
@@ -2013,7 +2625,7 @@ if ($section_result && $section_result->num_rows > 0) {
                                         <td>
                                             <!-- Dynamic Drawer Toggle -->
                                             <input type="checkbox" id="<?php echo $drawer_id; ?>" class="drawer-toggle" />
-                                            <label for="<?php echo $drawer_id; ?>" class="btn btn-secondary">Edit</label>
+                                            <label for="<?php echo $drawer_id; ?>" class="btn btn-secondary">View</label>
                                             <label class="overlay" for="<?php echo $drawer_id; ?>"></label>
 
                                             <!-- Drawer Content -->
@@ -2096,8 +2708,34 @@ if ($section_result && $section_result->num_rows > 0) {
                                                             <?php
                                                             $student_id = $student['student_id']; // Assume this is dynamically set based on the current student
                                                             ?>
+
+                                                            <label for="teacher_remarks">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Teacher
+                                                                    Remarks</span>
+                                                                <br>
+                                                                <textarea textarea class="textarea"
+                                                                    placeholder="Please enter remarks from the teacher."
+                                                                    name="teacher_remarks"
+                                                                    rows="4"><?php echo htmlspecialchars($student['teacher_remarks']); ?></textarea>
+                                                            </label>
+                                                            <a href="../email/email_form.php?email=<?php echo urlencode($student['email']); ?>&name=<?php echo urlencode($student['first_name'] . ' ' . $student['last_name']); ?>&adviser_id=<?php echo urlencode($adviser_id); ?>&section_id=<?php echo urlencode($section_id); ?>"
+                                                                class="btn btn-outline-error"
+                                                                title="This will redirect to the email form with the student's email, name, and adviser ID, while the current page only has the section ID.">Contact
+                                                                Parent</a>
+
                                                             <a href="report_card.php?student_id=<?php echo $student_id; ?>"
                                                                 class="btn btn-outline-primary">View Report Card</a>
+
+                                                            <span class="flex items-center gap-2">
+                                                                <?php if ($total_gradesheets > 0 && $finalized_count == $total_gradesheets): ?>
+                                                                    <span class="dot dot-success"></span>
+                                                                    <span>All gradesheets finalized!</span>
+                                                                <?php else: ?>
+                                                                    <span class="dot dot-error"></span>
+                                                                    <span>Some gradesheets are not yet finalized.</span>
+                                                                <?php endif; ?>
+                                                            </span>
 
                                                             <div class="h-full flex flex-row justify-end items-end gap-2">
                                                                 <button type="button" class="btn btn-ghost"
@@ -2203,7 +2841,7 @@ if ($section_result && $section_result->num_rows > 0) {
                                         <td>
                                             <!-- Dynamic Drawer Toggle -->
                                             <input type="checkbox" id="<?php echo $drawer_id; ?>" class="drawer-toggle" />
-                                            <label for="<?php echo $drawer_id; ?>" class="btn btn-secondary">Edit</label>
+                                            <label for="<?php echo $drawer_id; ?>" class="btn btn-secondary">View</label>
                                             <label class="overlay" for="<?php echo $drawer_id; ?>"></label>
 
                                             <!-- Drawer Content -->
@@ -2286,8 +2924,34 @@ if ($section_result && $section_result->num_rows > 0) {
                                                             <?php
                                                             $student_id = $student['student_id']; // Assume this is dynamically set based on the current student
                                                             ?>
+
+                                                            <label for="teacher_remarks">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Teacher
+                                                                    Remarks</span>
+                                                                <br>
+                                                                <textarea textarea class="textarea"
+                                                                    placeholder="Please enter remarks from the teacher."
+                                                                    name="teacher_remarks"
+                                                                    rows="4"><?php echo htmlspecialchars($student['teacher_remarks']); ?></textarea>
+                                                            </label>
+                                                            <a href="../email/email_form.php?email=<?php echo urlencode($student['email']); ?>&name=<?php echo urlencode($student['first_name'] . ' ' . $student['last_name']); ?>&adviser_id=<?php echo urlencode($adviser_id); ?>&section_id=<?php echo urlencode($section_id); ?>"
+                                                                class="btn btn-outline-error"
+                                                                title="This will redirect to the email form with the student's email, name, and adviser ID, while the current page only has the section ID.">Contact
+                                                                Parent</a>
+
                                                             <a href="report_card.php?student_id=<?php echo $student_id; ?>"
                                                                 class="btn btn-outline-primary">View Report Card</a>
+
+                                                            <span class="flex items-center gap-2">
+                                                                <?php if ($total_gradesheets > 0 && $finalized_count == $total_gradesheets): ?>
+                                                                    <span class="dot dot-success"></span>
+                                                                    <span>All gradesheets finalized!</span>
+                                                                <?php else: ?>
+                                                                    <span class="dot dot-error"></span>
+                                                                    <span>Some gradesheets are not yet finalized.</span>
+                                                                <?php endif; ?>
+                                                            </span>
 
                                                             <div class="h-full flex flex-row justify-end items-end gap-2">
                                                                 <button type="button" class="btn btn-ghost"
@@ -2353,21 +3017,11 @@ if ($section_result && $section_result->num_rows > 0) {
         const genderRadioButtons = document.querySelectorAll('input[name="gender-filter"]');
         const akapDropdown = document.getElementById('akap-dropdown');
         const sections = document.querySelectorAll('#student-table > tbody');
-        const allAllSection = document.querySelector('tbody[data-type="all"][data-akap="all"]'); // New tbody for "All-All"
         const emptyStateMessage = document.createElement('tbody');
         emptyStateMessage.innerHTML = "<tr><td colspan='8'>No students found in this view</td></tr>";
         emptyStateMessage.style.color = 'red';
-        emptyStateMessage.style.margin = '10px 0';
         const tableContainer = document.getElementById('student-table');
         tableContainer.appendChild(emptyStateMessage);
-
-        // Initially hide all sections except for "all"
-        sections.forEach(section => {
-            const sectionType = section.getAttribute('data-type');
-            if (sectionType !== 'all') {
-                section.style.display = 'none';
-            }
-        });
 
         // Function to filter sections based on selected filters
         function filterSections() {
@@ -2380,30 +3034,35 @@ if ($section_result && $section_result->num_rows > 0) {
                 section.style.display = 'none';
             });
 
-            // Special case: if both filters are "All", show the new "All-All" section
-            if (selectedGender === 'all' && selectedAKAP === 'all') {
-                allAllSection.style.display = ''; // Show the special "All-All" section
-                anyVisible = true;
-            } else {
-                // Filter sections based on selected values
-                sections.forEach(section => {
-                    const sectionType = section.getAttribute('data-type');
-                    const sectionAKAP = section.getAttribute('data-akap');
+            // Show relevant tbody based on the selected filters
+            sections.forEach(section => {
+                const sectionType = section.getAttribute('data-type');
+                const sectionAKAP = section.getAttribute('data-akap');
 
-                    const genderMatches = (selectedGender === 'all' && sectionType === 'all') ||
-                        (sectionType === selectedGender);
-                    const akapMatches = (selectedAKAP === 'all' || sectionAKAP === selectedAKAP);
-
-                    if (genderMatches && akapMatches) {
-                        section.style.display = '';
-                        if (section.querySelector('tr')) {
-                            anyVisible = true;
-                        }
+                // Case 1: If both filters are "all", show the section with data-type="all" and data-akap="all"
+                if (selectedGender === 'all' && selectedAKAP === 'all') {
+                    if (sectionType === 'all' && sectionAKAP === 'all') {
+                        section.style.display = '';  // Show the "all-all" section
+                        anyVisible = true;
                     }
-                });
-            }
+                }
+                // Case 2: If gender is "male/female" and AKAP is "all", show only the section with data-akap="all" for that gender
+                else if ((selectedGender === 'male' || selectedGender === 'female') && selectedAKAP === 'all') {
+                    if (sectionType === selectedGender && sectionAKAP === 'all') {
+                        section.style.display = '';  // Show the gender's "all" section
+                        anyVisible = true;
+                    }
+                }
+                // Case 3: If specific AKAP is selected, match both the gender and AKAP
+                else if (selectedAKAP !== 'all') {
+                    if (sectionType === selectedGender && sectionAKAP === selectedAKAP) {
+                        section.style.display = '';  // Show the matching section
+                        anyVisible = true;
+                    }
+                }
+            });
 
-            // Handle empty state
+            // Handle empty state if no sections are visible
             if (!anyVisible) {
                 emptyStateMessage.style.display = '';
             } else {
@@ -2422,6 +3081,11 @@ if ($section_result && $section_result->num_rows > 0) {
         filterSections();
     });
 </script>
+
+
+
+
+
 
 
 </html>

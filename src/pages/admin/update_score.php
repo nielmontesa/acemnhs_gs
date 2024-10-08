@@ -55,7 +55,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
+    // New part: Check last 5 scores and update akap_status if necessary
+    $score_check_query = "SELECT score FROM student_activity_score WHERE student_id = ? ORDER BY activity_id DESC LIMIT 5";
+    $score_stmt = $conn->prepare($score_check_query);
+    $score_stmt->bind_param("i", $student_id);
+    $score_stmt->execute();
+    $score_result = $score_stmt->get_result();
+
+    // Initialize a counter for scores below 50
+    $low_score_count = 0;
+
+    if ($score_result->num_rows > 0) {
+        while ($row = $score_result->fetch_assoc()) {
+            if ($row['score'] < 50) {
+                $low_score_count++;
+            }
+        }
+
+        // If all 5 scores are below 50, update akap_status to 'Active'
+        if ($low_score_count == 5) {
+            $update_status_query = "UPDATE students SET akap_status = 'Active' WHERE student_id = ?";
+            $status_stmt = $conn->prepare($update_status_query);
+            $status_stmt->bind_param("i", $student_id);
+            $status_stmt->execute();
+        }
+    }
+
+
     $stmt->close();
     $conn->close();
 }
+
+
 ?>

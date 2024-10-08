@@ -1,5 +1,5 @@
 <?php
-session_start(); // Start the session
+session_start(); // Start the session to store form data across requests
 
 require '../../../vendor/autoload.php';
 
@@ -10,7 +10,8 @@ function sendTestEmail($to, $subject, $messageText)
 {
     $client = new Client();
     $client->setApplicationName('Gmail API PHP Quickstart');
-    $client->setScopes(Gmail::GMAIL_SEND);
+    // Set the correct Gmail API scope
+    $client->setScopes('https://www.googleapis.com/auth/gmail.send');
     $client->setAuthConfig('credentials.json');
     $client->setAccessType('offline');
 
@@ -74,7 +75,21 @@ if (isset($_GET['code'])) {
         // Store the access token in token.json
         if (array_key_exists('access_token', $token)) {
             file_put_contents('token.json', json_encode($token));
-            sendTestEmail('recipient@example.com', 'Test Email Subject', 'This is a test email message.');
+
+            // Retrieve form data from session after OAuth authorization
+            if (isset($_SESSION['email']) && isset($_SESSION['subject']) && isset($_SESSION['message'])) {
+                $to = $_SESSION['email'];
+                $subject = $_SESSION['subject'];
+                $messageText = $_SESSION['message'];
+
+                // Send the email
+                sendTestEmail($to, $subject, $messageText);
+
+                // Clear form data from session after use
+                unset($_SESSION['email'], $_SESSION['subject'], $_SESSION['message']);
+            } else {
+                echo "Form data not found in session!";
+            }
         } else {
             echo "Error retrieving access token: " . json_encode($token);
         }
@@ -82,5 +97,26 @@ if (isset($_GET['code'])) {
         echo "Error retrieving access token: " . $e->getMessage();
     }
 } else {
-    sendTestEmail('recipient@example.com', 'Test Email Subject', 'This is a test email message.');
+    // Check if the form has been submitted via POST
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email']) && isset($_POST['subject']) && isset($_POST['message'])) {
+        // Save form data to the session before OAuth authorization
+        $_SESSION['email'] = $_POST['email'];
+        $_SESSION['subject'] = $_POST['subject'];
+        $_SESSION['message'] = $_POST['message'];
+
+        // Check if token exists, otherwise trigger OAuth flow
+        if (!file_exists('token.json')) {
+            $client = new Client();
+            $client->setAuthConfig('credentials.json');
+            $client->setScopes('https://www.googleapis.com/auth/gmail.send'); // Ensure the scope is set
+            $authUrl = $client->createAuthUrl();
+            header("Location: $authUrl");
+            exit(); // OAuth flow triggered
+        }
+
+        // If token exists, send the email directly
+        sendTestEmail($_POST['email'], $_POST['subject'], $_POST['message']);
+    } else {
+        echo "Missing form data!";
+    }
 }

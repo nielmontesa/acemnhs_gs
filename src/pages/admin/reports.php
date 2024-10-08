@@ -1,6 +1,29 @@
 <?php
-session_start()
-    ?>
+session_start();
+
+include '../../connection/connection.php';
+
+// Query to get the count of students by akap_status
+$query_akap_status = "SELECT akap_status, COUNT(*) as count FROM students GROUP BY akap_status";
+$result_akap_status = $conn->query($query_akap_status);
+
+$akap_status_data = [];
+while ($row = $result_akap_status->fetch_assoc()) {
+    $akap_status_data[] = $row;
+}
+
+// Query to get the count of students by gender
+$query_gender = "SELECT gender, COUNT(*) as count FROM students GROUP BY gender";
+$result_gender = $conn->query($query_gender);
+
+$gender_data = [];
+while ($row = $result_gender->fetch_assoc()) {
+    $gender_data[] = $row;
+}
+
+// Close database connection
+$conn->close();
+?>
 <!DOCTYPE html>
 <html data-theme="light">
 
@@ -100,17 +123,86 @@ session_start()
 
             <h1 class="text-xl font-bold">Reports</h1>
             <p class="pt-2">This is charts of the entire school.</p>
-
-            <div>
-                <img src="https://images.squarespace-cdn.com/content/v1/55b6a6dce4b089e11621d3ed/62a2d66b-8435-4e41-8df9-262db165ed79/NPL+and+Reserves+combo+chart.png"
-                    alt="">
-                <img src="https://www.mongodb.com/docs/charts/static/87821c53a354afffdf8f003e3f86adac/64ccf/stacked-bar-chart-reference-small.webp"
-                    alt="">
+            <div class="flex gap-2 pt-4">
+                <div class="flex gap-4 flex-col items-center">
+                    <h2 class="font-bold text-xl">Student AKAP Status Report</h2>
+                    <canvas id="akapStatusChart" width="400" height="500"></canvas>
+                </div>
+                <div class="flex gap-4 flex-col items-center">
+                    <h2 class="font-bold text-xl">Student Gender Distribution</h2>
+                    <canvas id="genderChart" width="400" height="500"></canvas>
+                </div>
             </div>
+
     </div>
     </main>
     </div>
 </body>
+<script src="../../../node_modules/chart.js/dist/chart.umd.js"></script>
+<script>
+    // Data for AKAP Status (from PHP)
+    const akapStatusData = <?php echo json_encode($akap_status_data); ?>;
+    const akapStatusLabels = akapStatusData.map(item => item.akap_status);
+    const akapStatusCounts = akapStatusData.map(item => item.count);
+
+    // Data for Gender Distribution (from PHP)
+    const genderData = <?php echo json_encode($gender_data); ?>;
+    const genderLabels = genderData.map(item => item.gender);
+    const genderCounts = genderData.map(item => item.count);
+
+    // Chart 1: AKAP Status
+    const ctx1 = document.getElementById('akapStatusChart').getContext('2d');
+    const akapStatusChart = new Chart(ctx1, {
+        type: 'bar',
+        data: {
+            labels: akapStatusLabels,
+            datasets: [{
+                label: 'Number of Students by AKAP Status',
+                data: akapStatusCounts,
+                backgroundColor: [
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(255, 159, 64, 0.2)',
+                    'rgba(255, 99, 132, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(255, 159, 64, 1)',
+                    'rgba(255, 99, 132, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    // Chart 2: Gender Distribution
+    const ctx2 = document.getElementById('genderChart').getContext('2d');
+    const genderChart = new Chart(ctx2, {
+        type: 'pie',
+        data: {
+            labels: genderLabels,
+            datasets: [{
+                label: 'Number of Students by Gender',
+                data: genderCounts,
+                backgroundColor: [
+                    'rgba(54, 162, 235, 0.2)', // Blue for male
+                    'rgba(255, 99, 132, 0.2)' // Red for female
+                ],
+                borderColor: [
+                    'rgba(54, 162, 235, 1)', // Blue border
+                    'rgba(255, 99, 132, 1)' // Red border
+                ],
+                borderWidth: 1
+            }]
+        }
+    });
+</script>
 
 
 </html>

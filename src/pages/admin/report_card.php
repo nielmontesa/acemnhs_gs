@@ -261,7 +261,14 @@ if (isset($_POST['export'])) {
         'Filipino' => 7,
         'English' => 8,
         'Mathematics' => 9,
-        'Science' => 10,
+        'Science' => 11,
+        'Araling Panlipunan' => 12,
+        'Edukasyon sa Pagpapakatao' => 13,
+        'TLE' => 15,
+        'Music' => 18,
+        'Arts' => 19,
+        'PE' => 20,
+        'Health' => 21,
         // Continue mapping subjects to row numbers
     ];
 
@@ -350,7 +357,8 @@ $conn->close();
             <form method="post">
                 <button type="submit" name="export" class="btn btn-primary">Export to Excel</button>
                 <h1> </h1>
-                <a href="PDF Generator\pdfstructure.php?student_id=<?php echo $_GET['student_id']; ?>" target="_blank" class="btn btn-primary">Preview in PDF</a>
+                <a href="PDF Generator\pdfstructure.php?student_id=<?php echo $_GET['student_id']; ?>" target="_blank"
+                    class="btn btn-primary">Preview in PDF</a>
             </form>
 
             <tbody>

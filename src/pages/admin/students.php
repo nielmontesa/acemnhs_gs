@@ -1027,15 +1027,15 @@ if ($section_result && $section_result->num_rows > 0) {
 
                                             <!-- Archive Button and Modal -->
                                             <label class="btn btn-error"
-                                                for="modal-1-<?php echo $student['student_id']; ?>">Archive</label>
-                                            <input class="modal-state" id="modal-1-<?php echo $student['student_id']; ?>"
+                                                for="modal-60-<?php echo $student['student_id']; ?>">Archive</label>
+                                            <input class="modal-state" id="modal-60-<?php echo $student['student_id']; ?>"
                                                 type="checkbox" />
                                             <div class="modal">
                                                 <label class="modal-overlay"
                                                     for="modal-1-<?php echo $student['student_id']; ?>"></label>
                                                 <form method="POST" action="../../connection/archive_student.php"
                                                     class="modal-content flex flex-col gap-5">
-                                                    <label for="modal-1-<?php echo $student['student_id']; ?>"
+                                                    <label for="modal-60-<?php echo $student['student_id']; ?>"
                                                         class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
                                                     <h2 class="text-xl">Archive Student?</h2>
                                                     <span>Are you sure you want to archive this student?</span>
@@ -1049,7 +1049,7 @@ if ($section_result && $section_result->num_rows > 0) {
                                                         value="<?php echo $_GET['section_id']; ?>" />
                                                     <div class="flex gap-3">
                                                         <button class="btn btn-error btn-block" type="submit">Archive</button>
-                                                        <label for="modal-1-<?php echo $student['student_id']; ?>"
+                                                        <label for="modal-60-<?php echo $student['student_id']; ?>"
                                                             class="btn btn-block">Cancel</label>
                                                     </div>
                                                 </form>
@@ -1242,15 +1242,15 @@ if ($section_result && $section_result->num_rows > 0) {
 
                                             <!-- Archive Button and Modal -->
                                             <label class="btn btn-error"
-                                                for="modal-1-<?php echo $student['student_id']; ?>">Archive</label>
-                                            <input class="modal-state" id="modal-1-<?php echo $student['student_id']; ?>"
+                                                for="modal-61-<?php echo $student['student_id']; ?>">Archive</label>
+                                            <input class="modal-state" id="modal-61-<?php echo $student['student_id']; ?>"
                                                 type="checkbox" />
                                             <div class="modal">
                                                 <label class="modal-overlay"
-                                                    for="modal-1-<?php echo $student['student_id']; ?>"></label>
+                                                    for="modal-61-<?php echo $student['student_id']; ?>"></label>
                                                 <form method="POST" action="../../connection/archive_student.php"
                                                     class="modal-content flex flex-col gap-5">
-                                                    <label for="modal-1-<?php echo $student['student_id']; ?>"
+                                                    <label for="modal-61-<?php echo $student['student_id']; ?>"
                                                         class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
                                                     <h2 class="text-xl">Archive Student?</h2>
                                                     <span>Are you sure you want to archive this student?</span>
@@ -1264,7 +1264,7 @@ if ($section_result && $section_result->num_rows > 0) {
                                                         value="<?php echo $_GET['section_id']; ?>" />
                                                     <div class="flex gap-3">
                                                         <button class="btn btn-error btn-block" type="submit">Archive</button>
-                                                        <label for="modal-1-<?php echo $student['student_id']; ?>"
+                                                        <label for="modal-61-<?php echo $student['student_id']; ?>"
                                                             class="btn btn-block">Cancel</label>
                                                     </div>
                                                 </form>
@@ -1299,7 +1299,7 @@ if ($section_result && $section_result->num_rows > 0) {
                                 $current_gender = 'Male';  // Track the current gender
                         
                                 while ($student = $result->fetch_assoc()):
-                                    $drawer_id = "drawer-right-4-" . $student['student_id'];
+                                    $drawer_id = "drawer-right-65-" . $student['student_id'];
 
                                     // Reset counter when switching from male to female or vice versa
                                     if ($student['gender'] !== $current_gender) {
@@ -1458,15 +1458,15 @@ if ($section_result && $section_result->num_rows > 0) {
 
                                             <!-- Archive Button and Modal -->
                                             <label class="btn btn-error"
-                                                for="modal-1-<?php echo $student['student_id']; ?>">Archive</label>
-                                            <input class="modal-state" id="modal-1-<?php echo $student['student_id']; ?>"
+                                                for="modal-20-<?php echo $student['student_id']; ?>">Archive</label>
+                                            <input class="modal-state" id="modal-20-<?php echo $student['student_id']; ?>"
                                                 type="checkbox" />
                                             <div class="modal">
                                                 <label class="modal-overlay"
-                                                    for="modal-1-<?php echo $student['student_id']; ?>"></label>
+                                                    for="modal-20-<?php echo $student['student_id']; ?>"></label>
                                                 <form method="POST" action="../../connection/archive_student.php"
                                                     class="modal-content flex flex-col gap-5">
-                                                    <label for="modal-1-<?php echo $student['student_id']; ?>"
+                                                    <label for="modal-20-<?php echo $student['student_id']; ?>"
                                                         class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
                                                     <h2 class="text-xl">Archive Student?</h2>
                                                     <span>Are you sure you want to archive this student?</span>
@@ -1480,7 +1480,7 @@ if ($section_result && $section_result->num_rows > 0) {
                                                         value="<?php echo $_GET['section_id']; ?>" />
                                                     <div class="flex gap-3">
                                                         <button class="btn btn-error btn-block" type="submit">Archive</button>
-                                                        <label for="modal-1-<?php echo $student['student_id']; ?>"
+                                                        <label for="modal-20-<?php echo $student['student_id']; ?>"
                                                             class="btn btn-block">Cancel</label>
                                                     </div>
                                                 </form>
@@ -1674,15 +1674,15 @@ if ($section_result && $section_result->num_rows > 0) {
 
                                             <!-- Archive Button and Modal -->
                                             <label class="btn btn-error"
-                                                for="modal-1-<?php echo $student['student_id']; ?>">Archive</label>
-                                            <input class="modal-state" id="modal-1-<?php echo $student['student_id']; ?>"
+                                                for="modal-11-<?php echo $student['student_id']; ?>">Archive</label>
+                                            <input class="modal-state" id="modal-11-<?php echo $student['student_id']; ?>"
                                                 type="checkbox" />
                                             <div class="modal">
                                                 <label class="modal-overlay"
-                                                    for="modal-1-<?php echo $student['student_id']; ?>"></label>
+                                                    for="modal-11-<?php echo $student['student_id']; ?>"></label>
                                                 <form method="POST" action="../../connection/archive_student.php"
                                                     class="modal-content flex flex-col gap-5">
-                                                    <label for="modal-1-<?php echo $student['student_id']; ?>"
+                                                    <label for="modal-11-<?php echo $student['student_id']; ?>"
                                                         class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
                                                     <h2 class="text-xl">Archive Student?</h2>
                                                     <span>Are you sure you want to archive this student?</span>
@@ -1696,7 +1696,7 @@ if ($section_result && $section_result->num_rows > 0) {
                                                         value="<?php echo $_GET['section_id']; ?>" />
                                                     <div class="flex gap-3">
                                                         <button class="btn btn-error btn-block" type="submit">Archive</button>
-                                                        <label for="modal-1-<?php echo $student['student_id']; ?>"
+                                                        <label for="modal-11-<?php echo $student['student_id']; ?>"
                                                             class="btn btn-block">Cancel</label>
                                                     </div>
                                                 </form>
@@ -1890,15 +1890,15 @@ if ($section_result && $section_result->num_rows > 0) {
 
                                             <!-- Archive Button and Modal -->
                                             <label class="btn btn-error"
-                                                for="modal-1-<?php echo $student['student_id']; ?>">Archive</label>
-                                            <input class="modal-state" id="modal-1-<?php echo $student['student_id']; ?>"
+                                                for="modal-62-<?php echo $student['student_id']; ?>">Archive</label>
+                                            <input class="modal-state" id="modal-62-<?php echo $student['student_id']; ?>"
                                                 type="checkbox" />
                                             <div class="modal">
                                                 <label class="modal-overlay"
-                                                    for="modal-1-<?php echo $student['student_id']; ?>"></label>
+                                                    for="modal-62-<?php echo $student['student_id']; ?>"></label>
                                                 <form method="POST" action="../../connection/archive_student.php"
                                                     class="modal-content flex flex-col gap-5">
-                                                    <label for="modal-1-<?php echo $student['student_id']; ?>"
+                                                    <label for="modal-62-<?php echo $student['student_id']; ?>"
                                                         class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
                                                     <h2 class="text-xl">Archive Student?</h2>
                                                     <span>Are you sure you want to archive this student?</span>
@@ -1912,7 +1912,7 @@ if ($section_result && $section_result->num_rows > 0) {
                                                         value="<?php echo $_GET['section_id']; ?>" />
                                                     <div class="flex gap-3">
                                                         <button class="btn btn-error btn-block" type="submit">Archive</button>
-                                                        <label for="modal-1-<?php echo $student['student_id']; ?>"
+                                                        <label for="modal-62-<?php echo $student['student_id']; ?>"
                                                             class="btn btn-block">Cancel</label>
                                                     </div>
                                                 </form>
@@ -2106,15 +2106,15 @@ if ($section_result && $section_result->num_rows > 0) {
 
                                             <!-- Archive Button and Modal -->
                                             <label class="btn btn-error"
-                                                for="modal-1-<?php echo $student['student_id']; ?>">Archive</label>
-                                            <input class="modal-state" id="modal-1-<?php echo $student['student_id']; ?>"
+                                                for="modal-63-<?php echo $student['student_id']; ?>">Archive</label>
+                                            <input class="modal-state" id="modal-63-<?php echo $student['student_id']; ?>"
                                                 type="checkbox" />
                                             <div class="modal">
                                                 <label class="modal-overlay"
-                                                    for="modal-1-<?php echo $student['student_id']; ?>"></label>
+                                                    for="modal-63-<?php echo $student['student_id']; ?>"></label>
                                                 <form method="POST" action="../../connection/archive_student.php"
                                                     class="modal-content flex flex-col gap-5">
-                                                    <label for="modal-1-<?php echo $student['student_id']; ?>"
+                                                    <label for="modal-63-<?php echo $student['student_id']; ?>"
                                                         class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
                                                     <h2 class="text-xl">Archive Student?</h2>
                                                     <span>Are you sure you want to archive this student?</span>
@@ -2128,7 +2128,7 @@ if ($section_result && $section_result->num_rows > 0) {
                                                         value="<?php echo $_GET['section_id']; ?>" />
                                                     <div class="flex gap-3">
                                                         <button class="btn btn-error btn-block" type="submit">Archive</button>
-                                                        <label for="modal-1-<?php echo $student['student_id']; ?>"
+                                                        <label for="modal-63-<?php echo $student['student_id']; ?>"
                                                             class="btn btn-block">Cancel</label>
                                                     </div>
                                                 </form>
@@ -2163,7 +2163,7 @@ if ($section_result && $section_result->num_rows > 0) {
                                 $current_gender = 'Male';  // Track the current gender
                         
                                 while ($student = $result->fetch_assoc()):
-                                    $drawer_id = "drawer-right-7-" . $student['student_id'];
+                                    $drawer_id = "drawer-right-65-" . $student['student_id'];
 
                                     // Reset counter when switching from male to female or vice versa
                                     if ($student['gender'] !== $current_gender) {
@@ -2321,15 +2321,15 @@ if ($section_result && $section_result->num_rows > 0) {
 
                                             <!-- Archive Button and Modal -->
                                             <label class="btn btn-error"
-                                                for="modal-1-<?php echo $student['student_id']; ?>">Archive</label>
-                                            <input class="modal-state" id="modal-1-<?php echo $student['student_id']; ?>"
+                                                for="modal-65-<?php echo $student['student_id']; ?>">Archive</label>
+                                            <input class="modal-state" id="modal-65-<?php echo $student['student_id']; ?>"
                                                 type="checkbox" />
                                             <div class="modal">
                                                 <label class="modal-overlay"
-                                                    for="modal-1-<?php echo $student['student_id']; ?>"></label>
+                                                    for="modal-65-<?php echo $student['student_id']; ?>"></label>
                                                 <form method="POST" action="../../connection/archive_student.php"
                                                     class="modal-content flex flex-col gap-5">
-                                                    <label for="modal-1-<?php echo $student['student_id']; ?>"
+                                                    <label for="modal-65-<?php echo $student['student_id']; ?>"
                                                         class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
                                                     <h2 class="text-xl">Archive Student?</h2>
                                                     <span>Are you sure you want to archive this student?</span>
@@ -2343,7 +2343,7 @@ if ($section_result && $section_result->num_rows > 0) {
                                                         value="<?php echo $_GET['section_id']; ?>" />
                                                     <div class="flex gap-3">
                                                         <button class="btn btn-error btn-block" type="submit">Archive</button>
-                                                        <label for="modal-1-<?php echo $student['student_id']; ?>"
+                                                        <label for="modal-65-<?php echo $student['student_id']; ?>"
                                                             class="btn btn-block">Cancel</label>
                                                     </div>
                                                 </form>
@@ -2536,15 +2536,15 @@ if ($section_result && $section_result->num_rows > 0) {
 
                                             <!-- Archive Button and Modal -->
                                             <label class="btn btn-error"
-                                                for="modal-1-<?php echo $student['student_id']; ?>">Archive</label>
-                                            <input class="modal-state" id="modal-1-<?php echo $student['student_id']; ?>"
+                                                for="modal-71-<?php echo $student['student_id']; ?>">Archive</label>
+                                            <input class="modal-state" id="modal-71-<?php echo $student['student_id']; ?>"
                                                 type="checkbox" />
                                             <div class="modal">
                                                 <label class="modal-overlay"
-                                                    for="modal-1-<?php echo $student['student_id']; ?>"></label>
+                                                    for="modal-71-<?php echo $student['student_id']; ?>"></label>
                                                 <form method="POST" action="../../connection/archive_student.php"
                                                     class="modal-content flex flex-col gap-5">
-                                                    <label for="modal-1-<?php echo $student['student_id']; ?>"
+                                                    <label for="modal-71-<?php echo $student['student_id']; ?>"
                                                         class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
                                                     <h2 class="text-xl">Archive Student?</h2>
                                                     <span>Are you sure you want to archive this student?</span>
@@ -2558,7 +2558,7 @@ if ($section_result && $section_result->num_rows > 0) {
                                                         value="<?php echo $_GET['section_id']; ?>" />
                                                     <div class="flex gap-3">
                                                         <button class="btn btn-error btn-block" type="submit">Archive</button>
-                                                        <label for="modal-1-<?php echo $student['student_id']; ?>"
+                                                        <label for="modal-71-<?php echo $student['student_id']; ?>"
                                                             class="btn btn-block">Cancel</label>
                                                     </div>
                                                 </form>
@@ -2752,15 +2752,15 @@ if ($section_result && $section_result->num_rows > 0) {
 
                                             <!-- Archive Button and Modal -->
                                             <label class="btn btn-error"
-                                                for="modal-1-<?php echo $student['student_id']; ?>">Archive</label>
-                                            <input class="modal-state" id="modal-1-<?php echo $student['student_id']; ?>"
+                                                for="modal-81-<?php echo $student['student_id']; ?>">Archive</label>
+                                            <input class="modal-state" id="modal-81-<?php echo $student['student_id']; ?>"
                                                 type="checkbox" />
                                             <div class="modal">
                                                 <label class="modal-overlay"
-                                                    for="modal-1-<?php echo $student['student_id']; ?>"></label>
+                                                    for="modal-81-<?php echo $student['student_id']; ?>"></label>
                                                 <form method="POST" action="../../connection/archive_student.php"
                                                     class="modal-content flex flex-col gap-5">
-                                                    <label for="modal-1-<?php echo $student['student_id']; ?>"
+                                                    <label for="modal-81-<?php echo $student['student_id']; ?>"
                                                         class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
                                                     <h2 class="text-xl">Archive Student?</h2>
                                                     <span>Are you sure you want to archive this student?</span>
@@ -2774,7 +2774,7 @@ if ($section_result && $section_result->num_rows > 0) {
                                                         value="<?php echo $_GET['section_id']; ?>" />
                                                     <div class="flex gap-3">
                                                         <button class="btn btn-error btn-block" type="submit">Archive</button>
-                                                        <label for="modal-1-<?php echo $student['student_id']; ?>"
+                                                        <label for="modal-81-<?php echo $student['student_id']; ?>"
                                                             class="btn btn-block">Cancel</label>
                                                     </div>
                                                 </form>
@@ -2968,15 +2968,15 @@ if ($section_result && $section_result->num_rows > 0) {
 
                                             <!-- Archive Button and Modal -->
                                             <label class="btn btn-error"
-                                                for="modal-1-<?php echo $student['student_id']; ?>">Archive</label>
-                                            <input class="modal-state" id="modal-1-<?php echo $student['student_id']; ?>"
+                                                for="modal-91-<?php echo $student['student_id']; ?>">Archive</label>
+                                            <input class="modal-state" id="modal-91-<?php echo $student['student_id']; ?>"
                                                 type="checkbox" />
                                             <div class="modal">
                                                 <label class="modal-overlay"
-                                                    for="modal-1-<?php echo $student['student_id']; ?>"></label>
+                                                    for="modal-91-<?php echo $student['student_id']; ?>"></label>
                                                 <form method="POST" action="../../connection/archive_student.php"
                                                     class="modal-content flex flex-col gap-5">
-                                                    <label for="modal-1-<?php echo $student['student_id']; ?>"
+                                                    <label for="modal-91-<?php echo $student['student_id']; ?>"
                                                         class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
                                                     <h2 class="text-xl">Archive Student?</h2>
                                                     <span>Are you sure you want to archive this student?</span>
@@ -2990,7 +2990,7 @@ if ($section_result && $section_result->num_rows > 0) {
                                                         value="<?php echo $_GET['section_id']; ?>" />
                                                     <div class="flex gap-3">
                                                         <button class="btn btn-error btn-block" type="submit">Archive</button>
-                                                        <label for="modal-1-<?php echo $student['student_id']; ?>"
+                                                        <label for="modal-91-<?php echo $student['student_id']; ?>"
                                                             class="btn btn-block">Cancel</label>
                                                     </div>
                                                 </form>

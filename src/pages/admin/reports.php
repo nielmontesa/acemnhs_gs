@@ -1,27 +1,16 @@
 <?php
 session_start();
-
 include '../../connection/connection.php';
 
-// Query to get the count of students by akap_status
-$query_akap_status = "SELECT akap_status, COUNT(*) as count FROM students GROUP BY akap_status";
-$result_akap_status = $conn->query($query_akap_status);
+// Query to get distinct school years
+$query_school_years = "SELECT DISTINCT section.school_year FROM section ORDER BY section.school_year DESC";
+$result_school_years = $conn->query($query_school_years);
 
-$akap_status_data = [];
-while ($row = $result_akap_status->fetch_assoc()) {
-    $akap_status_data[] = $row;
+$school_years = [];
+while ($row = $result_school_years->fetch_assoc()) {
+    $school_years[] = $row['school_year'];
 }
 
-// Query to get the count of students by gender
-$query_gender = "SELECT gender, COUNT(*) as count FROM students GROUP BY gender";
-$result_gender = $conn->query($query_gender);
-
-$gender_data = [];
-while ($row = $result_gender->fetch_assoc()) {
-    $gender_data[] = $row;
-}
-
-// Close database connection
 $conn->close();
 ?>
 <!DOCTYPE html>
@@ -121,16 +110,32 @@ $conn->close();
                 <label for="sidebar-mobile-fixed" class="btn-primary btn sm:hidden">Open Sidebar</label>
             </div>
 
-            <h1 class="text-xl font-bold">Reports</h1>
-            <p class="pt-2">This is charts of the entire school.</p>
+
+
+            <div class="mx-auto w-full flex justify-center items-center gap-2 px-auto">
+                <label for="school_year" class="font-bold">Select School Year:</label>
+                <select id="school_year" class="select">
+                    <?php foreach ($school_years as $year): ?>
+                        <option value="<?php echo $year; ?>"><?php echo $year; ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+
+
             <div class="flex gap-2 pt-4">
                 <div class="flex gap-4 flex-col items-center">
-                    <h2 class="font-bold text-xl">Student AKAP Status Report</h2>
-                    <canvas id="akapStatusChart" width="400" height="500"></canvas>
+                    <h2 class="font-medium text-s">Student AKAP Status Report</h2>
+                    <canvas id="akapStatusChart" width="900" height="500"></canvas>
                 </div>
+                <div class="font-medium flex gap-4 flex-col items-center">
+                    <h2 class="text-s">Student Gender Distribution</h2>
+                    <canvas id="genderChart" width="500" height="500"></canvas>
+                </div>
+            </div>
+            <div class="w-full mt-8">
                 <div class="flex gap-4 flex-col items-center">
-                    <h2 class="font-bold text-xl">Student Gender Distribution</h2>
-                    <canvas id="genderChart" width="400" height="500"></canvas>
+                    <h2 class="font-medium text-s">Student AKAP Status Report</h2>
+                    <canvas id="akapCasesChart" width="900" height="500"></canvas>
                 </div>
             </div>
 
@@ -139,36 +144,64 @@ $conn->close();
     </div>
 </body>
 <script src="../../../node_modules/chart.js/dist/chart.umd.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <script>
-    // Data for AKAP Status (from PHP)
-    const akapStatusData = <?php echo json_encode($akap_status_data); ?>;
-    const akapStatusLabels = akapStatusData.map(item => item.akap_status);
-    const akapStatusCounts = akapStatusData.map(item => item.count);
+    // Function to update the charts dynamically based on the selected school year
+    function updateCharts(schoolYear) {
+        $.ajax({
+            url: 'fetch_chart_data.php', // PHP script that fetches data for the selected school year
+            type: 'GET',
+            data: { school_year: schoolYear },
+            success: function (response) {
+                const data = JSON.parse(response);
 
-    // Data for Gender Distribution (from PHP)
-    const genderData = <?php echo json_encode($gender_data); ?>;
-    const genderLabels = genderData.map(item => item.gender);
-    const genderCounts = genderData.map(item => item.count);
+                // Update the AKAP Status chart
+                akapStatusChart.data.labels = ['AKAP Status'];
+                akapStatusChart.data.datasets.forEach((dataset, index) => {
+                    dataset.data = [data.akapStatusCounts[index] || 0];
+                });
+                akapStatusChart.update();
 
-    // Chart 1: AKAP Status
+                // Update the Gender Distribution chart
+                genderChart.data.labels = data.genderLabels.length ? data.genderLabels : ['Male', 'Female'];
+                genderChart.data.datasets[0].data = data.genderCounts.length ? data.genderCounts : [0, 0];
+                genderChart.update();
+
+                // Update the AKAP Cases chart
+                akapCasesChart.data.labels = data.akapCasesLabels;
+                akapCasesChart.data.datasets[0].data = data.akapCasesCounts;
+                akapCasesChart.update();
+            },
+            error: function (xhr, status, error) {
+                console.error('AJAX Error: ', error);
+            }
+        });
+    }
+
+    // Initialize Chart.js charts (empty for now)
     const ctx1 = document.getElementById('akapStatusChart').getContext('2d');
     const akapStatusChart = new Chart(ctx1, {
         type: 'bar',
         data: {
-            labels: akapStatusLabels,
+            labels: ['AKAP Status'],
             datasets: [{
-                label: 'Number of Students by AKAP Status',
-                data: akapStatusCounts,
-                backgroundColor: [
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(255, 159, 64, 0.2)',
-                    'rgba(255, 99, 132, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(255, 159, 64, 1)',
-                    'rgba(255, 99, 132, 1)'
-                ],
+                label: 'Inactive',
+                data: [0],
+                backgroundColor: 'rgba(255, 159, 64, 0.2)',
+                borderColor: 'rgba(255, 159, 64, 1)',
+                borderWidth: 1
+            }, {
+                label: 'Active',
+                data: [0],
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 1
+            }, {
+                label: 'Solved',
+                data: [0],
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
                 borderWidth: 1
             }]
         },
@@ -177,32 +210,102 @@ $conn->close();
                 y: {
                     beginAtZero: true
                 }
+            },
+            plugins: {
+                legend: {
+                    display: true,
+                    labels: {
+                        color: 'black',
+                        font: {
+                            size: 14
+                        }
+                    }
+                }
             }
         }
     });
 
-    // Chart 2: Gender Distribution
     const ctx2 = document.getElementById('genderChart').getContext('2d');
     const genderChart = new Chart(ctx2, {
         type: 'pie',
         data: {
-            labels: genderLabels,
+            labels: ['Male', 'Female'],
             datasets: [{
-                label: 'Number of Students by Gender',
-                data: genderCounts,
+                label: 'Gender Distribution',
+                data: [0, 0],
                 backgroundColor: [
-                    'rgba(54, 162, 235, 0.2)', // Blue for male
-                    'rgba(255, 99, 132, 0.2)' // Red for female
+                    'rgba(54, 162, 235, 0.2)', // Blue for Male
+                    'rgba(255, 99, 132, 0.2)' // Red for Female
                 ],
                 borderColor: [
-                    'rgba(54, 162, 235, 1)', // Blue border
-                    'rgba(255, 99, 132, 1)' // Red border
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 99, 132, 1)'
                 ],
                 borderWidth: 1
             }]
+        },
+        options: {
+            plugins: {
+                legend: {
+                    display: true,
+                    labels: {
+                        color: 'black',
+                        font: {
+                            size: 14
+                        }
+                    }
+                }
+            }
         }
     });
+
+    // Initialize the AKAP Cases chart
+    const ctx3 = document.getElementById('akapCasesChart').getContext('2d');
+    const akapCasesChart = new Chart(ctx3, {
+        type: 'line',
+        data: {
+            labels: [], // School year labels
+            datasets: [{
+                label: 'AKAP Cases (Active and Solved)',
+                data: [], // Data for AKAP cases across years
+                backgroundColor: 'rgba(153, 102, 255, 0.2)', // Purple
+                borderColor: 'rgba(153, 102, 255, 1)', // Purple border
+                borderWidth: 2,
+                fill: false
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            },
+            plugins: {
+                legend: {
+                    display: true,
+                    labels: {
+                        color: 'black',
+                        font: {
+                            size: 14
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    // When the dropdown value changes, update the charts
+    $('#school_year').change(function () {
+        const selectedYear = $(this).val();
+        updateCharts(selectedYear); // Update the charts for the selected school year
+    });
+
+    // Initially load charts for the first school year in the dropdown
+    const initialYear = $('#school_year').val();
+    updateCharts(initialYear);
 </script>
+
+
 
 
 </html>

@@ -2,22 +2,13 @@
 session_start();
 include '../../connection/connection.php';
 
-// Check if we are accessing a new gradesheet; if yes, clear the old session data
-if (isset($_GET['section_id'])) {
-    // Unset previous session values
-    unset($_SESSION['section_id']);
-    unset($_SESSION['gradesheet_id']);
-
-    // Set the new session values
-    $_SESSION['section_id'] = $_GET['section_id'];
-}
-
-// Do similar for gradesheet_id if necessary
-if (isset($_GET['gradesheet_id'])) {
-    unset($_SESSION['gradesheet_id']);
-    $_SESSION['gradesheet_id'] = $_GET['gradesheet_id'];
-}
+// Fetch distinct school years for the dropdown
+$schoolYearsQuery = "SELECT DISTINCT section.school_year FROM students 
+                     JOIN section ON students.section_ID = section.section_id 
+                     ORDER BY section.school_year DESC"; // Include archived sections too
+$schoolYearsResult = $conn->query($schoolYearsQuery);
 ?>
+
 
 <!DOCTYPE html>
 <html data-theme="light">
@@ -30,6 +21,8 @@ if (isset($_GET['gradesheet_id'])) {
     <link rel="stylesheet" href='../../styles/tailwind.css'>
     <link rel="stylesheet" href='../../styles/style.css'>
     <link rel="icon" href="../../assets/acemnhs_logo.png">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- jQuery for AJAX -->
+
 </head>
 
 <body>
@@ -52,7 +45,7 @@ if (isset($_GET['gradesheet_id'])) {
                             <span class="menu-title">Welcome, <?php echo $_SESSION['username']; ?></span>
                             <ul class="menu-items">
                                 <a href="departments.php">
-                                    <li class="menu-item ">
+                                    <li class="menu-item">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-75" fill="none"
                                             viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -116,110 +109,86 @@ if (isset($_GET['gradesheet_id'])) {
                 <label for="sidebar-mobile-fixed" class="btn-primary btn sm:hidden">Open Sidebar</label>
             </div>
 
+
             <h1 class="text-xl font-bold">
-                <?php
-
-                if (isset($_GET['section_id'])) {
-                    $section_id = $_GET['section_id'];
-                    $section_details_query = "SELECT section_name, grade_level, section_id FROM section WHERE section_id = $section_id";
-                    $result = $conn->query($section_details_query);
-
-                    if ($result->num_rows > 0) {
-                        // Fetch the result as an associative array and display section_name
-                        while ($row = $result->fetch_assoc()) {
-                            echo "Gradesheets of Grade ";
-                            echo $row['grade_level'];
-                            echo " - ";
-                            echo $row['section_name']; // Output each section name
-                        }
-                    } else {
-                        echo "No sections found.";
-                    }
-                }
-                ?>
+                All Students
             </h1>
-            <p class='pt-2'>This is currently all of the gradesheets in
-
-                <?php
-                if (isset($_GET['section_id'])) {
-                    $section_id = $_GET['section_id'];
-                    $section_details_query = "SELECT section_name, grade_level, section_id FROM section WHERE section_id = $section_id";
-                    $result = $conn->query($section_details_query);
-
-                    if ($result->num_rows > 0) {
-                        // Fetch the result as an associative array and display section_name
-                        while ($row = $result->fetch_assoc()) {
-                            echo "Grade ";
-                            echo $row['grade_level'];
-                            echo " - ";
-                            echo $row['section_name']; // Output each section name
-                        }
-                    } else {
-                        echo "No sections found.";
-                    }
-                }
-                ?>.
+            <p class='pt-2'>This is currently all of the students in ACEMNHS.
             </p>
-            <?php
-            if (isset($_GET['section_id'])) {
-                $section_id = $_GET['section_id'];
-                $section_details_query = "SELECT section_name, grade_level, section_id FROM section WHERE section_id = $section_id";
-                $result = $conn->query($section_details_query);
-            }
-            ?>
-            </p>
-            <br>
-            <table class="table-compact table-hover table w-full">
+
+            <div class="flex gap-4 justify-between items-center pt-2">
+                <div class="flex gap-4 items-center">
+                    <a href="export_all_students.php" class="btn btn-primary">Export All Students</a>
+                    <a href="export_akap_students.php" class="btn btn-primary">Export AKAP Students</a>
+                </div>
+                <div class="flex gap-2 items-center">
+                    <span for="school_year" class="text-sm w-20">School Year: </span>
+                    <select class="select" id="school_year" name="school_year">
+                        <option value="">All School Years</option>
+                        <?php while ($row = $schoolYearsResult->fetch_assoc()): ?>
+                            <option value="<?php echo $row['school_year']; ?>" <?php echo isset($_GET['school_year']) && $_GET['school_year'] == $row['school_year'] ? 'selected' : ''; ?>>
+                                <?php echo $row['school_year']; ?>
+                            </option>
+                        <?php endwhile; ?>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Student Table -->
+            <table class="table-compact table-zebra table pt-8" id="student-table">
                 <thead>
                     <tr>
-                        <th>Subject</th>
-                        <th>Finalized?</th>
+                        <th>No.</th>
+                        <th>LRN</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Parent E-mail</th>
+                        <th>Gender</th>
+                        <th>AKAP Status</th>
+                        <th>Section Name</th>
+                        <th>Grade Level</th>
+                        <th>Status</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <?php
-                    // SQL query to get gradesheet details for the specific section_id
-                    if (isset($section_id)) {
-                        $sql = "SELECT g.gradesheet_id, g.subject, g.is_finalized, s.section_name, s.grade_level
-                    FROM gradesheet g
-                    INNER JOIN section s ON g.section_id = s.section_id
-                    WHERE s.section_id = $section_id AND s.is_archived = 0";
-                        $result = $conn->query($sql);
-
-                        if ($result->num_rows > 0):
-                            ?>
-                        <tbody>
-                            <?php while ($row = $result->fetch_assoc()): ?>
-                                <tr>
-                                    <th><?php echo $row['subject']; ?></th>
-                                    <td><?php echo $row['is_finalized'] ? 'Yes' : 'No'; ?></td>
-                                    <!-- Displays Yes/No based on is_finalized -->
-                                    <td>
-                                        <a
-                                            href="quarters/1q-grades.php?gradesheet_id=<?php echo $row['gradesheet_id']; ?>&section_id=<?php echo $section_id; ?>">
-                                            <button class="btn btn-secondary">View</button>
-                                        </a>
-                                        <a
-                                            href="gradesheet_log.php?gradesheet_id=<?php echo $row['gradesheet_id']; ?>&section_id=<?php echo $section_id; ?>">
-                                            <button class="btn btn-outline-secondary">Edit Log</button>
-                                        </a>
-                                    </td>
-                                </tr>
-                            <?php endwhile; ?>
-                        </tbody>
-                    <?php else: ?>
-                        <tr>
-                            <td colspan="4">No gradesheets found for this section.</td>
-                        </tr>
-                    <?php endif;
-                    } ?>
+                <tbody id="students-body">
+                    <!-- This will be dynamically filled by AJAX -->
                 </tbody>
             </table>
 
-        </main>
+    </div>
+
+    </main>
+
+    <script>
+        // Function to load students based on the selected school year
+        function loadStudents(schoolYear) {
+            $.ajax({
+                url: 'fetch_students.php', // Call the separate script to fetch student data
+                type: 'GET',
+                data: { school_year: schoolYear },
+                success: function (response) {
+                    $('#students-body').html(response); // Update only the tbody content
+                }
+            });
+        }
+
+        // Load all students initially
+        loadStudents('');
+
+        // When the dropdown changes, dynamically load students for the selected school year
+        $('#school_year').change(function () {
+            var schoolYear = $(this).val(); // Get selected school year
+            loadStudents(schoolYear); // Call the function to load students
+        });
+    </script>
     </div>
 </body>
+
+
+
+
+
 
 
 </html>

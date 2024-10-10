@@ -70,7 +70,7 @@ function insertSections($grade_level, $teachers, $mysqli)
     global $faker;
     global $subjects;
 
-    for ($i = 1; $i <= 10; $i++) {  // 10 sections per grade level
+    for ($i = 1; $i <= 5; $i++) {  // 10 sections per grade level
         $section_name = "Section " . $i;
         $school_year = "2024-2025";
         $adviser_id = $teachers[array_rand($teachers)];  // Randomly assign a teacher as adviser
@@ -98,7 +98,7 @@ function insertStudents($section_id, $mysqli)
     global $faker;
     global $akap_statuses;
 
-    for ($j = 1; $j <= 50; $j++) {  // 50 students per section
+    for ($j = 1; $j <= 10; $j++) {  // 50 students per section
         $first_name = $mysqli->real_escape_string($faker->firstName);
         $last_name = $mysqli->real_escape_string($faker->lastName);
         $email = $mysqli->real_escape_string($faker->email);

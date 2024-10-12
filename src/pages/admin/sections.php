@@ -131,7 +131,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['finish_year'])) {
 
         // Commit transaction
         $conn->commit();
-        echo "School year finished, sections promoted, and gradesheets created successfully!";
     } catch (Exception $e) {
         // Rollback in case of any failure
         $conn->rollback();

@@ -3,6 +3,10 @@
         "phpoffice/phpspreadsheet": "^3.3",
         "google/apiclient": "^2.0",
         "guzzlehttp/guzzle": "^7.0",
-        "fzaninotto/faker": "^1.5"
+        "fzaninotto/faker": "^1.5",
+        "dompdf/dompdf": "^3.0",
+        "mitoteam/jpgraph": "^10.4",
+        "mpdf/mpdf": "^8.2",
+        "tecnickcom/tcpdf": "^6.7"
     }
 }

@@ -506,7 +506,7 @@ $conn->close();
             <form method="post" class="flex gap-2">
                 <button type="submit" name="export" class="btn btn-primary">Export to Excel</button>
                 <h1> </h1>
-                <button type="submit" name="preview_pdf" class="btn btn-primary">Preview in PDF</button>
+                <a href="PDF%20Generator/pdfstructure.php?student_id=<?php echo $student_id; ?>" target="_blank" class="btn btn-primary">Preview in PDF</a>
             </form>
 
             <table class="table table-striped pt-8">

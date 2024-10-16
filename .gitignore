@@ -1,5 +1,5 @@
 # Node.js dependencies
-node_modules
+/node_modules/
 /vendor/
 src/pages/email/token.json
 src/pages/email/credentials.json

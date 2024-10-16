@@ -118,18 +118,7 @@ if ($section_result && $section_result->num_rows > 0) {
                         <section class="menu-section px-4">
                             <span class="menu-title">Welcome, <?php echo $_SESSION['username']; ?></span>
                             <ul class="menu-items">
-                                <a href="departments.php">
-                                    <li class="menu-item">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-75" fill="none"
-                                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                        </svg>
-                                        <span>Faculty</span>
-                                    </li>
-                                </a>
+
                                 <a href="sections.php">
                                     <li class="menu-item menu-active">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-75" fill="none"
@@ -140,16 +129,7 @@ if ($section_result && $section_result->num_rows > 0) {
                                         <span>Students</span>
                                     </li>
                                 </a>
-                                <a href="reports.php">
-                                    <li class="menu-item">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-75" fill="none"
-                                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-                                        </svg>
-                                        <span>Reports</span>
-                                    </li>
-                                </a>
+
                             </ul>
                         </section>
 
@@ -182,6 +162,8 @@ if ($section_result && $section_result->num_rows > 0) {
             <div class="w-fit">
                 <label for="sidebar-mobile-fixed" class="btn-primary btn sm:hidden">Open Sidebar</label>
             </div>
+
+
 
 
             <h1 class="text-xl font-bold">
@@ -230,7 +212,7 @@ if ($section_result && $section_result->num_rows > 0) {
             </p>
 
             <div class="flex justify-between items-center mt-4" style="justify-content: space-between;">
-                <div class=" flex gap-2 items-center">
+                <div class=" flex gap-2">
                     <form method="POST">
                         <input type="checkbox" id="drawer-right" class="drawer-toggle" />
                         <label for="drawer-right" class="btn btn-primary">Add Student</label>
@@ -290,125 +272,13 @@ if ($section_result && $section_result->num_rows > 0) {
                             </div>
                         </div>
                     </form>
-                    <form action="../../connection/edit_section.php" method="POST">
-                        <input type="hidden" name="section_id" value="<?php echo $section_id; ?>" />
-                        <!-- Hidden field for section ID -->
-                        <input type="checkbox" id="drawer-edit-section" class="drawer-toggle" />
-                        <label for="drawer-edit-section" class="btn btn-primary">Edit Section</label>
-                        <label class="overlay" for="drawer-edit-section"></label>
-                        <div class="drawer drawer-right">
-                            <div class="drawer-content pt-10 flex flex-col h-full">
-                                <label for="drawer-edit-section"
-                                    class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
-                                <div>
-                                    <h2 class="text-xl font-medium">Edit Section</h2>
-                                    <label for="sectionname">
-                                        <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Section
-                                            Name</span>
-                                        <input class="input-block input" placeholder="Enter section name"
-                                            name="sectionname" type="text"
-                                            value="<?php echo htmlspecialchars($section['section_name']); ?>"
-                                            required />
-                                    </label>
-                                    <label for="gradelevel">
-                                        <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Grade
-                                            Level</span>
-                                        <select class="input-block input" name="gradelevel" required>
-                                            <option value="" disabled>Select grade level</option>
-                                            <option value="7" <?php echo ($section['grade_level'] == 7) ? 'selected' : ''; ?>>Grade 7</option>
-                                            <option value="8" <?php echo ($section['grade_level'] == 8) ? 'selected' : ''; ?>>Grade 8</option>
-                                            <option value="9" <?php echo ($section['grade_level'] == 9) ? 'selected' : ''; ?>>Grade 9</option>
-                                            <option value="10" <?php echo ($section['grade_level'] == 10) ? 'selected' : ''; ?>>Grade 10
-                                            </option>
-                                        </select>
-                                    </label>
-                                    <label for="schoolyear">
-                                        <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">School
-                                            Year</span>
-                                        <div class="flex gap-2 items-center justify-center">
-                                            <input class="input" maxlength="4" placeholder="Start Year" name="startyear"
-                                                value="<?php echo htmlspecialchars(substr($section['school_year'], 0, 4)); ?>" />
-                                            <span> to </span>
-                                            <input class="input" maxlength="4" placeholder="End Year" name="endyear"
-                                                value="<?php echo htmlspecialchars(substr($section['school_year'], 5, 4)); ?>" />
-                                        </div>
-                                    </label>
-                                    <label for="advisername">
-                                        <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Adviser
-                                            Name</span>
-                                        <select class="input-block input" name="advisername" required>
-                                            <option value="" disabled>Select adviser</option>
-                                            <?php
-                                            // Query the 'teachers' table
-                                            $teachersql = "SELECT teacher_id, first_name, last_name FROM teachers WHERE is_archived = 0";
-                                            $result = $conn->query($teachersql);
 
-                                            // Loop through results and generate options
-                                            if ($result->num_rows > 0) {
-                                                while ($row = $result->fetch_assoc()) {
-                                                    $selected = ($row['teacher_id'] == $section['adviser_id']) ? 'selected' : '';
-                                                    echo '<option value="' . $row["teacher_id"] . '" ' . $selected . '>' . $row["first_name"] . ' ' . $row["last_name"] . '</option>';
-                                                }
-                                            } else {
-                                                echo '<option value="" disabled>No advisers found</option>';
-                                            }
-                                            ?>
-                                        </select>
-                                    </label>
-                                </div>
-                                <div class="h-full flex flex-row justify-end items-end gap-2">
-                                    <button type="reset" class="btn btn-ghost">Cancel</button>
-                                    <button type="submit" class="btn btn-primary">Update</button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
 
                     <a href="gradesheet.php?section_id=<?php echo $section_id; ?>"
                         class="btn btn-outline-primary">Gradesheets</a>
 
-                    <?php
-                    // Assuming you have already established a database connection
-                    include '../../connection/connection.php';
-
-                    // Get the section ID from the URL
-                    $section_id = $_GET['section_id'] ?? null;
-
-                    // Check if section ID is available
-                    if ($section_id === null) {
-                        die('Error: Section ID is missing.');
-                    }
-
-                    // Fetch the section information along with the 'is_locked' status
-                    $sql = "SELECT section_name, grade_level, is_locked FROM section WHERE section_id = ?";
-                    $stmt = $conn->prepare($sql);
-                    $stmt->bind_param('i', $section_id);
-                    $stmt->execute();
-                    $result = $stmt->get_result();
-
-                    // Check if the section exists
-                    if ($result->num_rows > 0) {
-                        $section = $result->fetch_assoc();
-                        $section_name = $section['section_name'];
-                        $grade_level = $section['grade_level'];
-                        $is_locked = $section['is_locked'];
-
-                        // Checkbox for is_locked with specified format
-                        echo '<div>';
-                        echo '<label class="flex cursor-pointer gap-2">';
-                        echo '<input type="checkbox" class="checkbox" name="is_locked" value="1" id="lockCheckbox" ' . ($is_locked ? 'checked' : '') . ' />';
-                        echo '<span>Lock Gradesheets</span>';
-                        echo '</label>';
-                        echo '</div>';
-                    } else {
-                        echo "<h1>Section not found</h1>";
-                    }
-
-                    // Close the statement and connection
-                    $stmt->close();
-                    $conn->close();
-                    ?>
                 </div>
+
                 <div class="flex gap-4 items-center content-center">
                     <div class="flex gap-4 items-center">
                         <span class="text-sm">Filter Gender:</span>
@@ -3122,31 +2992,7 @@ if ($section_result && $section_result->num_rows > 0) {
         filterSections();
     });
 </script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function () {
-        $('#lockCheckbox').change(function () {
-            // Get the checked state of the checkbox
-            var isChecked = $(this).is(':checked') ? 1 : 0;
 
-            // Send an AJAX request to update the is_locked status
-            $.ajax({
-                url: 'update_status.php', // Create this file to handle the update
-                type: 'POST',
-                data: {
-                    section_id: <?php echo $section_id; ?>,
-                    is_locked: isChecked
-                },
-                success: function (response) {
-                    console.log(response); // You can handle the response here if needed
-                },
-                error: function (xhr, status, error) {
-                    console.error(error); // Handle any errors here
-                }
-            });
-        });
-    });
-</script>
 
 
 

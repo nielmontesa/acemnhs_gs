@@ -3,4 +3,3 @@
 /vendor/
 src/pages/email/token.json
 src/pages/email/credentials.json
-composer.lock

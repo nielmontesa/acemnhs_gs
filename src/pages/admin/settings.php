@@ -106,7 +106,7 @@
                         <label for="username">
                             <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Username</span>
                             <input class="input-block input" placeholder="Please enter your username." name="username"
-                                type="text" />
+                              value="<?php echo $_SESSION['username']; ?>"  type="text" />
                         </label>
                         <label for="oldpassword">
                             <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Old Password</span>

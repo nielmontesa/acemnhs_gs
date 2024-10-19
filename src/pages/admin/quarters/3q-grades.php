@@ -276,7 +276,6 @@ session_start();
                                     </div>
                                 </div>
                             </form>
-                            <a href="#" class="btn btn-outline-primary">Check Totals</a>
                             <div>
                                 <?php
                                 include "../../../connection/connection.php"; // Include your database connection

@@ -160,7 +160,6 @@ if ($result->num_rows > 0) {
         }
     }
 } else {
-    echo "No activity scores found for Student ID: $student_id";
 }
 function transmute_grade($final_grade)
 {
@@ -393,11 +392,11 @@ $conn->close();
                 </section>
                 <section class="sidebar-content">
                     <nav class="menu rounded-md">
-                        <section class="menu-section px-4">head
+                        <section class="menu-section px-4">
                             <span class="menu-title">Welcome, <?php echo $_SESSION['username']; ?></span>
                             <ul class="menu-items">
                                 <a href="sections.php">
-                                    <li class="menu-item  menu-active">
+                                    <li class="menu-item menu-active">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-75" fill="none"
                                             viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -409,7 +408,6 @@ $conn->close();
 
                             </ul>
                         </section>
-
                     </nav>
                 </section>
                 <section class="sidebar-footer justify-end bg-gray-2 pt-2">

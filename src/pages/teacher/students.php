@@ -118,7 +118,6 @@ if ($section_result && $section_result->num_rows > 0) {
                         <section class="menu-section px-4">
                             <span class="menu-title">Welcome, <?php echo $_SESSION['username']; ?></span>
                             <ul class="menu-items">
-
                                 <a href="sections.php">
                                     <li class="menu-item menu-active">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-75" fill="none"
@@ -132,7 +131,6 @@ if ($section_result && $section_result->num_rows > 0) {
 
                             </ul>
                         </section>
-
                     </nav>
                 </section>
                 <section class="sidebar-footer justify-end bg-gray-2 pt-2">

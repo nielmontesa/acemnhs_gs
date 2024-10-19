@@ -160,7 +160,6 @@ if ($result->num_rows > 0) {
         }
     }
 } else {
-    echo "No activity scores found for Student ID: $student_id";
 }
 function transmute_grade($final_grade)
 {

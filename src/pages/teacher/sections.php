@@ -203,7 +203,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['finish_year'])) {
 
                             </ul>
                         </section>
-
                     </nav>
                 </section>
                 <section class="sidebar-footer justify-end bg-gray-2 pt-2">
@@ -372,31 +371,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['finish_year'])) {
                                             <a href="students.php?section_id=<?php echo $row['section_id']; ?>">
                                                 <button class="btn btn-secondary">View</button>
                                             </a>
-                                            <label class="btn btn-error"
-                                                for="modal-1-<?php echo $row['section_id']; ?>">Archive</label>
-                                            <input class="modal-state" id="modal-1-<?php echo $row['section_id']; ?>"
-                                                type="checkbox" />
-                                            <div class="modal">
-                                                <label class="modal-overlay"
-                                                    for="modal-1-<?php echo $row['section_id']; ?>"></label>
-                                                <form method="POST" action="../../connection/archive_section.php"
-                                                    class="modal-content flex flex-col gap-5">
-                                                    <label for="modal-1-<?php echo $row['section_id']; ?>"
-                                                        class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
-                                                    <h2 class="text-xl">Archive Section?</h2>
-                                                    <span>Are you sure you want to archive this section?</span>
-
-                                                    <!-- Hidden input to send section ID -->
-                                                    <input type="hidden" name="section_id"
-                                                        value="<?php echo $row['section_id']; ?>" />
-
-                                                    <div class="flex gap-3">
-                                                        <button class="btn btn-error btn-block" type="submit">Archive</button>
-                                                        <label for="modal-1-<?php echo $row['section_id']; ?>"
-                                                            class="btn btn-block">Cancel</label>
-                                                    </div>
-                                                </form>
-                                            </div>
                                         </td>
                                     </tr>
                                 <?php endwhile; ?>
@@ -457,31 +431,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['finish_year'])) {
                                             <a href="students.php?section_id=<?php echo $row['section_id']; ?>">
                                                 <button class="btn btn-secondary">View</button>
                                             </a>
-                                            <label class="btn btn-error"
-                                                for="modal-1-<?php echo $row['section_id']; ?>">Archive</label>
-                                            <input class="modal-state" id="modal-1-<?php echo $row['section_id']; ?>"
-                                                type="checkbox" />
-                                            <div class="modal">
-                                                <label class="modal-overlay"
-                                                    for="modal-1-<?php echo $row['section_id']; ?>"></label>
-                                                <form method="POST" action="../../connection/archive_section.php"
-                                                    class="modal-content flex flex-col gap-5">
-                                                    <label for="modal-1-<?php echo $row['section_id']; ?>"
-                                                        class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
-                                                    <h2 class="text-xl">Archive Section?</h2>
-                                                    <span>Are you sure you want to archive this section?</span>
-
-                                                    <!-- Hidden input to send section ID -->
-                                                    <input type="hidden" name="section_id"
-                                                        value="<?php echo $row['section_id']; ?>" />
-
-                                                    <div class="flex gap-3">
-                                                        <button class="btn btn-error btn-block" type="submit">Archive</button>
-                                                        <label for="modal-1-<?php echo $row['section_id']; ?>"
-                                                            class="btn btn-block">Cancel</label>
-                                                    </div>
-                                                </form>
-                                            </div>
                                         </td>
                                     </tr>
                                 <?php endwhile; ?>
@@ -542,31 +491,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['finish_year'])) {
                                             <a href="students.php?section_id=<?php echo $row['section_id']; ?>">
                                                 <button class="btn btn-secondary">View</button>
                                             </a>
-                                            <label class="btn btn-error"
-                                                for="modal-1-<?php echo $row['section_id']; ?>">Archive</label>
-                                            <input class="modal-state" id="modal-1-<?php echo $row['section_id']; ?>"
-                                                type="checkbox" />
-                                            <div class="modal">
-                                                <label class="modal-overlay"
-                                                    for="modal-1-<?php echo $row['section_id']; ?>"></label>
-                                                <form method="POST" action="../../connection/archive_section.php"
-                                                    class="modal-content flex flex-col gap-5">
-                                                    <label for="modal-1-<?php echo $row['section_id']; ?>"
-                                                        class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
-                                                    <h2 class="text-xl">Archive Section?</h2>
-                                                    <span>Are you sure you want to archive this section?</span>
-
-                                                    <!-- Hidden input to send section ID -->
-                                                    <input type="hidden" name="section_id"
-                                                        value="<?php echo $row['section_id']; ?>" />
-
-                                                    <div class="flex gap-3">
-                                                        <button class="btn btn-error btn-block" type="submit">Archive</button>
-                                                        <label for="modal-1-<?php echo $row['section_id']; ?>"
-                                                            class="btn btn-block">Cancel</label>
-                                                    </div>
-                                                </form>
-                                            </div>
                                         </td>
                                     </tr>
                                 <?php endwhile; ?>
@@ -627,31 +551,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['finish_year'])) {
                                             <a href="students.php?section_id=<?php echo $row['section_id']; ?>">
                                                 <button class="btn btn-secondary">View</button>
                                             </a>
-                                            <label class="btn btn-error"
-                                                for="modal-1-<?php echo $row['section_id']; ?>">Archive</label>
-                                            <input class="modal-state" id="modal-1-<?php echo $row['section_id']; ?>"
-                                                type="checkbox" />
-                                            <div class="modal">
-                                                <label class="modal-overlay"
-                                                    for="modal-1-<?php echo $row['section_id']; ?>"></label>
-                                                <form method="POST" action="../../connection/archive_section.php"
-                                                    class="modal-content flex flex-col gap-5">
-                                                    <label for="modal-1-<?php echo $row['section_id']; ?>"
-                                                        class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
-                                                    <h2 class="text-xl">Archive Section?</h2>
-                                                    <span>Are you sure you want to archive this section?</span>
-
-                                                    <!-- Hidden input to send section ID -->
-                                                    <input type="hidden" name="section_id"
-                                                        value="<?php echo $row['section_id']; ?>" />
-
-                                                    <div class="flex gap-3">
-                                                        <button class="btn btn-error btn-block" type="submit">Archive</button>
-                                                        <label for="modal-1-<?php echo $row['section_id']; ?>"
-                                                            class="btn btn-block">Cancel</label>
-                                                    </div>
-                                                </form>
-                                            </div>
                                         </td>
                                     </tr>
                                 <?php endwhile; ?>

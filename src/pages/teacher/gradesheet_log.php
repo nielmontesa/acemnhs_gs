@@ -66,7 +66,6 @@ if (isset($_GET['gradesheet_id'])) {
 
                             </ul>
                         </section>
-
                     </nav>
                 </section>
                 <section class="sidebar-footer justify-end bg-gray-2 pt-2">

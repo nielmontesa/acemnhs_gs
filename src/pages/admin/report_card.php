@@ -312,7 +312,6 @@ if (isset($_POST['export'])) {
     }
 
     // Get student information from the database
-    // Get student information from the database
     $sql = "SELECT s.first_name, s.last_name, s.LRN, sec.grade_level, sec.section_name, sec.school_year, s.gender
         FROM students s
         JOIN section sec ON s.section_ID = sec.section_id
@@ -392,7 +391,7 @@ $conn->close();
                 </section>
                 <section class="sidebar-content">
                     <nav class="menu rounded-md">
-                        <section class="menu-section px-4">head
+                        <section class="menu-section px-4">
                             <span class="menu-title">Welcome, <?php echo $_SESSION['username']; ?></span>
                             <ul class="menu-items">
                                 <a href="departments.php">
@@ -505,7 +504,8 @@ $conn->close();
             <form method="post" class="flex gap-2">
                 <button type="submit" name="export" class="btn btn-primary">Export to Excel</button>
                 <h1> </h1>
-                <a href="PDF%20Generator/pdfstructure.php?student_id=<?php echo $student_id; ?>" target="_blank" class="btn btn-primary">Preview in PDF</a>
+                <a href="PDF%20Generator/pdfstructure.php?student_id=<?php echo $student_id; ?>" target="_blank"
+                    class="btn btn-primary">Preview in PDF</a>
             </form>
 
             <table class="table table-striped pt-8">

@@ -55,7 +55,6 @@ function insertTeachers($mysqli, $departments)
         $email = $mysqli->real_escape_string($faker->email);
         $password = password_hash('password123', PASSWORD_DEFAULT);  // Default password
         $department_id = $departments[array_rand($departments)];  // Randomly assign a department
-
         $mysqli->query("INSERT INTO teachers (username, password, first_name, last_name, email, department_id) 
                         VALUES ('$username', '$password', '$first_name', '$last_name', '$email', '$department_id')");
         $teacher_ids[] = $mysqli->insert_id;  // Store the teacher IDs for assigning as advisers
@@ -70,14 +69,15 @@ function insertSections($grade_level, $teachers, $mysqli)
     global $faker;
     global $subjects;
 
-    for ($i = 1; $i <= 5; $i++) {  // 10 sections per grade level
+    for ($i = 1; $i <= 5; $i++) {  // 5 sections per grade level
         $section_name = "Section " . $i;
-        $school_year = "2024-2025";
+        $school_year = "2022-2023";
         $adviser_id = $teachers[array_rand($teachers)];  // Randomly assign a teacher as adviser
+        $is_archived = 1;  // Set the archived status to 1
 
-        // Insert section with adviser
-        $mysqli->query("INSERT INTO section (grade_level, section_name, school_year, adviser_id) 
-                        VALUES ('$grade_level', '$section_name', '$school_year', '$adviser_id')");
+        // Insert section with adviser and is_archived field
+        $mysqli->query("INSERT INTO section (grade_level, section_name, school_year, adviser_id, is_archived) 
+                        VALUES ('$grade_level', '$section_name', '$school_year', '$adviser_id', '$is_archived')");
         $section_id = $mysqli->insert_id;  // Get the section ID
 
         // Insert students for this section
@@ -87,6 +87,7 @@ function insertSections($grade_level, $teachers, $mysqli)
         insertGradesheet($section_id, $mysqli);
     }
 }
+
 
 // Function to insert students
 // Add random akap_status to each student

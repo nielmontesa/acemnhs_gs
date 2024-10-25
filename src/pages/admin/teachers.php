@@ -18,7 +18,7 @@ if (isset($_GET['department_id'])) {
     $stmt->execute();
     $result = $stmt->get_result();
 } else {
-    echo "Department ID is not provided.";
+    
 }
 
 if (isset($_GET['department_id'])) {
@@ -33,7 +33,6 @@ if (isset($_GET['department_id'])) {
     $stmt_department->fetch();
     $stmt_department->close();
 } else {
-    echo "Department ID is not provided.";
     exit; // Exit if the department ID is not provided
 }
 ?>
@@ -179,6 +178,7 @@ if (isset($_GET['department_id'])) {
                                 <input class="input-block input" placeholder="Please enter your password."
                                     name="password" type="password" />
                             </label>
+                             <input type="hidden" name="department_id" value="<?php echo htmlspecialchars($department_id); ?>">
                             <?php
                             // Fetch department data from the database
                             $department_query = "SELECT department_id, department_name FROM department WHERE is_archived = 0";
@@ -321,8 +321,6 @@ if (isset($_GET['department_id'])) {
                                                     </div>
                                                 </div>
                                             </form>
-
-
                                             <label class="btn btn-error" for="modal-<?php echo $teacher_id; ?>">Archive</label>
                                             <input class="modal-state" id="modal-<?php echo $teacher_id; ?>" type="checkbox" />
                                             <div class="modal">
@@ -330,9 +328,10 @@ if (isset($_GET['department_id'])) {
                                                 <div class="modal-content flex flex-col gap-5">
                                                     <label for="modal-<?php echo $teacher_id; ?>"
                                                         class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
-                                                    <h2 class="text-xl">Archive department?</h2>
-                                                    <span>Are you sure you want to Archive this department?</span>
+                                                    <h2 class="text-xl">Archive teacher?</h2>
+                                                    <span>Are you sure you want to Archive this teacher?</span>
                                                     <form method="post" action="../../connection/archive_teacher.php">
+                                                         <input type="hidden" name="department_id" value="<?php echo htmlspecialchars($department_id); ?>">
                                                         <input type="hidden" name="archive_teacher_id"
                                                             value="<?php echo $row['teacher_id']; ?>" />
                                                         <div class="flex gap-3">

@@ -1,5 +1,6 @@
 <?php
 include 'connection.php';
+$department_id = $_POST['department_id'];
 
 // Archive operation
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['archive_teacher_id'])) {
@@ -12,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['archive_teacher_id'])
 
     if ($stmt->execute()) {
         echo "Teacher archived successfully.";
-        header("Location: ../pages/admin/all_teachers.php"); // Redirect after successful archive
+        header("Location: ../pages/admin/teachers.php?department_id=" . $department_id); // Redirect after successful archive
         exit();
     } else {
         echo "Error archiving teacher: " . $conn->error;

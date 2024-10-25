@@ -1,6 +1,6 @@
 <?php
 include 'connection.php';
-
+$department_id = $_POST['department_id']; // Get department ID from the form
 // Check if the form is submitted
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Get form data
@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Execute the statement
     if ($stmt->execute()) {
         echo "New teacher added successfully!";
-        header("Location: ../pages/admin/teachers.php");
+        header("Location: ../pages/admin/teachers.php?department_id=" . $department_id);
         exit(); // Ensure no further code is executed after redirect
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;

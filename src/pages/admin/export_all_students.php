@@ -1,4 +1,6 @@
 <?php
+ob_start(); // Start output buffering to prevent premature output
+
 session_start();
 include '../../connection/connection.php';
 require '../../../vendor/autoload.php'; // PhpSpreadsheet autoload
@@ -63,8 +65,13 @@ while ($row = $schoolYearsResult->fetch_assoc()) {
 // Set the first sheet as active
 $spreadsheet->setActiveSheetIndex(0);
 
-// Remove the first empty sheet
-$spreadsheet->removeSheetByIndex(0);
+// Remove the first empty sheet if there are more than one
+if ($spreadsheet->getSheetCount() > 1) {
+    $spreadsheet->removeSheetByIndex(0);
+}
+
+// Clear any output buffer before sending the file to prevent corruption
+ob_end_clean();
 
 // Create the Excel file
 $writer = new Xlsx($spreadsheet);

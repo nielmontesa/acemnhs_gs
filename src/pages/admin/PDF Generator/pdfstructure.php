@@ -156,7 +156,7 @@ while ($row = mysqli_fetch_assoc($data_attendance)) {
     $pdf->MultiCell(120, 2, $row['LRN']);
 
     $pdf->SetXY(140, 127);
-    $pdf->MultiCell(120, 2, $row['email']);
+    $pdf->MultiCell(120, 2, $row['']);
 
     $pdf->SetXY(200, 127);
     $pdf->MultiCell(120, 2, $row['gender']);
@@ -166,6 +166,9 @@ while ($row = mysqli_fetch_assoc($data_attendance)) {
 
     $pdf->SetXY(190, 136);
     $pdf->MultiCell(120, 2, $row['section_name']);
+
+    $pdf->SetXY(150, 145);
+    $pdf->MultiCell(120, 2, $row['school_year']);
 
     
    

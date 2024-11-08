@@ -42,7 +42,7 @@ while ($row = $schoolYearsResult->fetch_assoc()) {
     $rowIndex = 2;
     while ($student = $studentsResult->fetch_assoc()) {
         $akapStatus = $student['akap_status'];
-        $sheet->setCellValue('A' . $rowIndex, $student['LRN'])
+        $sheet->setCellValue('A' . $rowIndex, (int) $student['LRN'])
             ->setCellValue('B' . $rowIndex, $student['first_name'])
             ->setCellValue('C' . $rowIndex, $student['last_name'])
             ->setCellValue('D' . $rowIndex, $student['email'])

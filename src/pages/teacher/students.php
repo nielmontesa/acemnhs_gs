@@ -312,8 +312,8 @@ if ($section_result && $section_result->num_rows > 0) {
                         <tr>
                             <th>No.</th>
                             <th>LRN</th>
-                            <th>First Name</th>
                             <th>Last Name</th>
+                            <th>First Name</th>
                             <th>Parent E-mail</th>
                             <th>Gender</th>
                             <th>AKAP Status</th>
@@ -365,8 +365,8 @@ if ($section_result && $section_result->num_rows > 0) {
                                             ?>
                                         </th>
                                         <th><?php echo $student['LRN']; ?></th>
-                                        <th><?php echo $student['first_name']; ?></th>
-                                        <td><?php echo $student['last_name']; ?></td>
+                                        <th><?php echo $student['last_name']; ?></th>
+                                        <td><?php echo $student['first_name']; ?></td>
                                         <td><?php echo $student['email']; ?></td>
                                         <td><?php echo $student['gender']; ?></td>
                                         <td><?php echo $student['akap_status']; ?></td>

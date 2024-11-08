@@ -140,8 +140,8 @@ $schoolYearsResult = $conn->query($schoolYearsQuery);
                     <tr>
                         <th>No.</th>
                         <th>LRN</th>
-                        <th>First Name</th>
                         <th>Last Name</th>
+                        <th>First Name</th>
                         <th>Parent E-mail</th>
                         <th>Gender</th>
                         <th>AKAP Status</th>

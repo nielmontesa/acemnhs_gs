@@ -169,8 +169,8 @@ if (isset($_GET['department_id'])) {
                                     name="teachermail" type="email" />
                             </label>
                             <label for="username">
-                                <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Username</span>
-                                <input class="input-block input" placeholder="Please enter your username."
+                                <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Teacher Number</span>
+                                <input class="input-block input" placeholder="Please enter the teacher number."
                                     name="username" type="text" />
                             </label>
                             <label for="Password">
@@ -219,7 +219,7 @@ if (isset($_GET['department_id'])) {
                                 <th>Last Name</th>
                                 <th>Department</th>
                                 <th>E-mail</th>
-                                <th>Username</th>
+                                <th>Teacher Number</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -286,8 +286,8 @@ if (isset($_GET['department_id'])) {
                                             
                                                             <!-- Username -->
                                                             <label for="username-<?php echo $teacher_id; ?>">
-                                                                <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Username</span><br>
-                                                                <input class="input-block input" placeholder="Please enter your username." name="username"
+                                                                <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Teacher Number</span><br>
+                                                                <input class="input-block input" placeholder="Please enter the teacher number." name="username"
                                                                     type="text" id="username-<?php echo $teacher_id; ?>" value="<?php echo $row['username']; ?>" />
                                                             </label>
                                             

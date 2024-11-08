@@ -57,8 +57,8 @@ $studentsResult = $conn->query($studentsQuery);
                 ?>
             </th>
             <th><?php echo $student['LRN']; ?></th>
-            <th><?php echo $student['first_name']; ?></th>
-            <td><?php echo $student['last_name']; ?></td>
+            <th><?php echo $student['last_name']; ?></th>
+            <td><?php echo $student['first_name']; ?></td>
             <td><?php echo $student['email']; ?></td>
             <td><?php echo $student['gender']; ?></td>
             <td><?php echo $student['akap_status']; ?></td>

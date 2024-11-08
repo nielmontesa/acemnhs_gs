@@ -49,7 +49,8 @@ if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
                 </div>
                 <div class="flex flex-col gap-2">
                     <label for="username">
-                        <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Username</span>
+                        <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Username or Teacher
+                            No.</span>
                         <input class="input-block input" placeholder="Please enter your username." name="username"
                             type="text" required />
                     </label>

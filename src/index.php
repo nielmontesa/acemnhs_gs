@@ -2,7 +2,7 @@
 session_start();
 
 // If the user is already logged in, redirect them based on their role
-if (isset($_SESSION['status']) && $_SESSION['status'] === 'valid') {
+if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
     if ($_SESSION['role'] === 'admin') {
         header('Location: pages/admin/departments.php');
     } elseif ($_SESSION['role'] === 'teacher') {
@@ -19,6 +19,11 @@ if (isset($_SESSION['status']) && $_SESSION['status'] === 'valid') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="color-scheme" content="light only">
+
+    <meta http-equiv="Cache-Control" content="no-store">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
     <title>Antonio C. Esguerra MNHS</title>
     <link rel="stylesheet" href='styles/tailwind.css'>
     <link rel="stylesheet" href='styles/style.css'>
@@ -44,7 +49,8 @@ if (isset($_SESSION['status']) && $_SESSION['status'] === 'valid') {
                 </div>
                 <div class="flex flex-col gap-2">
                     <label for="username">
-                        <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Username</span>
+                        <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Username or Teacher
+                            No.</span>
                         <input class="input-block input" placeholder="Please enter your username." name="username"
                             type="text" required />
                     </label>

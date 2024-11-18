@@ -1,6 +1,29 @@
 <?php
 // Include your database connection
+// Include your database connection
+session_start();
 include '../../connection/connection.php';
+
+// Get the section ID from the URL
+$section_id = $_GET['section_id'] ?? null;
+
+// Check if section ID is available
+if ($section_id === null) {
+    die('Error: Section ID is missing.');
+}
+
+// Query to check if all gradesheets are finalized
+$sql = "SELECT COUNT(*) AS total, SUM(is_finalized) AS finalized_count FROM gradesheet WHERE section_id = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $section_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$row = $result->fetch_assoc();
+
+$total_gradesheets = $row['total'];
+$finalized_count = $row['finalized_count'];
+
+$stmt->close();
 
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -14,14 +37,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     unset($_SESSION['section_id']);
     unset($_SESSION['gradesheet_id']);
 
-    // Use the section ID from the session
-    $section_id = $_GET['section_id'] ?? null;
-
-    // Check if section ID is available
-    if ($section_id === null) {
-        die('Error: Section ID is missing.');
-    }
-
     // SQL query to insert student data, including the section ID and Akap Status
     $sql = "INSERT INTO students (LRN, first_name, last_name, email, gender, akap_status, section_id)
             VALUES ('$student_lrn', '$student_firstname', '$student_lastname', '$parent_email', '$gender', '$akap_status', '$section_id')";
@@ -31,6 +46,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
+}
+
+
+
+// Check if section_id is set in the URL
+if (isset($_GET['section_id'])) {
+    $section_id = $conn->real_escape_string($_GET['section_id']);
+
+    // SQL query to fetch existing section data
+    $sql = "SELECT section_name, grade_level, school_year, adviser_id FROM section WHERE section_id='$section_id'";
+    $result = $conn->query($sql);
+
+    // Check if section data exists
+    if ($result->num_rows > 0) {
+        $section = $result->fetch_assoc();
+    } else {
+        // Handle the case where no section data is found
+        die("No section found with the given ID.");
+    }
+} else {
+    // Handle the case where section_id is not set
+    die("No section ID specified.");
+}
+
+// Fetch the adviser_id from the sections table
+$section_sql = "SELECT adviser_id FROM section WHERE section_ID = '$section_id'";
+$section_result = $conn->query($section_sql);
+
+if ($section_result && $section_result->num_rows > 0) {
+    $section_row = $section_result->fetch_assoc();
+    $adviser_id = $section_row['adviser_id']; // Get the adviser ID
+} else {
+    echo "Section not found.";
+    exit();
 }
 ?>
 
@@ -67,7 +116,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <section class="sidebar-content">
                     <nav class="menu rounded-md">
                         <section class="menu-section px-4">
-                            <span class="menu-title">Welcome, Username</span>
+                            <span class="menu-title">Welcome, <?php echo $_SESSION['username']; ?></span>
                             <ul class="menu-items">
                                 <a href="departments.php">
                                     <li class="menu-item">
@@ -116,7 +165,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 </div>
 
                                 <div class="flex flex-col">
-                                    <span>Username</span>
+                                    <span><?php echo $_SESSION['username']; ?></span>
                                     <span class="text-xs">Administrator</span>
                                 </div>
                             </div>
@@ -181,68 +230,185 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </p>
 
             <div class="flex justify-between items-center mt-4" style="justify-content: space-between;">
-                <form method="POST">
-                    <input type="checkbox" id="drawer-right" class="drawer-toggle" />
-                    <label for="drawer-right" class="btn btn-primary">Add Student</label>
-                    <label class="overlay" for="drawer-right"></label>
-                    <div class="drawer drawer-right">
-                        <div class="drawer-content pt-10 flex flex-col h-full">
-                            <label for="drawer-right"
-                                class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
-                            <div>
-                                <h2 class="text-xl font-medium">Add Student</h2>
-                                <label for="studentlrn">
-                                    <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">LRN</span>
-                                    <input class="input-block input" placeholder="Please enter the LRN."
-                                        name="studentlrn" type="text" maxlength="12" required />
-                                </label>
-                                <label for="studentfirstname">
-                                    <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Student First
-                                        Name</span>
-                                    <input class="input-block input" placeholder="Please enter first name."
-                                        name="studentfirstname" type="text" required />
-                                </label>
-                                <label for="studentlastname">
-                                    <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Student Last
-                                        Name</span>
-                                    <input class="input-block input" placeholder="Please enter last name."
-                                        name="studentlastname" type="text" required />
-                                </label>
-                                <label for="email">
-                                    <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Parent
-                                        E-mail</span>
-                                    <input class="input-block input" placeholder="Please enter parent e-mail."
-                                        name="email" type="email" required />
-                                </label>
-                                <label for="gender">
-                                    <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Gender</span>
-                                    <select class="select" name="gender" required>
-                                        <option value="">Select Gender...</option>
-                                        <option value="Male">Male</option>
-                                        <option value="Female">Female</option>
-                                    </select>
-                                </label>
-                                <label for="akap_status">
-                                    <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Akap
-                                        Status</span>
-                                    <select class="select" name="akap_status" required>
-                                        <option value="Inactive">Inactive</option>
-                                        <option value="Active">Active</option>
-                                        <option value="Solved">Solved</option>
-                                    </select>
-                                </label>
-                            </div>
-                            <div class="h-full flex flex-row justify-end items-end gap-2">
-                                <button type="button" class="btn btn-ghost"
-                                    onclick="document.getElementById('drawer-right').checked = false;">Cancel</button>
-                                <button type="submit" class="btn btn-primary">Create</button>
+                <div class=" flex gap-2 items-center">
+                    <form method="POST">
+                        <input type="checkbox" id="drawer-right" class="drawer-toggle" />
+                        <label for="drawer-right" class="btn btn-primary">Add Student</label>
+                        <label class="overlay" for="drawer-right"></label>
+                        <div class="drawer drawer-right">
+                            <div class="drawer-content pt-10 flex flex-col h-full">
+                                <label for="drawer-right"
+                                    class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
+                                <div>
+                                    <h2 class="text-xl font-medium">Add Student</h2>
+                                    <label for="studentlrn">
+                                        <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">LRN</span>
+                                        <input class="input-block input" placeholder="Please enter the LRN."
+                                            name="studentlrn" type="text" maxlength="12" required />
+                                    </label>
+                                    <label for="studentfirstname">
+                                        <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Student First
+                                            Name</span>
+                                        <input class="input-block input" placeholder="Please enter first name."
+                                            name="studentfirstname" type="text" required />
+                                    </label>
+                                    <label for="studentlastname">
+                                        <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Student Last
+                                            Name</span>
+                                        <input class="input-block input" placeholder="Please enter last name."
+                                            name="studentlastname" type="text" required />
+                                    </label>
+                                    <label for="email">
+                                        <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Parent
+                                            E-mail</span>
+                                        <input class="input-block input" placeholder="Please enter parent e-mail."
+                                            name="email" type="email" required />
+                                    </label>
+                                    <label for="gender">
+                                        <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Gender</span>
+                                        <select class="select" name="gender" required>
+                                            <option value="">Select Gender...</option>
+                                            <option value="Male">Male</option>
+                                            <option value="Female">Female</option>
+                                        </select>
+                                    </label>
+                                    <label for="akap_status">
+                                        <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Akap
+                                            Status</span>
+                                        <select class="select" name="akap_status" required>
+                                            <option value="Inactive">Inactive</option>
+                                            <option value="Active">Active</option>
+                                            <option value="Solved">Solved</option>
+                                        </select>
+                                    </label>
+                                </div>
+                                <div class="h-full flex flex-row justify-end items-end gap-2">
+                                    <button type="button" class="btn btn-ghost"
+                                        onclick="document.getElementById('drawer-right').checked = false;">Cancel</button>
+                                    <button type="submit" class="btn btn-primary">Create</button>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </form>
+                    <form action="../../connection/edit_section.php" method="POST">
+                        <input type="hidden" name="section_id" value="<?php echo $section_id; ?>" />
+                        <!-- Hidden field for section ID -->
+                        <input type="checkbox" id="drawer-edit-section" class="drawer-toggle" />
+                        <label for="drawer-edit-section" class="btn btn-primary">Edit Section</label>
+                        <label class="overlay" for="drawer-edit-section"></label>
+                        <div class="drawer drawer-right">
+                            <div class="drawer-content pt-10 flex flex-col h-full">
+                                <label for="drawer-edit-section"
+                                    class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
+                                <div>
+                                    <h2 class="text-xl font-medium">Edit Section</h2>
+                                    <label for="sectionname">
+                                        <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Section
+                                            Name</span>
+                                        <input class="input-block input" placeholder="Enter section name"
+                                            name="sectionname" type="text"
+                                            value="<?php echo htmlspecialchars($section['section_name']); ?>"
+                                            required />
+                                    </label>
+                                    <label for="gradelevel">
+                                        <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Grade
+                                            Level</span>
+                                        <select class="input-block input" name="gradelevel" required>
+                                            <option value="" disabled>Select grade level</option>
+                                            <option value="7" <?php echo ($section['grade_level'] == 7) ? 'selected' : ''; ?>>Grade 7</option>
+                                            <option value="8" <?php echo ($section['grade_level'] == 8) ? 'selected' : ''; ?>>Grade 8</option>
+                                            <option value="9" <?php echo ($section['grade_level'] == 9) ? 'selected' : ''; ?>>Grade 9</option>
+                                            <option value="10" <?php echo ($section['grade_level'] == 10) ? 'selected' : ''; ?>>Grade 10
+                                            </option>
+                                        </select>
+                                    </label>
+                                    <label for="schoolyear">
+                                        <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">School
+                                            Year</span>
+                                        <div class="flex gap-2 items-center justify-center">
+                                            <input class="input" maxlength="4" placeholder="Start Year" name="startyear"
+                                                value="<?php echo htmlspecialchars(substr($section['school_year'], 0, 4)); ?>" />
+                                            <span> to </span>
+                                            <input class="input" maxlength="4" placeholder="End Year" name="endyear"
+                                                value="<?php echo htmlspecialchars(substr($section['school_year'], 5, 4)); ?>" />
+                                        </div>
+                                    </label>
+                                    <label for="advisername">
+                                        <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Adviser
+                                            Name</span>
+                                        <select class="input-block input" name="advisername" required>
+                                            <option value="" disabled>Select adviser</option>
+                                            <?php
+                                            // Query the 'teachers' table
+                                            $teachersql = "SELECT teacher_id, first_name, last_name FROM teachers WHERE is_archived = 0";
+                                            $result = $conn->query($teachersql);
+
+                                            // Loop through results and generate options
+                                            if ($result->num_rows > 0) {
+                                                while ($row = $result->fetch_assoc()) {
+                                                    $selected = ($row['teacher_id'] == $section['adviser_id']) ? 'selected' : '';
+                                                    echo '<option value="' . $row["teacher_id"] . '" ' . $selected . '>' . $row["first_name"] . ' ' . $row["last_name"] . '</option>';
+                                                }
+                                            } else {
+                                                echo '<option value="" disabled>No advisers found</option>';
+                                            }
+                                            ?>
+                                        </select>
+                                    </label>
+                                </div>
+                                <div class="h-full flex flex-row justify-end items-end gap-2">
+                                    <button type="reset" class="btn btn-ghost">Cancel</button>
+                                    <button type="submit" class="btn btn-primary">Update</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
                     <a href="gradesheet.php?section_id=<?php echo $section_id; ?>"
                         class="btn btn-outline-primary">Gradesheets</a>
-                </form>
 
+                    <?php
+                    // Assuming you have already established a database connection
+                    include '../../connection/connection.php';
+
+                    // Get the section ID from the URL
+                    $section_id = $_GET['section_id'] ?? null;
+
+                    // Check if section ID is available
+                    if ($section_id === null) {
+                        die('Error: Section ID is missing.');
+                    }
+
+                    // Fetch the section information along with the 'is_locked' status
+                    $sql = "SELECT section_name, grade_level, is_locked FROM section WHERE section_id = ?";
+                    $stmt = $conn->prepare($sql);
+                    $stmt->bind_param('i', $section_id);
+                    $stmt->execute();
+                    $result = $stmt->get_result();
+
+                    // Check if the section exists
+                    if ($result->num_rows > 0) {
+                        $section = $result->fetch_assoc();
+                        $section_name = $section['section_name'];
+                        $grade_level = $section['grade_level'];
+                        $is_locked = $section['is_locked'];
+
+                        // Checkbox for is_locked with specified format
+                        echo '<div>';
+                        echo '<label class="flex cursor-pointer gap-2">';
+                        echo '<input type="checkbox" class="checkbox" name="is_locked" value="1" id="lockCheckbox" ' . ($is_locked ? 'checked' : '') . ' />';
+                        echo '<span>Lock Gradesheets</span>';
+                        echo '</label>';
+                        echo '</div>';
+                    } else {
+                        echo "<h1>Section not found</h1>";
+                    }
+
+                    // Close the statement and connection
+                    $stmt->close();
+                    $conn->close();
+                    ?>
+                </div>
                 <div class="flex gap-4 items-center content-center">
                     <div class="flex gap-4 items-center">
                         <span class="text-sm">Filter Gender:</span>
@@ -278,8 +444,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <tr>
                             <th>No.</th>
                             <th>LRN</th>
-                            <th>First Name</th>
                             <th>Last Name</th>
+                            <th>First Name</th>
                             <th>Parent E-mail</th>
                             <th>Gender</th>
                             <th>AKAP Status</th>
@@ -331,15 +497,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                             ?>
                                         </th>
                                         <th><?php echo $student['LRN']; ?></th>
-                                        <th><?php echo $student['first_name']; ?></th>
-                                        <td><?php echo $student['last_name']; ?></td>
+                                        <th><?php echo $student['last_name']; ?></th>
+                                        <td><?php echo $student['first_name']; ?></td>
                                         <td><?php echo $student['email']; ?></td>
                                         <td><?php echo $student['gender']; ?></td>
                                         <td><?php echo $student['akap_status']; ?></td>
                                         <td>
                                             <!-- Dynamic Drawer Toggle -->
                                             <input type="checkbox" id="<?php echo $drawer_id; ?>" class="drawer-toggle" />
-                                            <label for="<?php echo $drawer_id; ?>" class="btn btn-secondary">Edit</label>
+                                            <label for="<?php echo $drawer_id; ?>" class="btn btn-secondary">View</label>
                                             <label class="overlay" for="<?php echo $drawer_id; ?>"></label>
 
                                             <!-- Drawer Content -->
@@ -418,6 +584,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                         Solved</option>
                                                                 </select>
                                                             </label>
+
+                                                            <?php
+                                                            $student_id = $student['student_id']; // Assume this is dynamically set based on the current student
+                                                            ?>
+
+                                                            <label for="teacher_remarks">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Teacher
+                                                                    Remarks</span>
+                                                                <br>
+                                                                <textarea textarea class="textarea"
+                                                                    placeholder="Please enter remarks from the teacher."
+                                                                    name="teacher_remarks"
+                                                                    rows="4"><?php echo htmlspecialchars($student['teacher_remarks']); ?></textarea>
+                                                            </label>
+                                                            <a href="../email/email_form.php?email=<?php echo urlencode($student['email']); ?>&name=<?php echo urlencode($student['first_name'] . ' ' . $student['last_name']); ?>&adviser_id=<?php echo urlencode($adviser_id); ?>&section_id=<?php echo urlencode($section_id); ?>"
+                                                                class="btn btn-outline-error"
+                                                                title="This will redirect to the email form with the student's email, name, and adviser ID, while the current page only has the section ID.">Contact
+                                                                Parent</a>
+                                                            <a href="report_card.php?student_id=<?php echo $student_id; ?>"
+                                                                class="btn btn-outline-primary">View Report Card</a>
+
+                                                            <span class="flex items-center gap-2">
+                                                                <?php if ($total_gradesheets > 0 && $finalized_count == $total_gradesheets): ?>
+                                                                    <span class="dot dot-success"></span>
+                                                                    <span>All gradesheets finalized!</span>
+                                                                <?php else: ?>
+                                                                    <span class="dot dot-error"></span>
+                                                                    <span>Some gradesheets are not yet finalized.</span>
+                                                                <?php endif; ?>
+                                                            </span>
+
 
                                                             <div class="h-full flex flex-row justify-end items-end gap-2">
                                                                 <button type="button" class="btn btn-ghost"
@@ -464,9 +662,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         </td>
                                     </tr>
                                 <?php endwhile; ?>
+                            <?php else: ?>
+                                <tr>
+                                    <td colspan="8" class="text-center">No students found in this view.</td>
+                                </tr>
                             <?php endif;
                         } else {
-                            echo "<p>No section selected.</p>";
+                            echo "<tr><td colspan='7'>No students found in this view.</td></tr>";
                         }
                         ?>
                     </tbody>
@@ -491,7 +693,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 $current_gender = 'Male';  // Track the current gender
                         
                                 while ($student = $result->fetch_assoc()):
-                                    $drawer_id = "drawer-right-" . $student['student_id'];
+                                    $drawer_id = "drawer-right-1" . $student['student_id'];
 
                                     // Reset counter when switching from male to female or vice versa
                                     if ($student['gender'] !== $current_gender) {
@@ -515,15 +717,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                             ?>
                                         </th>
                                         <th><?php echo $student['LRN']; ?></th>
-                                        <th><?php echo $student['first_name']; ?></th>
-                                        <td><?php echo $student['last_name']; ?></td>
+                                        <th><?php echo $student['last_name']; ?></th>
+                                        <td><?php echo $student['first_name']; ?></td>
                                         <td><?php echo $student['email']; ?></td>
                                         <td><?php echo $student['gender']; ?></td>
                                         <td><?php echo $student['akap_status']; ?></td>
                                         <td>
                                             <!-- Dynamic Drawer Toggle -->
                                             <input type="checkbox" id="<?php echo $drawer_id; ?>" class="drawer-toggle" />
-                                            <label for="<?php echo $drawer_id; ?>" class="btn btn-secondary">Edit</label>
+                                            <label for="<?php echo $drawer_id; ?>" class="btn btn-secondary">View</label>
                                             <label class="overlay" for="<?php echo $drawer_id; ?>"></label>
 
                                             <!-- Drawer Content -->
@@ -602,6 +804,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                         Solved</option>
                                                                 </select>
                                                             </label>
+
+                                                            <?php
+                                                            $student_id = $student['student_id']; // Assume this is dynamically set based on the current student
+                                                            ?>
+
+                                                            <label for="teacher_remarks">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Teacher
+                                                                    Remarks</span>
+                                                                <br>
+                                                                <textarea textarea class="textarea"
+                                                                    placeholder="Please enter remarks from the teacher."
+                                                                    name="teacher_remarks"
+                                                                    rows="4"><?php echo htmlspecialchars($student['teacher_remarks']); ?></textarea>
+                                                            </label>
+                                                            <a href="../email/email_form.php?email=<?php echo urlencode($student['email']); ?>&name=<?php echo urlencode($student['first_name'] . ' ' . $student['last_name']); ?>&adviser_id=<?php echo urlencode($adviser_id); ?>&section_id=<?php echo urlencode($section_id); ?>"
+                                                                class="btn btn-outline-error"
+                                                                title="This will redirect to the email form with the student's email, name, and adviser ID, while the current page only has the section ID.">Contact
+                                                                Parent</a>
+
+                                                            <a href="report_card.php?student_id=<?php echo $student_id; ?>"
+                                                                class="btn btn-outline-primary">View Report Card</a>
+
+                                                            <span class="flex items-center gap-2">
+                                                                <?php if ($total_gradesheets > 0 && $finalized_count == $total_gradesheets): ?>
+                                                                    <span class="dot dot-success"></span>
+                                                                    <span>All gradesheets finalized!</span>
+                                                                <?php else: ?>
+                                                                    <span class="dot dot-error"></span>
+                                                                    <span>Some gradesheets are not yet finalized.</span>
+                                                                <?php endif; ?>
+                                                            </span>
 
                                                             <div class="h-full flex flex-row justify-end items-end gap-2">
                                                                 <button type="button" class="btn btn-ghost"
@@ -675,7 +909,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 $current_gender = 'Male';  // Track the current gender
                         
                                 while ($student = $result->fetch_assoc()):
-                                    $drawer_id = "drawer-right-" . $student['student_id'];
+                                    $drawer_id = "drawer-right-2-" . $student['student_id'];
 
                                     // Reset counter when switching from male to female or vice versa
                                     if ($student['gender'] !== $current_gender) {
@@ -699,15 +933,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                             ?>
                                         </th>
                                         <th><?php echo $student['LRN']; ?></th>
-                                        <th><?php echo $student['first_name']; ?></th>
-                                        <td><?php echo $student['last_name']; ?></td>
+                                        <th><?php echo $student['last_name']; ?></th>
+                                        <td><?php echo $student['first_name']; ?></td>
                                         <td><?php echo $student['email']; ?></td>
                                         <td><?php echo $student['gender']; ?></td>
                                         <td><?php echo $student['akap_status']; ?></td>
                                         <td>
                                             <!-- Dynamic Drawer Toggle -->
                                             <input type="checkbox" id="<?php echo $drawer_id; ?>" class="drawer-toggle" />
-                                            <label for="<?php echo $drawer_id; ?>" class="btn btn-secondary">Edit</label>
+                                            <label for="<?php echo $drawer_id; ?>" class="btn btn-secondary">View</label>
                                             <label class="overlay" for="<?php echo $drawer_id; ?>"></label>
 
                                             <!-- Drawer Content -->
@@ -787,6 +1021,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                 </select>
                                                             </label>
 
+                                                            <?php
+                                                            $student_id = $student['student_id']; // Assume this is dynamically set based on the current student
+                                                            ?>
+
+                                                            <label for="teacher_remarks">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Teacher
+                                                                    Remarks</span>
+                                                                <br>
+                                                                <textarea textarea class="textarea"
+                                                                    placeholder="Please enter remarks from the teacher."
+                                                                    name="teacher_remarks"
+                                                                    rows="4"><?php echo htmlspecialchars($student['teacher_remarks']); ?></textarea>
+                                                            </label>
+                                                            <a href="../email/email_form.php?email=<?php echo urlencode($student['email']); ?>&name=<?php echo urlencode($student['first_name'] . ' ' . $student['last_name']); ?>&adviser_id=<?php echo urlencode($adviser_id); ?>&section_id=<?php echo urlencode($section_id); ?>"
+                                                                class="btn btn-outline-error"
+                                                                title="This will redirect to the email form with the student's email, name, and adviser ID, while the current page only has the section ID.">Contact
+                                                                Parent</a>
+
+                                                            <a href="report_card.php?student_id=<?php echo $student_id; ?>"
+                                                                class="btn btn-outline-primary">View Report Card</a>
+
+                                                            <span class="flex items-center gap-2">
+                                                                <?php if ($total_gradesheets > 0 && $finalized_count == $total_gradesheets): ?>
+                                                                    <span class="dot dot-success"></span>
+                                                                    <span>All gradesheets finalized!</span>
+                                                                <?php else: ?>
+                                                                    <span class="dot dot-error"></span>
+                                                                    <span>Some gradesheets are not yet finalized.</span>
+                                                                <?php endif; ?>
+                                                            </span>
+
                                                             <div class="h-full flex flex-row justify-end items-end gap-2">
                                                                 <button type="button" class="btn btn-ghost"
                                                                     onclick="document.getElementById('<?php echo $drawer_id; ?>').checked = false;">Cancel</button>
@@ -802,15 +1068,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                             <!-- Archive Button and Modal -->
                                             <label class="btn btn-error"
-                                                for="modal-1-<?php echo $student['student_id']; ?>">Archive</label>
-                                            <input class="modal-state" id="modal-1-<?php echo $student['student_id']; ?>"
+                                                for="modal-60-<?php echo $student['student_id']; ?>">Archive</label>
+                                            <input class="modal-state" id="modal-60-<?php echo $student['student_id']; ?>"
                                                 type="checkbox" />
                                             <div class="modal">
                                                 <label class="modal-overlay"
                                                     for="modal-1-<?php echo $student['student_id']; ?>"></label>
                                                 <form method="POST" action="../../connection/archive_student.php"
                                                     class="modal-content flex flex-col gap-5">
-                                                    <label for="modal-1-<?php echo $student['student_id']; ?>"
+                                                    <label for="modal-60-<?php echo $student['student_id']; ?>"
                                                         class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
                                                     <h2 class="text-xl">Archive Student?</h2>
                                                     <span>Are you sure you want to archive this student?</span>
@@ -824,7 +1090,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                         value="<?php echo $_GET['section_id']; ?>" />
                                                     <div class="flex gap-3">
                                                         <button class="btn btn-error btn-block" type="submit">Archive</button>
-                                                        <label for="modal-1-<?php echo $student['student_id']; ?>"
+                                                        <label for="modal-60-<?php echo $student['student_id']; ?>"
                                                             class="btn btn-block">Cancel</label>
                                                     </div>
                                                 </form>
@@ -859,7 +1125,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 $current_gender = 'Male';  // Track the current gender
                         
                                 while ($student = $result->fetch_assoc()):
-                                    $drawer_id = "drawer-right-" . $student['student_id'];
+                                    $drawer_id = "drawer-right-3-" . $student['student_id'];
 
                                     // Reset counter when switching from male to female or vice versa
                                     if ($student['gender'] !== $current_gender) {
@@ -883,15 +1149,230 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                             ?>
                                         </td>
                                         <th><?php echo $student['LRN']; ?></th>
-                                        <th><?php echo $student['first_name']; ?></th>
-                                        <td><?php echo $student['last_name']; ?></td>
+                                        <th><?php echo $student['last_name']; ?></th>
+                                        <td><?php echo $student['first_name']; ?></td>
                                         <td><?php echo $student['email']; ?></td>
                                         <td><?php echo $student['gender']; ?></td>
                                         <td><?php echo $student['akap_status']; ?></td>
                                         <td>
                                             <!-- Dynamic Drawer Toggle -->
                                             <input type="checkbox" id="<?php echo $drawer_id; ?>" class="drawer-toggle" />
-                                            <label for="<?php echo $drawer_id; ?>" class="btn btn-secondary">Edit</label>
+                                            <label for="<?php echo $drawer_id; ?>" class="btn btn-secondary">View</label>
+                                            <label class="overlay" for="<?php echo $drawer_id; ?>"></label>
+
+                                            <!-- Drawer Content -->
+                                            <div class="drawer drawer-right">
+                                                <form method="POST" action="../../connection/update_student.php"
+                                                    class="drawer-content pt-10 flex flex-col h-full">
+                                                    <label for="<?php echo $drawer_id; ?>"
+                                                        class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
+                                                    <div>
+                                                        <h2 class="text-xl font-medium">Edit Student</h2>
+                                                        <div class="flex flex-col gap-2">
+                                                            <label for="student_lrn">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">LRN</span>
+                                                                <br>
+                                                                <input class="input-block input" placeholder="Please enter the LRN."
+                                                                    name="student_lrn" type="text"
+                                                                    value="<?php echo htmlspecialchars($student['LRN']); ?>"
+                                                                    required />
+                                                            </label>
+                                                            <label for="student_firstname">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Student
+                                                                    First
+                                                                    Name</span>
+                                                                <br>
+                                                                <input class="input-block input"
+                                                                    placeholder="Please enter first name." name="student_firstname"
+                                                                    type="text"
+                                                                    value="<?php echo htmlspecialchars($student['first_name']); ?>"
+                                                                    required />
+                                                            </label>
+                                                            <label for="student_lastname">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Student
+                                                                    Last
+                                                                    Name</span>
+                                                                <br>
+                                                                <input class="input-block input"
+                                                                    placeholder="Please enter last name." name="student_lastname"
+                                                                    type="text"
+                                                                    value="<?php echo htmlspecialchars($student['last_name']); ?>"
+                                                                    required />
+                                                            </label>
+                                                            <label for="email">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">E-mail</span>
+                                                                <br>
+                                                                <input class="input-block input" placeholder="Please enter e-mail."
+                                                                    name="email" type="email"
+                                                                    value="<?php echo htmlspecialchars($student['email']); ?>"
+                                                                    required />
+                                                            </label>
+                                                            <label for="gender">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Gender</span>
+                                                                <br>
+                                                                <select class="select" name="gender" required>
+                                                                    <option value="">Select Gender...</option>
+                                                                    <option value="Male" <?php echo ($student['gender'] == 'Male') ? 'selected' : ''; ?>>
+                                                                        Male</option>
+                                                                    <option value="Female" <?php echo ($student['gender'] == 'Female') ? 'selected' : ''; ?>>Female</option>
+                                                                </select>
+                                                            </label>
+                                                            <label for="akap_status">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">AKAP</span>
+                                                                <br>
+                                                                <select class="select" name="akap_status" required>
+                                                                    <option value="">Select Status...</option>
+                                                                    <option value="Active" <?php echo ($student['akap_status'] == 'Active') ? 'selected' : ''; ?>>
+                                                                        Active</option>
+                                                                    <option value="Inactive" <?php echo ($student['akap_status'] == 'Inactive') ? 'selected' : ''; ?>>
+                                                                        Inactive</option>
+                                                                    <option value="Solved" <?php echo ($student['akap_status'] == 'Solved') ? 'selected' : ''; ?>>
+                                                                        Solved</option>
+                                                                </select>
+                                                            </label>
+                                                            <?php
+                                                            $student_id = $student['student_id']; // Assume this is dynamically set based on the current student
+                                                            ?>
+
+                                                            <label for="teacher_remarks">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Teacher
+                                                                    Remarks</span>
+                                                                <br>
+                                                                <textarea textarea class="textarea"
+                                                                    placeholder="Please enter remarks from the teacher."
+                                                                    name="teacher_remarks"
+                                                                    rows="4"><?php echo htmlspecialchars($student['teacher_remarks']); ?></textarea>
+                                                            </label>
+                                                            <a href="../email/email_form.php?email=<?php echo urlencode($student['email']); ?>&name=<?php echo urlencode($student['first_name'] . ' ' . $student['last_name']); ?>&adviser_id=<?php echo urlencode($adviser_id); ?>&section_id=<?php echo urlencode($section_id); ?>"
+                                                                class="btn btn-outline-error"
+                                                                title="This will redirect to the email form with the student's email, name, and adviser ID, while the current page only has the section ID.">Contact
+                                                                Parent</a>
+
+                                                            <a href="report_card.php?student_id=<?php echo $student_id; ?>"
+                                                                class="btn btn-outline-primary">View Report Card</a>
+
+                                                            <span class="flex items-center gap-2">
+                                                                <?php if ($total_gradesheets > 0 && $finalized_count == $total_gradesheets): ?>
+                                                                    <span class="dot dot-success"></span>
+                                                                    <span>All gradesheets finalized!</span>
+                                                                <?php else: ?>
+                                                                    <span class="dot dot-error"></span>
+                                                                    <span>Some gradesheets are not yet finalized.</span>
+                                                                <?php endif; ?>
+                                                            </span>
+
+                                                            <div class="h-full flex flex-row justify-end items-end gap-2">
+                                                                <button type="button" class="btn btn-ghost"
+                                                                    onclick="document.getElementById('<?php echo $drawer_id; ?>').checked = false;">Cancel</button>
+                                                                <button type="submit" class="btn btn-primary">Update</button>
+                                                                <input type="hidden" name="student_id"
+                                                                    value="<?php echo htmlspecialchars($student['student_id']); ?>" />
+                                                                <!-- Hidden field for student ID -->
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+
+                                            <!-- Archive Button and Modal -->
+                                            <label class="btn btn-error"
+                                                for="modal-61-<?php echo $student['student_id']; ?>">Archive</label>
+                                            <input class="modal-state" id="modal-61-<?php echo $student['student_id']; ?>"
+                                                type="checkbox" />
+                                            <div class="modal">
+                                                <label class="modal-overlay"
+                                                    for="modal-61-<?php echo $student['student_id']; ?>"></label>
+                                                <form method="POST" action="../../connection/archive_student.php"
+                                                    class="modal-content flex flex-col gap-5">
+                                                    <label for="modal-61-<?php echo $student['student_id']; ?>"
+                                                        class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
+                                                    <h2 class="text-xl">Archive Student?</h2>
+                                                    <span>Are you sure you want to archive this student?</span>
+
+                                                    <!-- Hidden input to send student ID -->
+                                                    <input type="hidden" name="student_id"
+                                                        value="<?php echo $student['student_id']; ?>" />
+
+                                                    <!-- Hidden input to send the current section ID -->
+                                                    <input type="hidden" name="section_id"
+                                                        value="<?php echo $_GET['section_id']; ?>" />
+                                                    <div class="flex gap-3">
+                                                        <button class="btn btn-error btn-block" type="submit">Archive</button>
+                                                        <label for="modal-61-<?php echo $student['student_id']; ?>"
+                                                            class="btn btn-block">Cancel</label>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <?php endwhile; ?>
+                            <?php endif;
+                        } else {
+                            echo "<p>No section selected.</p>";
+                        }
+                        ?>
+                    </tbody>
+                    <tbody data-type="male" data-akap="all">
+                        <?php
+                        include '../../connection/connection.php';
+
+                        // Check if section_id is passed in the URL
+                        if (isset($_GET['section_id'])) {
+                            $section_id = $_GET['section_id'];
+
+                            // Query the database for students in this section, ordered by gender (Male first) and then by last name
+                            $sql = "SELECT * FROM students WHERE section_ID = $section_id AND is_archived = 0 AND gender = 'Male'
+                ORDER BY 
+                CASE WHEN gender = 'Male' THEN 1 ELSE 2 END, 
+                last_name ASC";
+                            $result = $conn->query($sql);
+
+                            if ($result->num_rows > 0):
+                                $male_counter = 1;  // Initialize the counter for males
+                                $female_counter = 1;  // Initialize the counter for females
+                                $current_gender = 'Male';  // Track the current gender
+                        
+                                while ($student = $result->fetch_assoc()):
+                                    $drawer_id = "drawer-right-65-" . $student['student_id'];
+
+                                    // Reset counter when switching from male to female or vice versa
+                                    if ($student['gender'] !== $current_gender) {
+                                        $current_gender = $student['gender'];
+                                        if ($current_gender == 'Male') {
+                                            $male_counter = 1;  // Reset male counter
+                                        } else {
+                                            $female_counter = 1;  // Reset female counter
+                                        }
+                                    }
+                                    ?>
+                                    <tr>
+                                        <th>
+                                            <!-- Display male or female counter -->
+                                            <?php
+                                            if ($student['gender'] == 'Male') {
+                                                echo $male_counter++;  // Increment and display male counter
+                                            } else {
+                                                echo $female_counter++;  // Increment and display female counter
+                                            }
+                                            ?>
+                                        </th>
+                                        <th><?php echo $student['LRN']; ?></th>
+                                        <th><?php echo $student['last_name']; ?></th>
+                                        <td><?php echo $student['first_name']; ?></td>
+                                        <td><?php echo $student['email']; ?></td>
+                                        <td><?php echo $student['gender']; ?></td>
+                                        <td><?php echo $student['akap_status']; ?></td>
+                                        <td>
+                                            <!-- Dynamic Drawer Toggle -->
+                                            <input type="checkbox" id="<?php echo $drawer_id; ?>" class="drawer-toggle" />
+                                            <label for="<?php echo $drawer_id; ?>" class="btn btn-secondary">View</label>
                                             <label class="overlay" for="<?php echo $drawer_id; ?>"></label>
 
                                             <!-- Drawer Content -->
@@ -971,6 +1452,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                 </select>
                                                             </label>
 
+                                                            <?php
+                                                            $student_id = $student['student_id']; // Assume this is dynamically set based on the current student
+                                                            ?>
+
+                                                            <label for="teacher_remarks">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Teacher
+                                                                    Remarks</span>
+                                                                <br>
+                                                                <textarea textarea class="textarea"
+                                                                    placeholder="Please enter remarks from the teacher."
+                                                                    name="teacher_remarks"
+                                                                    rows="4"><?php echo htmlspecialchars($student['teacher_remarks']); ?></textarea>
+                                                            </label>
+                                                            <a href="../email/email_form.php?email=<?php echo urlencode($student['email']); ?>&name=<?php echo urlencode($student['first_name'] . ' ' . $student['last_name']); ?>&adviser_id=<?php echo urlencode($adviser_id); ?>&section_id=<?php echo urlencode($section_id); ?>"
+                                                                class="btn btn-outline-error"
+                                                                title="This will redirect to the email form with the student's email, name, and adviser ID, while the current page only has the section ID.">Contact
+                                                                Parent</a>
+
+                                                            <a href="report_card.php?student_id=<?php echo $student_id; ?>"
+                                                                class="btn btn-outline-primary">View Report Card</a>
+
+                                                            <span class="flex items-center gap-2">
+                                                                <?php if ($total_gradesheets > 0 && $finalized_count == $total_gradesheets): ?>
+                                                                    <span class="dot dot-success"></span>
+                                                                    <span>All gradesheets finalized!</span>
+                                                                <?php else: ?>
+                                                                    <span class="dot dot-error"></span>
+                                                                    <span>Some gradesheets are not yet finalized.</span>
+                                                                <?php endif; ?>
+                                                            </span>
+
                                                             <div class="h-full flex flex-row justify-end items-end gap-2">
                                                                 <button type="button" class="btn btn-ghost"
                                                                     onclick="document.getElementById('<?php echo $drawer_id; ?>').checked = false;">Cancel</button>
@@ -986,15 +1499,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                             <!-- Archive Button and Modal -->
                                             <label class="btn btn-error"
-                                                for="modal-1-<?php echo $student['student_id']; ?>">Archive</label>
-                                            <input class="modal-state" id="modal-1-<?php echo $student['student_id']; ?>"
+                                                for="modal-20-<?php echo $student['student_id']; ?>">Archive</label>
+                                            <input class="modal-state" id="modal-20-<?php echo $student['student_id']; ?>"
                                                 type="checkbox" />
                                             <div class="modal">
                                                 <label class="modal-overlay"
-                                                    for="modal-1-<?php echo $student['student_id']; ?>"></label>
+                                                    for="modal-20-<?php echo $student['student_id']; ?>"></label>
                                                 <form method="POST" action="../../connection/archive_student.php"
                                                     class="modal-content flex flex-col gap-5">
-                                                    <label for="modal-1-<?php echo $student['student_id']; ?>"
+                                                    <label for="modal-20-<?php echo $student['student_id']; ?>"
                                                         class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
                                                     <h2 class="text-xl">Archive Student?</h2>
                                                     <span>Are you sure you want to archive this student?</span>
@@ -1008,7 +1521,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                         value="<?php echo $_GET['section_id']; ?>" />
                                                     <div class="flex gap-3">
                                                         <button class="btn btn-error btn-block" type="submit">Archive</button>
-                                                        <label for="modal-1-<?php echo $student['student_id']; ?>"
+                                                        <label for="modal-20-<?php echo $student['student_id']; ?>"
                                                             class="btn btn-block">Cancel</label>
                                                     </div>
                                                 </form>
@@ -1043,7 +1556,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 $current_gender = 'Male';  // Track the current gender
                         
                                 while ($student = $result->fetch_assoc()):
-                                    $drawer_id = "drawer-right-" . $student['student_id'];
+                                    $drawer_id = "drawer-right-4-" . $student['student_id'];
 
                                     // Reset counter when switching from male to female or vice versa
                                     if ($student['gender'] !== $current_gender) {
@@ -1067,15 +1580,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                             ?>
                                         </th>
                                         <th><?php echo $student['LRN']; ?></th>
-                                        <th><?php echo $student['first_name']; ?></th>
-                                        <td><?php echo $student['last_name']; ?></td>
+                                        <th><?php echo $student['last_name']; ?></th>
+                                        <td><?php echo $student['first_name']; ?></td>
                                         <td><?php echo $student['email']; ?></td>
                                         <td><?php echo $student['gender']; ?></td>
                                         <td><?php echo $student['akap_status']; ?></td>
                                         <td>
                                             <!-- Dynamic Drawer Toggle -->
                                             <input type="checkbox" id="<?php echo $drawer_id; ?>" class="drawer-toggle" />
-                                            <label for="<?php echo $drawer_id; ?>" class="btn btn-secondary">Edit</label>
+                                            <label for="<?php echo $drawer_id; ?>" class="btn btn-secondary">View</label>
                                             <label class="overlay" for="<?php echo $drawer_id; ?>"></label>
 
                                             <!-- Drawer Content -->
@@ -1155,6 +1668,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                 </select>
                                                             </label>
 
+                                                            <?php
+                                                            $student_id = $student['student_id']; // Assume this is dynamically set based on the current student
+                                                            ?>
+
+                                                            <label for="teacher_remarks">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Teacher
+                                                                    Remarks</span>
+                                                                <br>
+                                                                <textarea textarea class="textarea"
+                                                                    placeholder="Please enter remarks from the teacher."
+                                                                    name="teacher_remarks"
+                                                                    rows="4"><?php echo htmlspecialchars($student['teacher_remarks']); ?></textarea>
+                                                            </label>
+                                                            <a href="../email/email_form.php?email=<?php echo urlencode($student['email']); ?>&name=<?php echo urlencode($student['first_name'] . ' ' . $student['last_name']); ?>&adviser_id=<?php echo urlencode($adviser_id); ?>&section_id=<?php echo urlencode($section_id); ?>"
+                                                                class="btn btn-outline-error"
+                                                                title="This will redirect to the email form with the student's email, name, and adviser ID, while the current page only has the section ID.">Contact
+                                                                Parent</a>
+
+                                                            <a href="report_card.php?student_id=<?php echo $student_id; ?>"
+                                                                class="btn btn-outline-primary">View Report Card</a>
+
+                                                            <span class="flex items-center gap-2">
+                                                                <?php if ($total_gradesheets > 0 && $finalized_count == $total_gradesheets): ?>
+                                                                    <span class="dot dot-success"></span>
+                                                                    <span>All gradesheets finalized!</span>
+                                                                <?php else: ?>
+                                                                    <span class="dot dot-error"></span>
+                                                                    <span>Some gradesheets are not yet finalized.</span>
+                                                                <?php endif; ?>
+                                                            </span>
+
                                                             <div class="h-full flex flex-row justify-end items-end gap-2">
                                                                 <button type="button" class="btn btn-ghost"
                                                                     onclick="document.getElementById('<?php echo $drawer_id; ?>').checked = false;">Cancel</button>
@@ -1170,15 +1715,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                             <!-- Archive Button and Modal -->
                                             <label class="btn btn-error"
-                                                for="modal-1-<?php echo $student['student_id']; ?>">Archive</label>
-                                            <input class="modal-state" id="modal-1-<?php echo $student['student_id']; ?>"
+                                                for="modal-11-<?php echo $student['student_id']; ?>">Archive</label>
+                                            <input class="modal-state" id="modal-11-<?php echo $student['student_id']; ?>"
                                                 type="checkbox" />
                                             <div class="modal">
                                                 <label class="modal-overlay"
-                                                    for="modal-1-<?php echo $student['student_id']; ?>"></label>
+                                                    for="modal-11-<?php echo $student['student_id']; ?>"></label>
                                                 <form method="POST" action="../../connection/archive_student.php"
                                                     class="modal-content flex flex-col gap-5">
-                                                    <label for="modal-1-<?php echo $student['student_id']; ?>"
+                                                    <label for="modal-11-<?php echo $student['student_id']; ?>"
                                                         class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
                                                     <h2 class="text-xl">Archive Student?</h2>
                                                     <span>Are you sure you want to archive this student?</span>
@@ -1192,7 +1737,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                         value="<?php echo $_GET['section_id']; ?>" />
                                                     <div class="flex gap-3">
                                                         <button class="btn btn-error btn-block" type="submit">Archive</button>
-                                                        <label for="modal-1-<?php echo $student['student_id']; ?>"
+                                                        <label for="modal-11-<?php echo $student['student_id']; ?>"
                                                             class="btn btn-block">Cancel</label>
                                                     </div>
                                                 </form>
@@ -1227,7 +1772,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 $current_gender = 'Male';  // Track the current gender
                         
                                 while ($student = $result->fetch_assoc()):
-                                    $drawer_id = "drawer-right-" . $student['student_id'];
+                                    $drawer_id = "drawer-right-5-" . $student['student_id'];
 
                                     // Reset counter when switching from male to female or vice versa
                                     if ($student['gender'] !== $current_gender) {
@@ -1251,15 +1796,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                             ?>
                                         </th>
                                         <th><?php echo $student['LRN']; ?></th>
-                                        <th><?php echo $student['first_name']; ?></th>
-                                        <td><?php echo $student['last_name']; ?></td>
+                                        <th><?php echo $student['last_name']; ?></th>
+                                        <td><?php echo $student['first_name']; ?></td>
                                         <td><?php echo $student['email']; ?></td>
                                         <td><?php echo $student['gender']; ?></td>
                                         <td><?php echo $student['akap_status']; ?></td>
                                         <td>
                                             <!-- Dynamic Drawer Toggle -->
                                             <input type="checkbox" id="<?php echo $drawer_id; ?>" class="drawer-toggle" />
-                                            <label for="<?php echo $drawer_id; ?>" class="btn btn-secondary">Edit</label>
+                                            <label for="<?php echo $drawer_id; ?>" class="btn btn-secondary">View</label>
                                             <label class="overlay" for="<?php echo $drawer_id; ?>"></label>
 
                                             <!-- Drawer Content -->
@@ -1339,6 +1884,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                 </select>
                                                             </label>
 
+                                                            <?php
+                                                            $student_id = $student['student_id']; // Assume this is dynamically set based on the current student
+                                                            ?>
+
+                                                            <label for="teacher_remarks">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Teacher
+                                                                    Remarks</span>
+                                                                <br>
+                                                                <textarea textarea class="textarea"
+                                                                    placeholder="Please enter remarks from the teacher."
+                                                                    name="teacher_remarks"
+                                                                    rows="4"><?php echo htmlspecialchars($student['teacher_remarks']); ?></textarea>
+                                                            </label>
+                                                            <a href="../email/email_form.php?email=<?php echo urlencode($student['email']); ?>&name=<?php echo urlencode($student['first_name'] . ' ' . $student['last_name']); ?>&adviser_id=<?php echo urlencode($adviser_id); ?>&section_id=<?php echo urlencode($section_id); ?>"
+                                                                class="btn btn-outline-error"
+                                                                title="This will redirect to the email form with the student's email, name, and adviser ID, while the current page only has the section ID.">Contact
+                                                                Parent</a>
+
+                                                            <a href="report_card.php?student_id=<?php echo $student_id; ?>"
+                                                                class="btn btn-outline-primary">View Report Card</a>
+
+                                                            <span class="flex items-center gap-2">
+                                                                <?php if ($total_gradesheets > 0 && $finalized_count == $total_gradesheets): ?>
+                                                                    <span class="dot dot-success"></span>
+                                                                    <span>All gradesheets finalized!</span>
+                                                                <?php else: ?>
+                                                                    <span class="dot dot-error"></span>
+                                                                    <span>Some gradesheets are not yet finalized.</span>
+                                                                <?php endif; ?>
+                                                            </span>
+
                                                             <div class="h-full flex flex-row justify-end items-end gap-2">
                                                                 <button type="button" class="btn btn-ghost"
                                                                     onclick="document.getElementById('<?php echo $drawer_id; ?>').checked = false;">Cancel</button>
@@ -1354,15 +1931,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                             <!-- Archive Button and Modal -->
                                             <label class="btn btn-error"
-                                                for="modal-1-<?php echo $student['student_id']; ?>">Archive</label>
-                                            <input class="modal-state" id="modal-1-<?php echo $student['student_id']; ?>"
+                                                for="modal-62-<?php echo $student['student_id']; ?>">Archive</label>
+                                            <input class="modal-state" id="modal-62-<?php echo $student['student_id']; ?>"
                                                 type="checkbox" />
                                             <div class="modal">
                                                 <label class="modal-overlay"
-                                                    for="modal-1-<?php echo $student['student_id']; ?>"></label>
+                                                    for="modal-62-<?php echo $student['student_id']; ?>"></label>
                                                 <form method="POST" action="../../connection/archive_student.php"
                                                     class="modal-content flex flex-col gap-5">
-                                                    <label for="modal-1-<?php echo $student['student_id']; ?>"
+                                                    <label for="modal-62-<?php echo $student['student_id']; ?>"
                                                         class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
                                                     <h2 class="text-xl">Archive Student?</h2>
                                                     <span>Are you sure you want to archive this student?</span>
@@ -1376,7 +1953,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                         value="<?php echo $_GET['section_id']; ?>" />
                                                     <div class="flex gap-3">
                                                         <button class="btn btn-error btn-block" type="submit">Archive</button>
-                                                        <label for="modal-1-<?php echo $student['student_id']; ?>"
+                                                        <label for="modal-62-<?php echo $student['student_id']; ?>"
                                                             class="btn btn-block">Cancel</label>
                                                     </div>
                                                 </form>
@@ -1411,7 +1988,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 $current_gender = 'Male';  // Track the current gender
                         
                                 while ($student = $result->fetch_assoc()):
-                                    $drawer_id = "drawer-right-" . $student['student_id'];
+                                    $drawer_id = "drawer-right-6-" . $student['student_id'];
 
                                     // Reset counter when switching from male to female or vice versa
                                     if ($student['gender'] !== $current_gender) {
@@ -1435,15 +2012,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                             ?>
                                         </th>
                                         <th><?php echo $student['LRN']; ?></th>
-                                        <th><?php echo $student['first_name']; ?></th>
-                                        <td><?php echo $student['last_name']; ?></td>
+                                        <th><?php echo $student['last_name']; ?></th>
+                                        <td><?php echo $student['first_name']; ?></td>
                                         <td><?php echo $student['email']; ?></td>
                                         <td><?php echo $student['gender']; ?></td>
                                         <td><?php echo $student['akap_status']; ?></td>
                                         <td>
                                             <!-- Dynamic Drawer Toggle -->
                                             <input type="checkbox" id="<?php echo $drawer_id; ?>" class="drawer-toggle" />
-                                            <label for="<?php echo $drawer_id; ?>" class="btn btn-secondary">Edit</label>
+                                            <label for="<?php echo $drawer_id; ?>" class="btn btn-secondary">View</label>
                                             <label class="overlay" for="<?php echo $drawer_id; ?>"></label>
 
                                             <!-- Drawer Content -->
@@ -1523,6 +2100,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                 </select>
                                                             </label>
 
+                                                            <?php
+                                                            $student_id = $student['student_id']; // Assume this is dynamically set based on the current student
+                                                            ?>
+
+                                                            <label for="teacher_remarks">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Teacher
+                                                                    Remarks</span>
+                                                                <br>
+                                                                <textarea textarea class="textarea"
+                                                                    placeholder="Please enter remarks from the teacher."
+                                                                    name="teacher_remarks"
+                                                                    rows="4"><?php echo htmlspecialchars($student['teacher_remarks']); ?></textarea>
+                                                            </label>
+                                                            <a href="../email/email_form.php?email=<?php echo urlencode($student['email']); ?>&name=<?php echo urlencode($student['first_name'] . ' ' . $student['last_name']); ?>&adviser_id=<?php echo urlencode($adviser_id); ?>&section_id=<?php echo urlencode($section_id); ?>"
+                                                                class="btn btn-outline-error"
+                                                                title="This will redirect to the email form with the student's email, name, and adviser ID, while the current page only has the section ID.">Contact
+                                                                Parent</a>
+
+                                                            <a href="report_card.php?student_id=<?php echo $student_id; ?>"
+                                                                class="btn btn-outline-primary">View Report Card</a>
+
+                                                            <span class="flex items-center gap-2">
+                                                                <?php if ($total_gradesheets > 0 && $finalized_count == $total_gradesheets): ?>
+                                                                    <span class="dot dot-success"></span>
+                                                                    <span>All gradesheets finalized!</span>
+                                                                <?php else: ?>
+                                                                    <span class="dot dot-error"></span>
+                                                                    <span>Some gradesheets are not yet finalized.</span>
+                                                                <?php endif; ?>
+                                                            </span>
+
                                                             <div class="h-full flex flex-row justify-end items-end gap-2">
                                                                 <button type="button" class="btn btn-ghost"
                                                                     onclick="document.getElementById('<?php echo $drawer_id; ?>').checked = false;">Cancel</button>
@@ -1538,15 +2147,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                             <!-- Archive Button and Modal -->
                                             <label class="btn btn-error"
-                                                for="modal-1-<?php echo $student['student_id']; ?>">Archive</label>
-                                            <input class="modal-state" id="modal-1-<?php echo $student['student_id']; ?>"
+                                                for="modal-63-<?php echo $student['student_id']; ?>">Archive</label>
+                                            <input class="modal-state" id="modal-63-<?php echo $student['student_id']; ?>"
                                                 type="checkbox" />
                                             <div class="modal">
                                                 <label class="modal-overlay"
-                                                    for="modal-1-<?php echo $student['student_id']; ?>"></label>
+                                                    for="modal-63-<?php echo $student['student_id']; ?>"></label>
                                                 <form method="POST" action="../../connection/archive_student.php"
                                                     class="modal-content flex flex-col gap-5">
-                                                    <label for="modal-1-<?php echo $student['student_id']; ?>"
+                                                    <label for="modal-63-<?php echo $student['student_id']; ?>"
                                                         class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
                                                     <h2 class="text-xl">Archive Student?</h2>
                                                     <span>Are you sure you want to archive this student?</span>
@@ -1560,7 +2169,222 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                         value="<?php echo $_GET['section_id']; ?>" />
                                                     <div class="flex gap-3">
                                                         <button class="btn btn-error btn-block" type="submit">Archive</button>
-                                                        <label for="modal-1-<?php echo $student['student_id']; ?>"
+                                                        <label for="modal-63-<?php echo $student['student_id']; ?>"
+                                                            class="btn btn-block">Cancel</label>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <?php endwhile; ?>
+                            <?php endif;
+                        } else {
+                            echo "<p>No section selected.</p>";
+                        }
+                        ?>
+                    </tbody>
+                    <tbody data-type="female" data-akap="all">
+                        <?php
+                        include '../../connection/connection.php';
+
+                        // Check if section_id is passed in the URL
+                        if (isset($_GET['section_id'])) {
+                            $section_id = $_GET['section_id'];
+
+                            // Query the database for students in this section, ordered by gender (Male first) and then by last name
+                            $sql = "SELECT * FROM students WHERE section_ID = $section_id AND is_archived = 0  AND gender = 'Female'
+                ORDER BY 
+                CASE WHEN gender = 'Male' THEN 1 ELSE 2 END, 
+                last_name ASC";
+                            $result = $conn->query($sql);
+
+                            if ($result->num_rows > 0):
+                                $male_counter = 1;  // Initialize the counter for males
+                                $female_counter = 1;  // Initialize the counter for females
+                                $current_gender = 'Male';  // Track the current gender
+                        
+                                while ($student = $result->fetch_assoc()):
+                                    $drawer_id = "drawer-right-65-" . $student['student_id'];
+
+                                    // Reset counter when switching from male to female or vice versa
+                                    if ($student['gender'] !== $current_gender) {
+                                        $current_gender = $student['gender'];
+                                        if ($current_gender == 'Male') {
+                                            $male_counter = 1;  // Reset male counter
+                                        } else {
+                                            $female_counter = 1;  // Reset female counter
+                                        }
+                                    }
+                                    ?>
+                                    <tr>
+                                        <td>
+                                            <!-- Display male or female counter -->
+                                            <?php
+                                            if ($student['gender'] == 'Male') {
+                                                echo $male_counter++;  // Increment and display male counter
+                                            } else {
+                                                echo $female_counter++;  // Increment and display female counter
+                                            }
+                                            ?>
+                                        </td>
+                                        <th><?php echo $student['LRN']; ?></th>
+                                        <th><?php echo $student['last_name']; ?></th>
+                                        <td><?php echo $student['first_name']; ?></td>
+                                        <td><?php echo $student['email']; ?></td>
+                                        <td><?php echo $student['gender']; ?></td>
+                                        <td><?php echo $student['akap_status']; ?></td>
+                                        <td>
+                                            <!-- Dynamic Drawer Toggle -->
+                                            <input type="checkbox" id="<?php echo $drawer_id; ?>" class="drawer-toggle" />
+                                            <label for="<?php echo $drawer_id; ?>" class="btn btn-secondary">View</label>
+                                            <label class="overlay" for="<?php echo $drawer_id; ?>"></label>
+
+                                            <!-- Drawer Content -->
+                                            <div class="drawer drawer-right">
+                                                <form method="POST" action="../../connection/update_student.php"
+                                                    class="drawer-content pt-10 flex flex-col h-full">
+                                                    <label for="<?php echo $drawer_id; ?>"
+                                                        class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
+                                                    <div>
+                                                        <h2 class="text-xl font-medium">Edit Student</h2>
+                                                        <div class="flex flex-col gap-2">
+                                                            <label for="student_lrn">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">LRN</span>
+                                                                <br>
+                                                                <input class="input-block input" placeholder="Please enter the LRN."
+                                                                    name="student_lrn" type="text"
+                                                                    value="<?php echo htmlspecialchars($student['LRN']); ?>"
+                                                                    required />
+                                                            </label>
+                                                            <label for="student_firstname">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Student
+                                                                    First
+                                                                    Name</span>
+                                                                <br>
+                                                                <input class="input-block input"
+                                                                    placeholder="Please enter first name." name="student_firstname"
+                                                                    type="text"
+                                                                    value="<?php echo htmlspecialchars($student['first_name']); ?>"
+                                                                    required />
+                                                            </label>
+                                                            <label for="student_lastname">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Student
+                                                                    Last
+                                                                    Name</span>
+                                                                <br>
+                                                                <input class="input-block input"
+                                                                    placeholder="Please enter last name." name="student_lastname"
+                                                                    type="text"
+                                                                    value="<?php echo htmlspecialchars($student['last_name']); ?>"
+                                                                    required />
+                                                            </label>
+                                                            <label for="email">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">E-mail</span>
+                                                                <br>
+                                                                <input class="input-block input" placeholder="Please enter e-mail."
+                                                                    name="email" type="email"
+                                                                    value="<?php echo htmlspecialchars($student['email']); ?>"
+                                                                    required />
+                                                            </label>
+                                                            <label for="gender">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Gender</span>
+                                                                <br>
+                                                                <select class="select" name="gender" required>
+                                                                    <option value="">Select Gender...</option>
+                                                                    <option value="Male" <?php echo ($student['gender'] == 'Male') ? 'selected' : ''; ?>>
+                                                                        Male</option>
+                                                                    <option value="Female" <?php echo ($student['gender'] == 'Female') ? 'selected' : ''; ?>>Female</option>
+                                                                </select>
+                                                            </label>
+                                                            <label for="akap_status">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">AKAP</span>
+                                                                <br>
+                                                                <select class="select" name="akap_status" required>
+                                                                    <option value="">Select Status...</option>
+                                                                    <option value="Active" <?php echo ($student['akap_status'] == 'Active') ? 'selected' : ''; ?>>
+                                                                        Active</option>
+                                                                    <option value="Inactive" <?php echo ($student['akap_status'] == 'Inactive') ? 'selected' : ''; ?>>
+                                                                        Inactive</option>
+                                                                    <option value="Solved" <?php echo ($student['akap_status'] == 'Solved') ? 'selected' : ''; ?>>
+                                                                        Solved</option>
+                                                                </select>
+                                                            </label>
+
+                                                            <?php
+                                                            $student_id = $student['student_id']; // Assume this is dynamically set based on the current student
+                                                            ?>
+
+                                                            <label for="teacher_remarks">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Teacher
+                                                                    Remarks</span>
+                                                                <br>
+                                                                <textarea textarea class="textarea"
+                                                                    placeholder="Please enter remarks from the teacher."
+                                                                    name="teacher_remarks"
+                                                                    rows="4"><?php echo htmlspecialchars($student['teacher_remarks']); ?></textarea>
+                                                            </label>
+                                                            <a href="../email/email_form.php?email=<?php echo urlencode($student['email']); ?>&name=<?php echo urlencode($student['first_name'] . ' ' . $student['last_name']); ?>&adviser_id=<?php echo urlencode($adviser_id); ?>&section_id=<?php echo urlencode($section_id); ?>"
+                                                                class="btn btn-outline-error"
+                                                                title="This will redirect to the email form with the student's email, name, and adviser ID, while the current page only has the section ID.">Contact
+                                                                Parent</a>
+
+                                                            <a href="report_card.php?student_id=<?php echo $student_id; ?>"
+                                                                class="btn btn-outline-primary">View Report Card</a>
+
+                                                            <span class="flex items-center gap-2">
+                                                                <?php if ($total_gradesheets > 0 && $finalized_count == $total_gradesheets): ?>
+                                                                    <span class="dot dot-success"></span>
+                                                                    <span>All gradesheets finalized!</span>
+                                                                <?php else: ?>
+                                                                    <span class="dot dot-error"></span>
+                                                                    <span>Some gradesheets are not yet finalized.</span>
+                                                                <?php endif; ?>
+                                                            </span>
+                                                            <div class="h-full flex flex-row justify-end items-end gap-2">
+                                                                <button type="button" class="btn btn-ghost"
+                                                                    onclick="document.getElementById('<?php echo $drawer_id; ?>').checked = false;">Cancel</button>
+                                                                <button type="submit" class="btn btn-primary">Update</button>
+                                                                <input type="hidden" name="student_id"
+                                                                    value="<?php echo htmlspecialchars($student['student_id']); ?>" />
+                                                                <!-- Hidden field for student ID -->
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+
+                                            <!-- Archive Button and Modal -->
+                                            <label class="btn btn-error"
+                                                for="modal-65-<?php echo $student['student_id']; ?>">Archive</label>
+                                            <input class="modal-state" id="modal-65-<?php echo $student['student_id']; ?>"
+                                                type="checkbox" />
+                                            <div class="modal">
+                                                <label class="modal-overlay"
+                                                    for="modal-65-<?php echo $student['student_id']; ?>"></label>
+                                                <form method="POST" action="../../connection/archive_student.php"
+                                                    class="modal-content flex flex-col gap-5">
+                                                    <label for="modal-65-<?php echo $student['student_id']; ?>"
+                                                        class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
+                                                    <h2 class="text-xl">Archive Student?</h2>
+                                                    <span>Are you sure you want to archive this student?</span>
+
+                                                    <!-- Hidden input to send student ID -->
+                                                    <input type="hidden" name="student_id"
+                                                        value="<?php echo $student['student_id']; ?>" />
+
+                                                    <!-- Hidden input to send the current section ID -->
+                                                    <input type="hidden" name="section_id"
+                                                        value="<?php echo $_GET['section_id']; ?>" />
+                                                    <div class="flex gap-3">
+                                                        <button class="btn btn-error btn-block" type="submit">Archive</button>
+                                                        <label for="modal-65-<?php echo $student['student_id']; ?>"
                                                             class="btn btn-block">Cancel</label>
                                                     </div>
                                                 </form>
@@ -1595,7 +2419,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 $current_gender = 'Male';  // Track the current gender
                         
                                 while ($student = $result->fetch_assoc()):
-                                    $drawer_id = "drawer-right-" . $student['student_id'];
+                                    $drawer_id = "drawer-right-7-" . $student['student_id'];
 
                                     // Reset counter when switching from male to female or vice versa
                                     if ($student['gender'] !== $current_gender) {
@@ -1619,15 +2443,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                             ?>
                                         </td>
                                         <th><?php echo $student['LRN']; ?></th>
-                                        <th><?php echo $student['first_name']; ?></th>
-                                        <td><?php echo $student['last_name']; ?></td>
+                                        <th><?php echo $student['last_name']; ?></th>
+                                        <td><?php echo $student['first_name']; ?></td>
                                         <td><?php echo $student['email']; ?></td>
                                         <td><?php echo $student['gender']; ?></td>
                                         <td><?php echo $student['akap_status']; ?></td>
                                         <td>
                                             <!-- Dynamic Drawer Toggle -->
                                             <input type="checkbox" id="<?php echo $drawer_id; ?>" class="drawer-toggle" />
-                                            <label for="<?php echo $drawer_id; ?>" class="btn btn-secondary">Edit</label>
+                                            <label for="<?php echo $drawer_id; ?>" class="btn btn-secondary">View</label>
                                             <label class="overlay" for="<?php echo $drawer_id; ?>"></label>
 
                                             <!-- Drawer Content -->
@@ -1707,6 +2531,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                 </select>
                                                             </label>
 
+                                                            <?php
+                                                            $student_id = $student['student_id']; // Assume this is dynamically set based on the current student
+                                                            ?>
+
+                                                            <label for="teacher_remarks">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Teacher
+                                                                    Remarks</span>
+                                                                <br>
+                                                                <textarea textarea class="textarea"
+                                                                    placeholder="Please enter remarks from the teacher."
+                                                                    name="teacher_remarks"
+                                                                    rows="4"><?php echo htmlspecialchars($student['teacher_remarks']); ?></textarea>
+                                                            </label>
+                                                            <a href="../email/email_form.php?email=<?php echo urlencode($student['email']); ?>&name=<?php echo urlencode($student['first_name'] . ' ' . $student['last_name']); ?>&adviser_id=<?php echo urlencode($adviser_id); ?>&section_id=<?php echo urlencode($section_id); ?>"
+                                                                class="btn btn-outline-error"
+                                                                title="This will redirect to the email form with the student's email, name, and adviser ID, while the current page only has the section ID.">Contact
+                                                                Parent</a>
+
+                                                            <a href="report_card.php?student_id=<?php echo $student_id; ?>"
+                                                                class="btn btn-outline-primary">View Report Card</a>
+
+                                                            <span class="flex items-center gap-2">
+                                                                <?php if ($total_gradesheets > 0 && $finalized_count == $total_gradesheets): ?>
+                                                                    <span class="dot dot-success"></span>
+                                                                    <span>All gradesheets finalized!</span>
+                                                                <?php else: ?>
+                                                                    <span class="dot dot-error"></span>
+                                                                    <span>Some gradesheets are not yet finalized.</span>
+                                                                <?php endif; ?>
+                                                            </span>
                                                             <div class="h-full flex flex-row justify-end items-end gap-2">
                                                                 <button type="button" class="btn btn-ghost"
                                                                     onclick="document.getElementById('<?php echo $drawer_id; ?>').checked = false;">Cancel</button>
@@ -1722,15 +2577,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                             <!-- Archive Button and Modal -->
                                             <label class="btn btn-error"
-                                                for="modal-1-<?php echo $student['student_id']; ?>">Archive</label>
-                                            <input class="modal-state" id="modal-1-<?php echo $student['student_id']; ?>"
+                                                for="modal-71-<?php echo $student['student_id']; ?>">Archive</label>
+                                            <input class="modal-state" id="modal-71-<?php echo $student['student_id']; ?>"
                                                 type="checkbox" />
                                             <div class="modal">
                                                 <label class="modal-overlay"
-                                                    for="modal-1-<?php echo $student['student_id']; ?>"></label>
+                                                    for="modal-71-<?php echo $student['student_id']; ?>"></label>
                                                 <form method="POST" action="../../connection/archive_student.php"
                                                     class="modal-content flex flex-col gap-5">
-                                                    <label for="modal-1-<?php echo $student['student_id']; ?>"
+                                                    <label for="modal-71-<?php echo $student['student_id']; ?>"
                                                         class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
                                                     <h2 class="text-xl">Archive Student?</h2>
                                                     <span>Are you sure you want to archive this student?</span>
@@ -1744,7 +2599,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                         value="<?php echo $_GET['section_id']; ?>" />
                                                     <div class="flex gap-3">
                                                         <button class="btn btn-error btn-block" type="submit">Archive</button>
-                                                        <label for="modal-1-<?php echo $student['student_id']; ?>"
+                                                        <label for="modal-71-<?php echo $student['student_id']; ?>"
                                                             class="btn btn-block">Cancel</label>
                                                     </div>
                                                 </form>
@@ -1779,7 +2634,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 $current_gender = 'Male';  // Track the current gender
                         
                                 while ($student = $result->fetch_assoc()):
-                                    $drawer_id = "drawer-right-" . $student['student_id'];
+                                    $drawer_id = "drawer-right-8-" . $student['student_id'];
 
                                     // Reset counter when switching from male to female or vice versa
                                     if ($student['gender'] !== $current_gender) {
@@ -1803,15 +2658,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                             ?>
                                         </th>
                                         <th><?php echo $student['LRN']; ?></th>
-                                        <th><?php echo $student['first_name']; ?></th>
-                                        <td><?php echo $student['last_name']; ?></td>
+                                        <th><?php echo $student['last_name']; ?></th>
+                                        <td><?php echo $student['first_name']; ?></td>
                                         <td><?php echo $student['email']; ?></td>
                                         <td><?php echo $student['gender']; ?></td>
                                         <td><?php echo $student['akap_status']; ?></td>
                                         <td>
                                             <!-- Dynamic Drawer Toggle -->
                                             <input type="checkbox" id="<?php echo $drawer_id; ?>" class="drawer-toggle" />
-                                            <label for="<?php echo $drawer_id; ?>" class="btn btn-secondary">Edit</label>
+                                            <label for="<?php echo $drawer_id; ?>" class="btn btn-secondary">View</label>
                                             <label class="overlay" for="<?php echo $drawer_id; ?>"></label>
 
                                             <!-- Drawer Content -->
@@ -1891,6 +2746,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                 </select>
                                                             </label>
 
+                                                            <?php
+                                                            $student_id = $student['student_id']; // Assume this is dynamically set based on the current student
+                                                            ?>
+
+                                                            <label for="teacher_remarks">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Teacher
+                                                                    Remarks</span>
+                                                                <br>
+                                                                <textarea textarea class="textarea"
+                                                                    placeholder="Please enter remarks from the teacher."
+                                                                    name="teacher_remarks"
+                                                                    rows="4"><?php echo htmlspecialchars($student['teacher_remarks']); ?></textarea>
+                                                            </label>
+                                                            <a href="../email/email_form.php?email=<?php echo urlencode($student['email']); ?>&name=<?php echo urlencode($student['first_name'] . ' ' . $student['last_name']); ?>&adviser_id=<?php echo urlencode($adviser_id); ?>&section_id=<?php echo urlencode($section_id); ?>"
+                                                                class="btn btn-outline-error"
+                                                                title="This will redirect to the email form with the student's email, name, and adviser ID, while the current page only has the section ID.">Contact
+                                                                Parent</a>
+
+                                                            <a href="report_card.php?student_id=<?php echo $student_id; ?>"
+                                                                class="btn btn-outline-primary">View Report Card</a>
+
+                                                            <span class="flex items-center gap-2">
+                                                                <?php if ($total_gradesheets > 0 && $finalized_count == $total_gradesheets): ?>
+                                                                    <span class="dot dot-success"></span>
+                                                                    <span>All gradesheets finalized!</span>
+                                                                <?php else: ?>
+                                                                    <span class="dot dot-error"></span>
+                                                                    <span>Some gradesheets are not yet finalized.</span>
+                                                                <?php endif; ?>
+                                                            </span>
+
                                                             <div class="h-full flex flex-row justify-end items-end gap-2">
                                                                 <button type="button" class="btn btn-ghost"
                                                                     onclick="document.getElementById('<?php echo $drawer_id; ?>').checked = false;">Cancel</button>
@@ -1906,15 +2793,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                             <!-- Archive Button and Modal -->
                                             <label class="btn btn-error"
-                                                for="modal-1-<?php echo $student['student_id']; ?>">Archive</label>
-                                            <input class="modal-state" id="modal-1-<?php echo $student['student_id']; ?>"
+                                                for="modal-81-<?php echo $student['student_id']; ?>">Archive</label>
+                                            <input class="modal-state" id="modal-81-<?php echo $student['student_id']; ?>"
                                                 type="checkbox" />
                                             <div class="modal">
                                                 <label class="modal-overlay"
-                                                    for="modal-1-<?php echo $student['student_id']; ?>"></label>
+                                                    for="modal-81-<?php echo $student['student_id']; ?>"></label>
                                                 <form method="POST" action="../../connection/archive_student.php"
                                                     class="modal-content flex flex-col gap-5">
-                                                    <label for="modal-1-<?php echo $student['student_id']; ?>"
+                                                    <label for="modal-81-<?php echo $student['student_id']; ?>"
                                                         class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
                                                     <h2 class="text-xl">Archive Student?</h2>
                                                     <span>Are you sure you want to archive this student?</span>
@@ -1928,7 +2815,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                         value="<?php echo $_GET['section_id']; ?>" />
                                                     <div class="flex gap-3">
                                                         <button class="btn btn-error btn-block" type="submit">Archive</button>
-                                                        <label for="modal-1-<?php echo $student['student_id']; ?>"
+                                                        <label for="modal-81-<?php echo $student['student_id']; ?>"
                                                             class="btn btn-block">Cancel</label>
                                                     </div>
                                                 </form>
@@ -1963,7 +2850,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 $current_gender = 'Male';  // Track the current gender
                         
                                 while ($student = $result->fetch_assoc()):
-                                    $drawer_id = "drawer-right-" . $student['student_id'];
+                                    $drawer_id = "drawer-right-9-" . $student['student_id'];
 
                                     // Reset counter when switching from male to female or vice versa
                                     if ($student['gender'] !== $current_gender) {
@@ -1987,15 +2874,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                             ?>
                                         </th>
                                         <th><?php echo $student['LRN']; ?></th>
-                                        <th><?php echo $student['first_name']; ?></th>
-                                        <td><?php echo $student['last_name']; ?></td>
+                                        <th><?php echo $student['last_name']; ?></th>
+                                        <td><?php echo $student['first_name']; ?></td>
                                         <td><?php echo $student['email']; ?></td>
                                         <td><?php echo $student['gender']; ?></td>
                                         <td><?php echo $student['akap_status']; ?></td>
                                         <td>
                                             <!-- Dynamic Drawer Toggle -->
                                             <input type="checkbox" id="<?php echo $drawer_id; ?>" class="drawer-toggle" />
-                                            <label for="<?php echo $drawer_id; ?>" class="btn btn-secondary">Edit</label>
+                                            <label for="<?php echo $drawer_id; ?>" class="btn btn-secondary">View</label>
                                             <label class="overlay" for="<?php echo $drawer_id; ?>"></label>
 
                                             <!-- Drawer Content -->
@@ -2075,6 +2962,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                 </select>
                                                             </label>
 
+                                                            <?php
+                                                            $student_id = $student['student_id']; // Assume this is dynamically set based on the current student
+                                                            ?>
+
+                                                            <label for="teacher_remarks">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Teacher
+                                                                    Remarks</span>
+                                                                <br>
+                                                                <textarea textarea class="textarea"
+                                                                    placeholder="Please enter remarks from the teacher."
+                                                                    name="teacher_remarks"
+                                                                    rows="4"><?php echo htmlspecialchars($student['teacher_remarks']); ?></textarea>
+                                                            </label>
+                                                            <a href="../email/email_form.php?email=<?php echo urlencode($student['email']); ?>&name=<?php echo urlencode($student['first_name'] . ' ' . $student['last_name']); ?>&adviser_id=<?php echo urlencode($adviser_id); ?>&section_id=<?php echo urlencode($section_id); ?>"
+                                                                class="btn btn-outline-error"
+                                                                title="This will redirect to the email form with the student's email, name, and adviser ID, while the current page only has the section ID.">Contact
+                                                                Parent</a>
+
+                                                            <a href="report_card.php?student_id=<?php echo $student_id; ?>"
+                                                                class="btn btn-outline-primary">View Report Card</a>
+
+                                                            <span class="flex items-center gap-2">
+                                                                <?php if ($total_gradesheets > 0 && $finalized_count == $total_gradesheets): ?>
+                                                                    <span class="dot dot-success"></span>
+                                                                    <span>All gradesheets finalized!</span>
+                                                                <?php else: ?>
+                                                                    <span class="dot dot-error"></span>
+                                                                    <span>Some gradesheets are not yet finalized.</span>
+                                                                <?php endif; ?>
+                                                            </span>
+
                                                             <div class="h-full flex flex-row justify-end items-end gap-2">
                                                                 <button type="button" class="btn btn-ghost"
                                                                     onclick="document.getElementById('<?php echo $drawer_id; ?>').checked = false;">Cancel</button>
@@ -2090,15 +3009,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                             <!-- Archive Button and Modal -->
                                             <label class="btn btn-error"
-                                                for="modal-1-<?php echo $student['student_id']; ?>">Archive</label>
-                                            <input class="modal-state" id="modal-1-<?php echo $student['student_id']; ?>"
+                                                for="modal-91-<?php echo $student['student_id']; ?>">Archive</label>
+                                            <input class="modal-state" id="modal-91-<?php echo $student['student_id']; ?>"
                                                 type="checkbox" />
                                             <div class="modal">
                                                 <label class="modal-overlay"
-                                                    for="modal-1-<?php echo $student['student_id']; ?>"></label>
+                                                    for="modal-91-<?php echo $student['student_id']; ?>"></label>
                                                 <form method="POST" action="../../connection/archive_student.php"
                                                     class="modal-content flex flex-col gap-5">
-                                                    <label for="modal-1-<?php echo $student['student_id']; ?>"
+                                                    <label for="modal-91-<?php echo $student['student_id']; ?>"
                                                         class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
                                                     <h2 class="text-xl">Archive Student?</h2>
                                                     <span>Are you sure you want to archive this student?</span>
@@ -2112,7 +3031,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                         value="<?php echo $_GET['section_id']; ?>" />
                                                     <div class="flex gap-3">
                                                         <button class="btn btn-error btn-block" type="submit">Archive</button>
-                                                        <label for="modal-1-<?php echo $student['student_id']; ?>"
+                                                        <label for="modal-91-<?php echo $student['student_id']; ?>"
                                                             class="btn btn-block">Cancel</label>
                                                     </div>
                                                 </form>
@@ -2139,21 +3058,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         const genderRadioButtons = document.querySelectorAll('input[name="gender-filter"]');
         const akapDropdown = document.getElementById('akap-dropdown');
         const sections = document.querySelectorAll('#student-table > tbody');
-        const allAllSection = document.querySelector('tbody[data-type="all"][data-akap="all"]'); // New tbody for "All-All"
         const emptyStateMessage = document.createElement('tbody');
         emptyStateMessage.innerHTML = "<tr><td colspan='8'>No students found in this view</td></tr>";
         emptyStateMessage.style.color = 'red';
-        emptyStateMessage.style.margin = '10px 0';
         const tableContainer = document.getElementById('student-table');
         tableContainer.appendChild(emptyStateMessage);
-
-        // Initially hide all sections except for "all"
-        sections.forEach(section => {
-            const sectionType = section.getAttribute('data-type');
-            if (sectionType !== 'all') {
-                section.style.display = 'none';
-            }
-        });
 
         // Function to filter sections based on selected filters
         function filterSections() {
@@ -2166,30 +3075,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 section.style.display = 'none';
             });
 
-            // Special case: if both filters are "All", show the new "All-All" section
-            if (selectedGender === 'all' && selectedAKAP === 'all') {
-                allAllSection.style.display = ''; // Show the special "All-All" section
-                anyVisible = true;
-            } else {
-                // Filter sections based on selected values
-                sections.forEach(section => {
-                    const sectionType = section.getAttribute('data-type');
-                    const sectionAKAP = section.getAttribute('data-akap');
+            // Show relevant tbody based on the selected filters
+            sections.forEach(section => {
+                const sectionType = section.getAttribute('data-type');
+                const sectionAKAP = section.getAttribute('data-akap');
 
-                    const genderMatches = (selectedGender === 'all' && sectionType === 'all') ||
-                        (sectionType === selectedGender);
-                    const akapMatches = (selectedAKAP === 'all' || sectionAKAP === selectedAKAP);
-
-                    if (genderMatches && akapMatches) {
-                        section.style.display = '';
-                        if (section.querySelector('tr')) {
-                            anyVisible = true;
-                        }
+                // Case 1: If both filters are "all", show the section with data-type="all" and data-akap="all"
+                if (selectedGender === 'all' && selectedAKAP === 'all') {
+                    if (sectionType === 'all' && sectionAKAP === 'all') {
+                        section.style.display = '';  // Show the "all-all" section
+                        anyVisible = true;
                     }
-                });
-            }
+                }
+                // Case 2: If gender is "male/female" and AKAP is "all", show only the section with data-akap="all" for that gender
+                else if ((selectedGender === 'male' || selectedGender === 'female') && selectedAKAP === 'all') {
+                    if (sectionType === selectedGender && sectionAKAP === 'all') {
+                        section.style.display = '';  // Show the gender's "all" section
+                        anyVisible = true;
+                    }
+                }
+                // Case 3: If specific AKAP is selected, match both the gender and AKAP
+                else if (selectedAKAP !== 'all') {
+                    if (sectionType === selectedGender && sectionAKAP === selectedAKAP) {
+                        section.style.display = '';  // Show the matching section
+                        anyVisible = true;
+                    }
+                }
+            });
 
-            // Handle empty state
+            // Handle empty state if no sections are visible
             if (!anyVisible) {
                 emptyStateMessage.style.display = '';
             } else {
@@ -2208,6 +3122,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         filterSections();
     });
 </script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#lockCheckbox').change(function () {
+            // Get the checked state of the checkbox
+            var isChecked = $(this).is(':checked') ? 1 : 0;
+
+            // Send an AJAX request to update the is_locked status
+            $.ajax({
+                url: 'update_status.php', // Create this file to handle the update
+                type: 'POST',
+                data: {
+                    section_id: <?php echo $section_id; ?>,
+                    is_locked: isChecked
+                },
+                success: function (response) {
+                    console.log(response); // You can handle the response here if needed
+                },
+                error: function (xhr, status, error) {
+                    console.error(error); // Handle any errors here
+                }
+            });
+        });
+    });
+</script>
+
+
+
+
 
 
 </html>

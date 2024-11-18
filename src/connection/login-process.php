@@ -1,6 +1,6 @@
 <?php
 session_start();
-include '../connection/connection.php';
+include 'connection.php';
 
 // Handle login form submission
 if (isset($_POST['login'])) {
@@ -16,8 +16,6 @@ if (isset($_POST['login'])) {
             $checkQuery = "SELECT * FROM admin WHERE username=?";
         } elseif ($role == 'teacher') {
             $checkQuery = "SELECT * FROM teachers WHERE username=?";
-        } elseif ($role == 'parent') {
-            $checkQuery = "SELECT * FROM parents WHERE username=?";
         }
 
         // Use prepared statements to prevent SQL injection
@@ -39,9 +37,9 @@ if (isset($_POST['login'])) {
 
             // Check if the password is hashed in the database
             if (password_verify($password, $row['password'])) {
-                $_SESSION['status'] = 'valid';
                 $_SESSION['role'] = $role;
                 $_SESSION['username'] = $row['username'];
+                $_SESSION['logged_in'] = true;
 
                 // Alert and redirect based on role
                 echo '<script>alert("Logged in successfully as ' . ucfirst($role) . '!");</script>';

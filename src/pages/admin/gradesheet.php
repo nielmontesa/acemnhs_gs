@@ -19,8 +19,6 @@ if (isset($_GET['gradesheet_id'])) {
 }
 ?>
 
-
-
 <!DOCTYPE html>
 <html data-theme="light">
 
@@ -51,7 +49,7 @@ if (isset($_GET['gradesheet_id'])) {
                 <section class="sidebar-content">
                     <nav class="menu rounded-md">
                         <section class="menu-section px-4">
-                            <span class="menu-title">Welcome, Username</span>
+                            <span class="menu-title">Welcome, <?php echo $_SESSION['username']; ?></span>
                             <ul class="menu-items">
                                 <a href="departments.php">
                                     <li class="menu-item ">
@@ -100,7 +98,7 @@ if (isset($_GET['gradesheet_id'])) {
                                 </div>
 
                                 <div class="flex flex-col">
-                                    <span>Username</span>
+                                    <span><?php echo $_SESSION['username']; ?></span>
                                     <span class="text-xs">Administrator</span>
                                 </div>
                             </div>
@@ -171,10 +169,11 @@ if (isset($_GET['gradesheet_id'])) {
             ?>
             </p>
             <br>
-            <table class="table-compact table-zebra table w-full">
+            <table class="table-compact table-hover table w-full">
                 <thead>
                     <tr>
                         <th>Subject</th>
+                        <th>Finalized?</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -182,7 +181,7 @@ if (isset($_GET['gradesheet_id'])) {
                     <?php
                     // SQL query to get gradesheet details for the specific section_id
                     if (isset($section_id)) {
-                        $sql = "SELECT g.gradesheet_id, g.subject, s.section_name, s.grade_level
+                        $sql = "SELECT g.gradesheet_id, g.subject, g.is_finalized, s.section_name, s.grade_level
                     FROM gradesheet g
                     INNER JOIN section s ON g.section_id = s.section_id
                     WHERE s.section_id = $section_id AND s.is_archived = 0";
@@ -194,12 +193,17 @@ if (isset($_GET['gradesheet_id'])) {
                             <?php while ($row = $result->fetch_assoc()): ?>
                                 <tr>
                                     <th><?php echo $row['subject']; ?></th>
+                                    <td><?php echo $row['is_finalized'] ? 'Yes' : 'No'; ?></td>
+                                    <!-- Displays Yes/No based on is_finalized -->
                                     <td>
                                         <a
                                             href="quarters/1q-grades.php?gradesheet_id=<?php echo $row['gradesheet_id']; ?>&section_id=<?php echo $section_id; ?>">
                                             <button class="btn btn-secondary">View</button>
                                         </a>
-
+                                        <a
+                                            href="gradesheet_log.php?gradesheet_id=<?php echo $row['gradesheet_id']; ?>&section_id=<?php echo $section_id; ?>">
+                                            <button class="btn btn-outline-secondary">Edit Log</button>
+                                        </a>
                                     </td>
                                 </tr>
                             <?php endwhile; ?>

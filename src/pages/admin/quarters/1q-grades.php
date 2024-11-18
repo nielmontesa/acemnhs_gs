@@ -1,3 +1,7 @@
+<?php
+session_start();
+?>
+
 <!DOCTYPE html>
 <html data-theme="light">
 
@@ -110,7 +114,7 @@
                 <section class="sidebar-content">
                     <nav class="menu rounded-md">
                         <section class="menu-section px-4">
-                            <span class="menu-title">Welcome, Username</span>
+                            <span class="menu-title">Welcome, <?php echo $_SESSION['username']; ?></span>
                             <ul class="menu-items">
                                 <a href="../departments.php">
                                     <li class="menu-item ">
@@ -159,7 +163,7 @@
                                 </div>
 
                                 <div class="flex flex-col">
-                                    <span>Username</span>
+                                    <span><?php echo $_SESSION['username']; ?></span>
                                     <span class="text-xs">Administrator</span>
                                 </div>
                             </div>
@@ -271,16 +275,57 @@
                                     </div>
                                 </div>
                             </form>
-                            <a href="#" class="btn btn-outline-primary">Finalize</a>
-                            <a href="#" class="btn btn-outline-primary">Totals</a>
+                            <div>
+                                <?php
+                                include "../../../connection/connection.php"; // Include your database connection
+                        
+                                // Initialize the is_finalized variable
+                                $is_finalized = 0; // Default value
+                        
+                                // Assuming you have the gradesheet_id from the context (e.g., a GET parameter)
+                                if (isset($_GET['gradesheet_id'])) {
+                                    $gradesheet_id = (int) $_GET['gradesheet_id']; // Convert to integer for safety
+                        
+                                    // Prepare a statement to fetch the is_finalized value
+                                    $sql = "SELECT is_finalized FROM gradesheet WHERE gradesheet_id = ?";
+                                    $stmt = $conn->prepare($sql);
+
+                                    if ($stmt) {
+                                        $stmt->bind_param("i", $gradesheet_id);
+                                        $stmt->execute();
+                                        $result = $stmt->get_result();
+
+                                        // Fetch the result
+                                        if ($result->num_rows > 0) {
+                                            $row = $result->fetch_assoc();
+                                            $is_finalized = (int) $row['is_finalized']; // Ensure it's treated as an integer
+                                        }
+                                        $stmt->close(); // Close the statement
+                                    } else {
+                                        echo "Error preparing statement: " . $conn->error; // Handle errors in statement preparation
+                                    }
+                                }
+
+                                // Close the connection
+                        
+
+                                ?>
+                                <div>
+                                    <label class="flex cursor-pointer gap-2 items-center justify-center">
+                                        <input type="checkbox" class="checkbox" id="finalized-checkbox" <?php echo $is_finalized ? 'checked' : ''; ?> />
+                                        <span>Gradesheet Finalized?</span>
+                                    </label>
+                                </div>
+                            </div>
+
                         </div>
                         <div class="flex items-center content-center gap-2">
                             <span>Filter Quarter:</span>
                             <div class="btn-group btn-group-scrollable">
-                                <input type="radio" name="options" data-content="1" class="btn" checked />
-                                <input type="radio" name="options" data-content="2" class="btn" />
-                                <input type="radio" name="options" data-content="3" class="btn" />
-                                <input type="radio" name="options" data-content="4" class="btn" />
+                                <input type="radio" name="quarterFilter" data-content="1" class="btn" checked />
+                                <input type="radio" name="quarterFilter" data-content="2" class="btn" />
+                                <input type="radio" name="quarterFilter" data-content="3" class="btn" />
+                                <input type="radio" name="quarterFilter" data-content="4" class="btn" />
                             </div>
                         </div>
                     </div>
@@ -295,9 +340,11 @@
                             $gradesheet_id = $_POST['gradesheet_id']; // Get the gradesheet_id from POST data
             
                             // Insert the new activity into the activities table
-                            $add_activity_query = "INSERT INTO activity (activity_name, total_score, activity_type, gradesheet_id) VALUES (?, ?, ?, ?)";
+                            $add_activity_query = "INSERT INTO activity (activity_name, total_score, activity_type, gradesheet_id, quarter) VALUES (?, ?, ?, ?, ?)";
                             $add_stmt = $conn->prepare($add_activity_query);
-                            $add_stmt->bind_param("sisi", $activity_name, $total_score, $activity_type, $gradesheet_id);
+                            $quarter = 1; // The value you want to insert for the quarter column
+                            $add_stmt->bind_param("sisii", $activity_name, $total_score, $activity_type, $gradesheet_id, $quarter);
+
 
                             if ($add_stmt->execute()) {
 
@@ -331,7 +378,7 @@
                                 $gradesheet_id = $_GET['gradesheet_id'];
 
                                 // Updated SQL query with ORDER BY to sort activity types
-                                $activity_sql = "SELECT * FROM activity WHERE gradesheet_id = $gradesheet_id ORDER BY 
+                                $activity_sql = "SELECT * FROM activity WHERE gradesheet_id = $gradesheet_id AND quarter = 1 ORDER BY 
                              CASE activity_type 
                                  WHEN 'Written Work' THEN 1 
                                  WHEN 'Performance Task' THEN 2 
@@ -498,7 +545,6 @@
                         </div>
 
                         <!-- Dropdown for Activity Type -->
-                        <!-- Dropdown for Activity Type -->
                         <div>
                             <label for="activity_type">
                                 <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium for="
@@ -532,7 +578,7 @@
 
 
 </body>
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     // Function to open the activity drawer
     function openActivityDrawer(headerElement) {
@@ -685,10 +731,44 @@
         });
     });
 
+    $(document).ready(function () {
+        $('#finalized-checkbox').change(function () {
+            var isChecked = $(this).is(':checked') ? 1 : 0; // Set value based on checkbox state
+            var gradesheet_id = <?php echo isset($_GET['gradesheet_id']) ? json_encode($_GET['gradesheet_id']) : '0'; ?>; // Get the gradesheet ID
 
+            $.ajax({
+                url: '../../../connection/update_gradesheet.php', // Your PHP file to handle the update
+                type: 'POST',
+                data: {
+                    gradesheet_id: gradesheet_id,
+                    is_finalized: isChecked
+                },
+                success: function (response) {
+                    console.log(response); // Optional: Log the response
+                },
+                error: function (xhr, status, error) {
+                    console.error(error); // Optional: Log any errors
+                }
+            });
+        });
+    });
 
+    // PHP variables passed to JavaScript
+    const gradesheetId = "<?php echo $gradesheet_id; ?>";
+    const sectionId = "<?php echo $section_id; ?>";
 
+    // Get all the radio buttons
+    const buttons = document.querySelectorAll('input[name="quarterFilter"]');
 
+    // Add a change event listener to each radio button
+    buttons.forEach(button => {
+        button.addEventListener('change', function () {
+            // Get the value from data-content
+            const quarter = this.getAttribute('data-content');
+            // Redirect to the respective quarter page with PHP variables as query parameters
+            window.location.href = `${quarter}q-grades.php?gradesheet_id=${gradesheetId}&section_id=${sectionId}`;
+        });
+    });
 </script>
 
 

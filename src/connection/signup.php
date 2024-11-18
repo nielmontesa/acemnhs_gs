@@ -1,5 +1,5 @@
 <?php
-include '../connection/connection.php';
+include 'connection.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
     // Retrieve and sanitize input values

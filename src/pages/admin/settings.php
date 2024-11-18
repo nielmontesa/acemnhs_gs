@@ -1,3 +1,5 @@
+<?php session_start(); ?>
+
 <!DOCTYPE html>
 <html data-theme="light">
 
@@ -28,7 +30,7 @@
                 <section class="sidebar-content">
                     <nav class="menu rounded-md">
                         <section class="menu-section px-4">
-                            <span class="menu-title">Welcome, Username</span>
+                            <span class="menu-title">Welcome, <?php echo $_SESSION['username']; ?></span>
                             <ul class="menu-items">
                                 <a href="departments.php">
                                     <li class="menu-item">
@@ -77,7 +79,7 @@
                                 </div>
 
                                 <div class="flex flex-col">
-                                    <span>Username</span>
+                                    <span><?php echo $_SESSION['username']; ?></span>
                                     <span class="text-xs">Administrator</span>
                                 </div>
                             </div>
@@ -98,23 +100,23 @@
             <h1 class="text-xl font-bold">Account Settings</h1>
             <p class="pt-2">Change your username or your password.</p>
 
-            <form action="./pages/admin/departments.php" class="form-control">
+            <form action="../../connection/update_account_admin.php" method="POST" class="form-control">
                 <div class="flex flex-col gap-4 mt-4">
                     <div class="flex flex-col gap-2">
                         <label for="username">
                             <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Username</span>
                             <input class="input-block input" placeholder="Please enter your username." name="username"
-                                type="text" />
+                              value="<?php echo $_SESSION['username']; ?>"  type="text" />
                         </label>
                         <label for="oldpassword">
                             <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Old Password</span>
                             <input class="input-block input" placeholder="Please enter your old password."
-                                name="password" type="password" />
+                                name="oldpassword" type="password" />
                         </label>
                         <label for="newpassword">
                             <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">New Password</span>
                             <input class="input-block input" placeholder="Please enter your new password."
-                                name="password" type="password" />
+                                name="newpassword" type="password" />
                         </label>
                         <button class="btn btn-primary mt-2" type="submit">Update Details</button>
                     </div>

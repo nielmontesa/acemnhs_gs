@@ -8916,7 +8916,8 @@ CREATE TABLE `students` (
   `gender` varchar(255) NOT NULL,
   `is_archived` tinyint(1) NOT NULL DEFAULT 0,
   `LRN` varchar(12) NOT NULL,
-  `teacher_remarks` varchar(1000) NOT NULL
+  `teacher_remarks` varchar(1000) NOT NULL,
+  `bday` date
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --

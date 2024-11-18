@@ -14,10 +14,7 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 // Fetching for progress report
-
-$sql_attendance = "SELECT * FROM students WHERE is_archived = 0 AND student_id = '$student_id' ORDER BY student_id asc";
-
-$sql_attendance = "SELECT s.*, sec.*
+$sql_attendance = "SELECT s.*, sec.*, FLOOR(DATEDIFF(CURDATE(), bday) / 365) as age
                     FROM students s
                     INNER JOIN section sec ON s.section_id = sec.section_id
                     WHERE s.student_id = '$student_id' and s.is_archived = 0;";
@@ -25,87 +22,45 @@ $data_attendance = mysqli_query($conn, $sql_attendance);
 
 function transmute_grade($final_grade)
 {
-    if ($final_grade >= 100)
-        return 100;
-    if ($final_grade >= 98.40)
-        return 99;
-    if ($final_grade >= 96.80)
-        return 98;
-    if ($final_grade >= 95.21)
-        return 97;
-    if ($final_grade >= 93.60)
-        return 96;
-    if ($final_grade >= 92.00)
-        return 95;
-    if ($final_grade >= 90.40)
-        return 94;
-    if ($final_grade >= 88.80)
-        return 93;
-    if ($final_grade >= 87.20)
-        return 92;
-    if ($final_grade >= 85.60)
-        return 91;
-    if ($final_grade >= 84.00)
-        return 90;
-    if ($final_grade >= 82.40)
-        return 89;
-    if ($final_grade >= 80.80)
-        return 88;
-    if ($final_grade >= 78.20)
-        return 87;
-    if ($final_grade >= 77.60)
-        return 86;
-    if ($final_grade >= 76.00)
-        return 85;
-    if ($final_grade >= 74.40)
-        return 84;
-    if ($final_grade >= 72.80)
-        return 83;
-    if ($final_grade >= 71.20)
-        return 82;
-    if ($final_grade >= 69.61)
-        return 81;  // Adjusted the range here to make sure 69.80 gets covered
-    if ($final_grade >= 68.00)
-        return 80;
-    if ($final_grade >= 66.40)
-        return 79;
-    if ($final_grade >= 64.81)
-        return 78;
-    if ($final_grade >= 63.21)
-        return 77;
-    if ($final_grade >= 61.60)
-        return 76;
-    if ($final_grade >= 60.01)
-        return 75;
-    if ($final_grade >= 56.00)
-        return 74;
-    if ($final_grade >= 52.01)
-        return 73;
-    if ($final_grade >= 48.00)
-        return 72;
-    if ($final_grade >= 44.00)
-        return 71;
-    if ($final_grade >= 40.01)
-        return 70;
-    if ($final_grade >= 36.00)
-        return 69;
-    if ($final_grade >= 32.00)
-        return 68;
-    if ($final_grade >= 28.00)
-        return 67;
-    if ($final_grade >= 24.00)
-        return 66;
-    if ($final_grade >= 20.00)
-        return 65;
-    if ($final_grade >= 16.00)
-        return 64;
-    if ($final_grade >= 12.00)
-        return 63;
-    if ($final_grade >= 8.00)
-        return 62;
-    if ($final_grade >= 4.00)
-        return 61;
-    return 60;  // If grade is below 4.00, return 60
+    $grade_map = [
+        [100, 100],
+        [98.40, 99],
+        [96.80, 98],
+        [95.21, 97],
+        [93.60, 96],
+        [92.00, 95],
+        [90.40, 94],
+        [88.80, 93],
+        [87.20, 92],
+        [85.60, 91],
+        [84.00, 90],
+        [82.40, 89],
+        [80.80, 88],
+        [78.20, 87],
+        [77.60, 86],
+        [76.00, 85],
+        [74.40, 84],
+        [72.80, 83],
+        [71.20, 82],
+        [69.61, 81], 
+        [68.00, 80],
+        [66.40, 79],
+        [64.81, 78],
+        [63.21, 77],
+        [61.60, 76],
+        [60.01, 75],
+        [56.00, 74],
+        [52.01, 73],
+        [48.00, 72],
+        [4.00, 61],
+        [0, 60]  // If it's below 4.00, return 60
+    ];
+    // Iterate transmuted grade
+    foreach ($grade_map as $grade) {
+        if ($final_grade >= $grade[0]) {
+            return $grade[1];
+        }
+    }
 }
 
 function status($status)
@@ -155,13 +110,13 @@ while ($row = mysqli_fetch_assoc($data_attendance)) {
     $pdf->SetXY(175, 119);
     $pdf->MultiCell(120, 2, $row['LRN']);
 
-    $pdf->SetXY(140, 127);
-    $pdf->MultiCell(120, 2, $row['']);
+    $pdf->SetXY(155, 127);
+    $pdf->MultiCell(120, 2, $row['age']);
 
     $pdf->SetXY(200, 127);
     $pdf->MultiCell(120, 2, $row['gender']);
 
-    $pdf->SetXY(150, 136);
+    $pdf->SetXY(155, 136);
     $pdf->MultiCell(120, 2, $row['grade_level']);
 
     $pdf->SetXY(190, 136);

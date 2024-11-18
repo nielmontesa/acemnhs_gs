@@ -116,7 +116,7 @@ session_start();
                         <section class="menu-section px-4">
                             <span class="menu-title">Welcome, <?php echo $_SESSION['username']; ?></span>
                             <ul class="menu-items">
-                                <a href="sections.php">
+                                <a href="../sections.php">
                                     <li class="menu-item menu-active">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-75" fill="none"
                                             viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">

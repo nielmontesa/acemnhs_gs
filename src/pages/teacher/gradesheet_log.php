@@ -79,7 +79,7 @@ if (isset($_GET['gradesheet_id'])) {
 
                                 <div class="flex flex-col">
                                     <span><?php echo $_SESSION['username']; ?></span>
-                                    <span class="text-xs">Administrator</span>
+                                    <span class="text-xs">Teacher</span>
                                 </div>
                             </div>
                         </label>

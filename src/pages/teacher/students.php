@@ -144,7 +144,7 @@ if ($section_result && $section_result->num_rows > 0) {
 
                                 <div class="flex flex-col">
                                     <span><?php echo $_SESSION['username']; ?></span>
-                                    <span class="text-xs">Administrator</span>
+                                    <span class="text-xs">Teacher</span>
                                 </div>
                             </div>
                         </label>

@@ -51,10 +51,11 @@ function insertTeachers($mysqli, $departments)
     for ($i = 1; $i <= 40; $i++) {  // Assuming we need 40 teachers for 40 sections
         $first_name = $mysqli->real_escape_string($faker->firstName);
         $last_name = $mysqli->real_escape_string($faker->lastName);
-        $username = $mysqli->real_escape_string($faker->userName);
+        $username = str_pad(rand(0, 99999999), 8, '0', STR_PAD_LEFT);  // Generate 8-digit random number
         $email = $mysqli->real_escape_string($faker->email);
         $password = password_hash('password123', PASSWORD_DEFAULT);  // Default password
         $department_id = $departments[array_rand($departments)];  // Randomly assign a department
+
         $mysqli->query("INSERT INTO teachers (username, password, first_name, last_name, email, department_id) 
                         VALUES ('$username', '$password', '$first_name', '$last_name', '$email', '$department_id')");
         $teacher_ids[] = $mysqli->insert_id;  // Store the teacher IDs for assigning as advisers
@@ -62,6 +63,7 @@ function insertTeachers($mysqli, $departments)
 
     return $teacher_ids;
 }
+
 
 // Function to insert sections and students
 function insertSections($grade_level, $teachers, $mysqli)
@@ -71,7 +73,7 @@ function insertSections($grade_level, $teachers, $mysqli)
 
     for ($i = 1; $i <= 5; $i++) {  // 5 sections per grade level
         $section_name = "Section " . $i;
-        $school_year = "2022-2023";
+        $school_year = "2020-2021";
         $adviser_id = $teachers[array_rand($teachers)];  // Randomly assign a teacher as adviser
         $is_archived = 1;  // Set the archived status to 1
 

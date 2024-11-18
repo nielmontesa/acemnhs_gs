@@ -10,16 +10,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = $_POST['teachermail'];
     $username = $_POST['username'];
     $password = $_POST['password'];
+    $department = $_POST['department_id'];
 
     // Prepare the SQL query
     if (!empty($password)) {
         // If a new password is provided, update the password as well
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-        $sql = "UPDATE teachers SET first_name = ?, last_name = ?, email = ?, username = ?, password = ? WHERE teacher_id = ?";
+        $sql = "UPDATE teachers SET first_name = ?, last_name = ?, email = ?, username = ?, password = ?, department_id = ? WHERE teacher_id = ?";
         $stmt = $conn->prepare($sql);
     } else {
         // If no new password, only update the other fields
-        $sql = "UPDATE teachers SET first_name = ?, last_name = ?, email = ?, username = ? WHERE teacher_id = ?";
+        $sql = "UPDATE teachers SET first_name = ?, last_name = ?, email = ?, username = ? , department_id = ? WHERE teacher_id = ?";
         $stmt = $conn->prepare($sql);
     }
 
@@ -30,10 +31,32 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Bind parameters based on whether the password was provided
     if (!empty($password)) {
-        $stmt->bind_param("sssssi", $first_name, $last_name, $email, $username, $hashed_password, $teacher_id);
+        // If a new password is provided, update the password as well
+        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+        $sql = "UPDATE teachers SET first_name = ?, last_name = ?, email = ?, username = ?, password = ?, department_id = ? WHERE teacher_id = ?";
+        $stmt = $conn->prepare($sql);
+
+        // Check if the statement was prepared successfully
+        if ($stmt === false) {
+            die('Error in prepare statement: ' . $conn->error);
+        }
+
+        // Bind all 7 parameters
+        $stmt->bind_param("ssssssi", $first_name, $last_name, $email, $username, $hashed_password, $department, $teacher_id);
     } else {
-        $stmt->bind_param("ssssi", $first_name, $last_name, $email, $username, $teacher_id);
+        // If no new password, only update the other fields
+        $sql = "UPDATE teachers SET first_name = ?, last_name = ?, email = ?, username = ?, department_id = ? WHERE teacher_id = ?";
+        $stmt = $conn->prepare($sql);
+
+        // Check if the statement was prepared successfully
+        if ($stmt === false) {
+            die('Error in prepare statement: ' . $conn->error);
+        }
+
+        // Bind all 6 parameters
+        $stmt->bind_param("ssssii", $first_name, $last_name, $email, $username, $department, $teacher_id);
     }
+
 
     // Check if parameter binding was successful
     if ($stmt->errno !== 0) {

@@ -34,12 +34,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $parent_email = $_POST['email'];
     $gender = $_POST['gender'];
     $akap_status = $_POST['akap_status']; // Get the Akap Status from the form
+    $birthday = $_POST['bday']; // Get the birthday from the form
     unset($_SESSION['section_id']);
     unset($_SESSION['gradesheet_id']);
 
-    // SQL query to insert student data, including the section ID and Akap Status
-    $sql = "INSERT INTO students (LRN, first_name, last_name, email, gender, akap_status, section_id)
-            VALUES ('$student_lrn', '$student_firstname', '$student_lastname', '$parent_email', '$gender', '$akap_status', '$section_id')";
+    // SQL query to insert student data, including the birthday, section ID, and Akap Status
+    $sql = "INSERT INTO students (LRN, first_name, last_name, email, gender, akap_status, bday, section_id)
+            VALUES ('$student_lrn', '$student_firstname', '$student_lastname', '$parent_email', '$gender', '$akap_status', '$birthday', '$section_id')";
 
     if ($conn->query($sql) === TRUE) {
         echo "New student added successfully";
@@ -47,7 +48,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
 }
-
 
 
 // Check if section_id is set in the URL
@@ -161,7 +161,7 @@ if ($section_result && $section_result->num_rows > 0) {
                         <label class="whites mx-2 flex h-fit w-full cursor-pointer p-0 hover:bg-gray-4" tabindex="0">
                             <div class="flex flex-row gap-4 p-4">
                                 <div class="avatar-square avatar avatar-md">
-                                    <img src="https://i.pravatar.cc/150?img=30" alt="avatar" />
+                                    <img src="../../assets/avatar.svg" alt="avatar" />
                                 </div>
 
                                 <div class="flex flex-col">
@@ -263,6 +263,12 @@ if ($section_result && $section_result->num_rows > 0) {
                                             E-mail</span>
                                         <input class="input-block input" placeholder="Please enter parent e-mail."
                                             name="email" type="email" required />
+                                    </label>
+                                    <label for="bday">
+                                        <span
+                                            class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Birthday</span>
+                                        <input class="input-block input" placeholder="Please enter parent e-mail."
+                                            name="bday" type="date" required />
                                     </label>
                                     <label for="gender">
                                         <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Gender</span>
@@ -448,6 +454,7 @@ if ($section_result && $section_result->num_rows > 0) {
                             <th>First Name</th>
                             <th>Parent E-mail</th>
                             <th>Gender</th>
+                            <th>Birthday</th>
                             <th>AKAP Status</th>
                             <th>Actions</th>
                         </tr>
@@ -501,6 +508,7 @@ if ($section_result && $section_result->num_rows > 0) {
                                         <td><?php echo $student['first_name']; ?></td>
                                         <td><?php echo $student['email']; ?></td>
                                         <td><?php echo $student['gender']; ?></td>
+                                        <td><?php echo $student['bday']; ?></td>
                                         <td><?php echo $student['akap_status']; ?></td>
                                         <td>
                                             <!-- Dynamic Drawer Toggle -->
@@ -557,6 +565,16 @@ if ($section_result && $section_result->num_rows > 0) {
                                                                 <input class="input-block input" placeholder="Please enter e-mail."
                                                                     name="email" type="email"
                                                                     value="<?php echo htmlspecialchars($student['email']); ?>"
+                                                                    required />
+                                                            </label>
+                                                            <!-- Birthday Field -->
+                                                            <label for="bday">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Birthday</span>
+                                                                <br>
+                                                                <input class="input-block input"
+                                                                    placeholder="Please enter birthday." name="bday" type="date"
+                                                                    value="<?php echo htmlspecialchars($student['bday']); ?>"
                                                                     required />
                                                             </label>
                                                             <label for="gender">
@@ -721,6 +739,7 @@ if ($section_result && $section_result->num_rows > 0) {
                                         <td><?php echo $student['first_name']; ?></td>
                                         <td><?php echo $student['email']; ?></td>
                                         <td><?php echo $student['gender']; ?></td>
+                                        <td><?php echo $student['bday']; ?></td>
                                         <td><?php echo $student['akap_status']; ?></td>
                                         <td>
                                             <!-- Dynamic Drawer Toggle -->
@@ -777,6 +796,16 @@ if ($section_result && $section_result->num_rows > 0) {
                                                                 <input class="input-block input" placeholder="Please enter e-mail."
                                                                     name="email" type="email"
                                                                     value="<?php echo htmlspecialchars($student['email']); ?>"
+                                                                    required />
+                                                            </label>
+                                                            <!-- Birthday Field -->
+                                                            <label for="bday">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Birthday</span>
+                                                                <br>
+                                                                <input class="input-block input"
+                                                                    placeholder="Please enter birthday." name="bday" type="date"
+                                                                    value="<?php echo htmlspecialchars($student['bday']); ?>"
                                                                     required />
                                                             </label>
                                                             <label for="gender">
@@ -836,7 +865,6 @@ if ($section_result && $section_result->num_rows > 0) {
                                                                     <span>Some gradesheets are not yet finalized.</span>
                                                                 <?php endif; ?>
                                                             </span>
-
                                                             <div class="h-full flex flex-row justify-end items-end gap-2">
                                                                 <button type="button" class="btn btn-ghost"
                                                                     onclick="document.getElementById('<?php echo $drawer_id; ?>').checked = false;">Cancel</button>
@@ -937,6 +965,7 @@ if ($section_result && $section_result->num_rows > 0) {
                                         <td><?php echo $student['first_name']; ?></td>
                                         <td><?php echo $student['email']; ?></td>
                                         <td><?php echo $student['gender']; ?></td>
+                                        <td><?php echo $student['bday']; ?></td>
                                         <td><?php echo $student['akap_status']; ?></td>
                                         <td>
                                             <!-- Dynamic Drawer Toggle -->
@@ -995,6 +1024,19 @@ if ($section_result && $section_result->num_rows > 0) {
                                                                     value="<?php echo htmlspecialchars($student['email']); ?>"
                                                                     required />
                                                             </label>
+                                                            <!-- Birthday Field -->
+                                                            <label for="bday">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Birthday</span>
+                                                                <br>
+                                                                <input class="input-block input"
+                                                                    placeholder="Please enter birthday." name="bday" type="date"
+                                                                    value="<?php echo htmlspecialchars($student['bday']); ?>"
+                                                                    required />
+                                                            </label>
+
+
+
                                                             <label for="gender">
                                                                 <span
                                                                     class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Gender</span>
@@ -1052,7 +1094,6 @@ if ($section_result && $section_result->num_rows > 0) {
                                                                     <span>Some gradesheets are not yet finalized.</span>
                                                                 <?php endif; ?>
                                                             </span>
-
                                                             <div class="h-full flex flex-row justify-end items-end gap-2">
                                                                 <button type="button" class="btn btn-ghost"
                                                                     onclick="document.getElementById('<?php echo $drawer_id; ?>').checked = false;">Cancel</button>
@@ -1153,6 +1194,7 @@ if ($section_result && $section_result->num_rows > 0) {
                                         <td><?php echo $student['first_name']; ?></td>
                                         <td><?php echo $student['email']; ?></td>
                                         <td><?php echo $student['gender']; ?></td>
+                                        <td><?php echo $student['bday']; ?></td>
                                         <td><?php echo $student['akap_status']; ?></td>
                                         <td>
                                             <!-- Dynamic Drawer Toggle -->
@@ -1209,6 +1251,16 @@ if ($section_result && $section_result->num_rows > 0) {
                                                                 <input class="input-block input" placeholder="Please enter e-mail."
                                                                     name="email" type="email"
                                                                     value="<?php echo htmlspecialchars($student['email']); ?>"
+                                                                    required />
+                                                            </label>
+                                                            <!-- Birthday Field -->
+                                                            <label for="bday">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Birthday</span>
+                                                                <br>
+                                                                <input class="input-block input"
+                                                                    placeholder="Please enter birthday." name="bday" type="date"
+                                                                    value="<?php echo htmlspecialchars($student['bday']); ?>"
                                                                     required />
                                                             </label>
                                                             <label for="gender">
@@ -1368,6 +1420,7 @@ if ($section_result && $section_result->num_rows > 0) {
                                         <td><?php echo $student['first_name']; ?></td>
                                         <td><?php echo $student['email']; ?></td>
                                         <td><?php echo $student['gender']; ?></td>
+                                        <td><?php echo $student['bday']; ?></td>
                                         <td><?php echo $student['akap_status']; ?></td>
                                         <td>
                                             <!-- Dynamic Drawer Toggle -->
@@ -1426,6 +1479,19 @@ if ($section_result && $section_result->num_rows > 0) {
                                                                     value="<?php echo htmlspecialchars($student['email']); ?>"
                                                                     required />
                                                             </label>
+                                                            <!-- Birthday Field -->
+                                                            <label for="bday">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Birthday</span>
+                                                                <br>
+                                                                <input class="input-block input"
+                                                                    placeholder="Please enter birthday." name="bday" type="date"
+                                                                    value="<?php echo htmlspecialchars($student['bday']); ?>"
+                                                                    required />
+                                                            </label>
+
+
+
                                                             <label for="gender">
                                                                 <span
                                                                     class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Gender</span>
@@ -1483,7 +1549,6 @@ if ($section_result && $section_result->num_rows > 0) {
                                                                     <span>Some gradesheets are not yet finalized.</span>
                                                                 <?php endif; ?>
                                                             </span>
-
                                                             <div class="h-full flex flex-row justify-end items-end gap-2">
                                                                 <button type="button" class="btn btn-ghost"
                                                                     onclick="document.getElementById('<?php echo $drawer_id; ?>').checked = false;">Cancel</button>
@@ -1584,6 +1649,7 @@ if ($section_result && $section_result->num_rows > 0) {
                                         <td><?php echo $student['first_name']; ?></td>
                                         <td><?php echo $student['email']; ?></td>
                                         <td><?php echo $student['gender']; ?></td>
+                                        <td><?php echo $student['bday']; ?></td>
                                         <td><?php echo $student['akap_status']; ?></td>
                                         <td>
                                             <!-- Dynamic Drawer Toggle -->
@@ -1642,6 +1708,19 @@ if ($section_result && $section_result->num_rows > 0) {
                                                                     value="<?php echo htmlspecialchars($student['email']); ?>"
                                                                     required />
                                                             </label>
+                                                            <!-- Birthday Field -->
+                                                            <label for="bday">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Birthday</span>
+                                                                <br>
+                                                                <input class="input-block input"
+                                                                    placeholder="Please enter birthday." name="bday" type="date"
+                                                                    value="<?php echo htmlspecialchars($student['bday']); ?>"
+                                                                    required />
+                                                            </label>
+
+
+
                                                             <label for="gender">
                                                                 <span
                                                                     class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Gender</span>
@@ -1699,7 +1778,6 @@ if ($section_result && $section_result->num_rows > 0) {
                                                                     <span>Some gradesheets are not yet finalized.</span>
                                                                 <?php endif; ?>
                                                             </span>
-
                                                             <div class="h-full flex flex-row justify-end items-end gap-2">
                                                                 <button type="button" class="btn btn-ghost"
                                                                     onclick="document.getElementById('<?php echo $drawer_id; ?>').checked = false;">Cancel</button>
@@ -1800,6 +1878,7 @@ if ($section_result && $section_result->num_rows > 0) {
                                         <td><?php echo $student['first_name']; ?></td>
                                         <td><?php echo $student['email']; ?></td>
                                         <td><?php echo $student['gender']; ?></td>
+                                        <td><?php echo $student['bday']; ?></td>
                                         <td><?php echo $student['akap_status']; ?></td>
                                         <td>
                                             <!-- Dynamic Drawer Toggle -->
@@ -1858,6 +1937,19 @@ if ($section_result && $section_result->num_rows > 0) {
                                                                     value="<?php echo htmlspecialchars($student['email']); ?>"
                                                                     required />
                                                             </label>
+                                                            <!-- Birthday Field -->
+                                                            <label for="bday">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Birthday</span>
+                                                                <br>
+                                                                <input class="input-block input"
+                                                                    placeholder="Please enter birthday." name="bday" type="date"
+                                                                    value="<?php echo htmlspecialchars($student['bday']); ?>"
+                                                                    required />
+                                                            </label>
+
+
+
                                                             <label for="gender">
                                                                 <span
                                                                     class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Gender</span>
@@ -1915,7 +2007,6 @@ if ($section_result && $section_result->num_rows > 0) {
                                                                     <span>Some gradesheets are not yet finalized.</span>
                                                                 <?php endif; ?>
                                                             </span>
-
                                                             <div class="h-full flex flex-row justify-end items-end gap-2">
                                                                 <button type="button" class="btn btn-ghost"
                                                                     onclick="document.getElementById('<?php echo $drawer_id; ?>').checked = false;">Cancel</button>
@@ -2016,6 +2107,7 @@ if ($section_result && $section_result->num_rows > 0) {
                                         <td><?php echo $student['first_name']; ?></td>
                                         <td><?php echo $student['email']; ?></td>
                                         <td><?php echo $student['gender']; ?></td>
+                                        <td><?php echo $student['bday']; ?></td>
                                         <td><?php echo $student['akap_status']; ?></td>
                                         <td>
                                             <!-- Dynamic Drawer Toggle -->
@@ -2074,6 +2166,19 @@ if ($section_result && $section_result->num_rows > 0) {
                                                                     value="<?php echo htmlspecialchars($student['email']); ?>"
                                                                     required />
                                                             </label>
+                                                            <!-- Birthday Field -->
+                                                            <label for="bday">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Birthday</span>
+                                                                <br>
+                                                                <input class="input-block input"
+                                                                    placeholder="Please enter birthday." name="bday" type="date"
+                                                                    value="<?php echo htmlspecialchars($student['bday']); ?>"
+                                                                    required />
+                                                            </label>
+
+
+
                                                             <label for="gender">
                                                                 <span
                                                                     class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Gender</span>
@@ -2131,7 +2236,6 @@ if ($section_result && $section_result->num_rows > 0) {
                                                                     <span>Some gradesheets are not yet finalized.</span>
                                                                 <?php endif; ?>
                                                             </span>
-
                                                             <div class="h-full flex flex-row justify-end items-end gap-2">
                                                                 <button type="button" class="btn btn-ghost"
                                                                     onclick="document.getElementById('<?php echo $drawer_id; ?>').checked = false;">Cancel</button>
@@ -2232,6 +2336,7 @@ if ($section_result && $section_result->num_rows > 0) {
                                         <td><?php echo $student['first_name']; ?></td>
                                         <td><?php echo $student['email']; ?></td>
                                         <td><?php echo $student['gender']; ?></td>
+                                        <td><?php echo $student['bday']; ?></td>
                                         <td><?php echo $student['akap_status']; ?></td>
                                         <td>
                                             <!-- Dynamic Drawer Toggle -->
@@ -2288,6 +2393,16 @@ if ($section_result && $section_result->num_rows > 0) {
                                                                 <input class="input-block input" placeholder="Please enter e-mail."
                                                                     name="email" type="email"
                                                                     value="<?php echo htmlspecialchars($student['email']); ?>"
+                                                                    required />
+                                                            </label>
+                                                            <!-- Birthday Field -->
+                                                            <label for="bday">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Birthday</span>
+                                                                <br>
+                                                                <input class="input-block input"
+                                                                    placeholder="Please enter birthday." name="bday" type="date"
+                                                                    value="<?php echo htmlspecialchars($student['bday']); ?>"
                                                                     required />
                                                             </label>
                                                             <label for="gender">
@@ -2447,6 +2562,7 @@ if ($section_result && $section_result->num_rows > 0) {
                                         <td><?php echo $student['first_name']; ?></td>
                                         <td><?php echo $student['email']; ?></td>
                                         <td><?php echo $student['gender']; ?></td>
+                                        <td><?php echo $student['bday']; ?></td>
                                         <td><?php echo $student['akap_status']; ?></td>
                                         <td>
                                             <!-- Dynamic Drawer Toggle -->
@@ -2505,6 +2621,19 @@ if ($section_result && $section_result->num_rows > 0) {
                                                                     value="<?php echo htmlspecialchars($student['email']); ?>"
                                                                     required />
                                                             </label>
+                                                            <!-- Birthday Field -->
+                                                            <label for="bday">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Birthday</span>
+                                                                <br>
+                                                                <input class="input-block input"
+                                                                    placeholder="Please enter birthday." name="bday" type="date"
+                                                                    value="<?php echo htmlspecialchars($student['bday']); ?>"
+                                                                    required />
+                                                            </label>
+
+
+
                                                             <label for="gender">
                                                                 <span
                                                                     class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Gender</span>
@@ -2662,6 +2791,7 @@ if ($section_result && $section_result->num_rows > 0) {
                                         <td><?php echo $student['first_name']; ?></td>
                                         <td><?php echo $student['email']; ?></td>
                                         <td><?php echo $student['gender']; ?></td>
+                                        <td><?php echo $student['bday']; ?></td>
                                         <td><?php echo $student['akap_status']; ?></td>
                                         <td>
                                             <!-- Dynamic Drawer Toggle -->
@@ -2720,6 +2850,19 @@ if ($section_result && $section_result->num_rows > 0) {
                                                                     value="<?php echo htmlspecialchars($student['email']); ?>"
                                                                     required />
                                                             </label>
+                                                            <!-- Birthday Field -->
+                                                            <label for="bday">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Birthday</span>
+                                                                <br>
+                                                                <input class="input-block input"
+                                                                    placeholder="Please enter birthday." name="bday" type="date"
+                                                                    value="<?php echo htmlspecialchars($student['bday']); ?>"
+                                                                    required />
+                                                            </label>
+
+
+
                                                             <label for="gender">
                                                                 <span
                                                                     class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Gender</span>
@@ -2777,7 +2920,6 @@ if ($section_result && $section_result->num_rows > 0) {
                                                                     <span>Some gradesheets are not yet finalized.</span>
                                                                 <?php endif; ?>
                                                             </span>
-
                                                             <div class="h-full flex flex-row justify-end items-end gap-2">
                                                                 <button type="button" class="btn btn-ghost"
                                                                     onclick="document.getElementById('<?php echo $drawer_id; ?>').checked = false;">Cancel</button>
@@ -2878,6 +3020,7 @@ if ($section_result && $section_result->num_rows > 0) {
                                         <td><?php echo $student['first_name']; ?></td>
                                         <td><?php echo $student['email']; ?></td>
                                         <td><?php echo $student['gender']; ?></td>
+                                        <td><?php echo $student['bday']; ?></td>
                                         <td><?php echo $student['akap_status']; ?></td>
                                         <td>
                                             <!-- Dynamic Drawer Toggle -->
@@ -2927,6 +3070,7 @@ if ($section_result && $section_result->num_rows > 0) {
                                                                     value="<?php echo htmlspecialchars($student['last_name']); ?>"
                                                                     required />
                                                             </label>
+
                                                             <label for="email">
                                                                 <span
                                                                     class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">E-mail</span>
@@ -2936,6 +3080,19 @@ if ($section_result && $section_result->num_rows > 0) {
                                                                     value="<?php echo htmlspecialchars($student['email']); ?>"
                                                                     required />
                                                             </label>
+                                                            <!-- Birthday Field -->
+                                                            <label for="bday">
+                                                                <span
+                                                                    class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Birthday</span>
+                                                                <br>
+                                                                <input class="input-block input"
+                                                                    placeholder="Please enter birthday." name="bday" type="date"
+                                                                    value="<?php echo htmlspecialchars($student['bday']); ?>"
+                                                                    required />
+                                                            </label>
+
+
+
                                                             <label for="gender">
                                                                 <span
                                                                     class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Gender</span>
@@ -2993,7 +3150,6 @@ if ($section_result && $section_result->num_rows > 0) {
                                                                     <span>Some gradesheets are not yet finalized.</span>
                                                                 <?php endif; ?>
                                                             </span>
-
                                                             <div class="h-full flex flex-row justify-end items-end gap-2">
                                                                 <button type="button" class="btn btn-ghost"
                                                                     onclick="document.getElementById('<?php echo $drawer_id; ?>').checked = false;">Cancel</button>

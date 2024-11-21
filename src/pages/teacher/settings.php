@@ -55,7 +55,7 @@ session_start();
                         <label class="whites mx-2 flex h-fit w-full cursor-pointer p-0 hover:bg-gray-4" tabindex="0">
                             <div class="flex flex-row gap-4 p-4">
                                 <div class="avatar-square avatar avatar-md">
-                                    <img src="https://i.pravatar.cc/150?img=30" alt="avatar" />
+                                    <img src="../../assets/avatar.svg" alt="avatar" />
                                 </div>
 
                                 <div class="flex flex-col">
@@ -86,7 +86,7 @@ session_start();
                         <label for="username">
                             <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Username</span>
                             <input class="input-block input" placeholder="Please enter your username." name="username"
-                               value="<?php echo $_SESSION['username']; ?>" type="text" />
+                                value="<?php echo $_SESSION['username']; ?>" type="text" />
                         </label>
                         <label for="oldpassword">
                             <span class="text-xs pb-4 pl-2 text-[rgba(0,0,0,0.5)] font-medium">Old Password</span>

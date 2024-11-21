@@ -11,6 +11,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $gender = $conn->real_escape_string($_POST['gender']);
     $akap_status = $conn->real_escape_string($_POST['akap_status']);
     $teacher_remarks = $conn->real_escape_string($_POST['teacher_remarks']); // New field for teacher remarks
+    $bday = $conn->real_escape_string($_POST['bday']); // New field for birthday
 
     // Retrieve student ID and section ID
     $student_id = $conn->real_escape_string($_POST['student_id']); // Student ID from the form
@@ -35,7 +36,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 email = '$email', 
                 gender = '$gender', 
                 akap_status = '$akap_status', 
-                teacher_remarks = '$teacher_remarks'  -- Update for teacher remarks
+                teacher_remarks = '$teacher_remarks',
+                bday = '$bday'  -- Update for birthday
             WHERE student_id = '$student_id'";
 
     if ($conn->query($sql) === TRUE) {

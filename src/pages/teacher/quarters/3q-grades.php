@@ -138,7 +138,7 @@ session_start();
                         <label class="whites mx-2 flex h-fit w-full cursor-pointer p-0 hover:bg-gray-4" tabindex="0">
                             <div class="flex flex-row gap-4 p-4">
                                 <div class="avatar-square avatar avatar-md">
-                                    <img src="https://i.pravatar.cc/150?img=30" alt="avatar" />
+                                    <img src="../../assets/avatar.svg" alt="avatar" />
                                 </div>
 
                                 <div class="flex flex-col">

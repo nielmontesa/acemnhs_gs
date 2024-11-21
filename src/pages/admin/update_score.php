@@ -56,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // New part: Check last 5 scores and update akap_status if necessary
-    $score_check_query = "SELECT score FROM student_activity_score WHERE student_id = ? ORDER BY activity_id DESC LIMIT 5";
+    $score_check_query = "SELECT score FROM student_activity_score WHERE student_id = ? ORDER BY activity_id ASC LIMIT 5";
     $score_stmt = $conn->prepare($score_check_query);
     $score_stmt->bind_param("i", $student_id);
     $score_stmt->execute();

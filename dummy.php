@@ -73,9 +73,9 @@ function insertSections($grade_level, $teachers, $mysqli)
 
     for ($i = 1; $i <= 5; $i++) {  // 5 sections per grade level
         $section_name = "Section " . $i;
-        $school_year = "2020-2021";
+        $school_year = "2024-2025";
         $adviser_id = $teachers[array_rand($teachers)];  // Randomly assign a teacher as adviser
-        $is_archived = 1;  // Set the archived status to 1
+        $is_archived = 0;  // Set the archived status to 1
 
         // Insert section with adviser and is_archived field
         $mysqli->query("INSERT INTO section (grade_level, section_name, school_year, adviser_id, is_archived) 
@@ -108,13 +108,13 @@ function insertStudents($section_id, $mysqli)
         $gender = $mysqli->real_escape_string($faker->randomElement(['Male', 'Female']));
         $LRN = $faker->numerify('###########');  // Generate a 12-digit LRN
         $akap_status = $akap_statuses[array_rand($akap_statuses)];  // Randomly select akap_status
+        $bday = $faker->date('Y-m-d');  // Generate a random bday in YYYY-MM-DD format
 
-        // Insert student with akap_status
-        $mysqli->query("INSERT INTO students (first_name, last_name, section_ID, email, gender, LRN, akap_status) 
-                        VALUES ('$first_name', '$last_name', '$section_id', '$email', '$gender', '$LRN', '$akap_status')");
+        // Insert student with akap_status and bday
+        $mysqli->query("INSERT INTO students (first_name, last_name, section_ID, email, gender, LRN, akap_status, bday) 
+                        VALUES ('$first_name', '$last_name', '$section_id', '$email', '$gender', '$LRN', '$akap_status', '$bday')");
     }
 }
-
 
 // Function to insert gradesheets and activities (for all quarters)
 function insertGradesheet($section_id, $mysqli)

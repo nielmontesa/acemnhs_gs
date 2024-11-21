@@ -518,7 +518,7 @@ $pdf->MultiCell(60, 15, $mq4_ave);
 //mapeh/final?
 $mapeh_final = $mq1_ave + $mq2_ave + $mq3_ave + $mq4_ave ;
 $pdf->SetXY(90, 103);
-$pdf -> MultiCell(60, 15, ceil($mapeh_final/4));
+$pdf -> MultiCell(60, 15, transmute_grade(ceil($mapeh_final/4)));
 $pdf->SetXY(102, 103);
 $pdf->MultiCell(60, 15, status(transmute_grade($mapeh_final)));
 

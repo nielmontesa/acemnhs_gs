@@ -42,7 +42,7 @@ function transmute_grade($final_grade)
         [74.40, 84],
         [72.80, 83],
         [71.20, 82],
-        [69.61, 81], 
+        [69.61, 81],
         [68.00, 80],
         [66.40, 79],
         [64.81, 78],
@@ -125,8 +125,8 @@ while ($row = mysqli_fetch_assoc($data_attendance)) {
     $pdf->SetXY(150, 145);
     $pdf->MultiCell(120, 2, $row['school_year']);
 
-    
-   
+
+
 }
 
 // Grade PDF
@@ -153,34 +153,34 @@ while ($row = mysqli_fetch_assoc($data_grades)) {
     $pdf->SetFont("Arial", "", 10);
     $pdf->SetXY(50, 50);
 
-    
+
     if ($row['subject'] == 'Filipino') {
         // Store the final grade for each quarter in the array
         $quarterIndex = $row['quarter'] - 1; // Assuming quarter is 1-based (1, 2, 3, 4)
         $filipino_grades[$quarterIndex] = $row['final_grade'];
     }
-    
+
 
     //Filipino
     if ($row['subject'] == 'Filipino' && $row['quarter'] == 1) {
-        $pdf->SetXY(50, 50); 
-        $pdf->MultiCell(60, 15, $row['final_grade'] );     
+        $pdf->SetXY(50, 50);
+        $pdf->MultiCell(60, 15, $row['final_grade']);
     }
     if ($row['subject'] == 'Filipino' && $row['quarter'] == 2) {
-        $pdf->SetXY(60, 50); 
-        $pdf->MultiCell(60, 15, $row['final_grade'] );     
+        $pdf->SetXY(60, 50);
+        $pdf->MultiCell(60, 15, $row['final_grade']);
     }
     if ($row['subject'] == 'Filipino' && $row['quarter'] == 3) {
-        $pdf->SetXY(70, 50); 
-        $pdf->MultiCell(60, 15, $row['final_grade'] );     
+        $pdf->SetXY(70, 50);
+        $pdf->MultiCell(60, 15, $row['final_grade']);
     }
     if ($row['subject'] == 'Filipino' && $row['quarter'] == 4) {
-        $pdf->SetXY(80, 50); 
-        $pdf->MultiCell(60, 15, $row['final_grade'] );     
+        $pdf->SetXY(80, 50);
+        $pdf->MultiCell(60, 15, $row['final_grade']);
     }
 
-    
-    
+
+
     if ($row['subject'] == 'English') {
         // Store the final grade for each quarter in the array
         $quarterIndex = $row['quarter'] - 1; // Assuming quarter is 1-based (1, 2, 3, 4)
@@ -189,20 +189,20 @@ while ($row = mysqli_fetch_assoc($data_grades)) {
 
     // English
     if ($row['subject'] == 'English' && $row['quarter'] == 1) {
-        $pdf->SetXY(50, 55); 
-        $pdf->MultiCell(60, 16, $row['final_grade'] );     
+        $pdf->SetXY(50, 55);
+        $pdf->MultiCell(60, 16, $row['final_grade']);
     }
     if ($row['subject'] == 'English' && $row['quarter'] == 2) {
-        $pdf->SetXY(60, 55); 
-        $pdf->MultiCell(60, 16, $row['final_grade'] );     
+        $pdf->SetXY(60, 55);
+        $pdf->MultiCell(60, 16, $row['final_grade']);
     }
     if ($row['subject'] == 'English' && $row['quarter'] == 3) {
-        $pdf->SetXY(70,55); 
-        $pdf->MultiCell(60, 16, $row['final_grade'] );     
+        $pdf->SetXY(70, 55);
+        $pdf->MultiCell(60, 16, $row['final_grade']);
     }
     if ($row['subject'] == 'English' && $row['quarter'] == 4) {
-        $pdf->SetXY(80, 55); 
-        $pdf->MultiCell(60, 16, $row['final_grade'] );     
+        $pdf->SetXY(80, 55);
+        $pdf->MultiCell(60, 16, $row['final_grade']);
     }
 
     if ($row['subject'] == 'Mathematics') {
@@ -211,22 +211,22 @@ while ($row = mysqli_fetch_assoc($data_grades)) {
         $math_grades[$quarterIndex] = $row['final_grade'];
     }
 
-     // Mathematics
-     if ($row['subject'] == 'Mathematics' && $row['quarter'] == 1) {
-        $pdf->SetXY(50,61); 
-        $pdf->MultiCell(60, 16, $row['final_grade'] );     
+    // Mathematics
+    if ($row['subject'] == 'Mathematics' && $row['quarter'] == 1) {
+        $pdf->SetXY(50, 61);
+        $pdf->MultiCell(60, 16, $row['final_grade']);
     }
     if ($row['subject'] == 'Mathematics' && $row['quarter'] == 2) {
-        $pdf->SetXY(60,61); 
-        $pdf->MultiCell(60, 16, $row['final_grade'] );     
+        $pdf->SetXY(60, 61);
+        $pdf->MultiCell(60, 16, $row['final_grade']);
     }
     if ($row['subject'] == 'Mathematics' && $row['quarter'] == 3) {
-        $pdf->SetXY(70,61); 
-        $pdf->MultiCell(60, 16, $row['final_grade'] );     
+        $pdf->SetXY(70, 61);
+        $pdf->MultiCell(60, 16, $row['final_grade']);
     }
     if ($row['subject'] == 'Mathematics' && $row['quarter'] == 4) {
-        $pdf->SetXY(80,61); 
-        $pdf->MultiCell(60, 16, $row['final_grade'] );     
+        $pdf->SetXY(80, 61);
+        $pdf->MultiCell(60, 16, $row['final_grade']);
     }
 
     if ($row['subject'] == 'Science') {
@@ -235,22 +235,22 @@ while ($row = mysqli_fetch_assoc($data_grades)) {
         $sci_grades[$quarterIndex] = $row['final_grade'];
     }
 
-     // Science
-     if ($row['subject'] == 'Science' && $row['quarter'] == 1) {
-        $pdf->SetXY(50, 67); 
-        $pdf->MultiCell(60, 16, $row['final_grade'] );     
+    // Science
+    if ($row['subject'] == 'Science' && $row['quarter'] == 1) {
+        $pdf->SetXY(50, 67);
+        $pdf->MultiCell(60, 16, $row['final_grade']);
     }
     if ($row['subject'] == 'Science' && $row['quarter'] == 2) {
-        $pdf->SetXY(60, 67); 
-        $pdf->MultiCell(60, 16, $row['final_grade'] );     
+        $pdf->SetXY(60, 67);
+        $pdf->MultiCell(60, 16, $row['final_grade']);
     }
     if ($row['subject'] == 'Science' && $row['quarter'] == 3) {
-        $pdf->SetXY(70,67); 
-        $pdf->MultiCell(60, 16, $row['final_grade'] );     
+        $pdf->SetXY(70, 67);
+        $pdf->MultiCell(60, 16, $row['final_grade']);
     }
     if ($row['subject'] == 'Science' && $row['quarter'] == 4) {
-        $pdf->SetXY(80, 67); 
-        $pdf->MultiCell(60, 16, $row['final_grade'] );     
+        $pdf->SetXY(80, 67);
+        $pdf->MultiCell(60, 16, $row['final_grade']);
     }
 
     if ($row['subject'] == 'Araling Panlipunan') {
@@ -259,22 +259,22 @@ while ($row = mysqli_fetch_assoc($data_grades)) {
         $ap_grades[$quarterIndex] = $row['final_grade'];
     }
 
-     // Araling Panlipunan
-     if ($row['subject'] == 'Araling Panlipunan' && $row['quarter'] == 1) {
-        $pdf->SetXY(50, 73); 
-        $pdf->MultiCell(60, 16, $row['final_grade'] );     
+    // Araling Panlipunan
+    if ($row['subject'] == 'Araling Panlipunan' && $row['quarter'] == 1) {
+        $pdf->SetXY(50, 73);
+        $pdf->MultiCell(60, 16, $row['final_grade']);
     }
     if ($row['subject'] == 'Araling Panlipunan' && $row['quarter'] == 2) {
-        $pdf->SetXY(60, 73); 
-        $pdf->MultiCell(60, 16, $row['final_grade'] );     
+        $pdf->SetXY(60, 73);
+        $pdf->MultiCell(60, 16, $row['final_grade']);
     }
     if ($row['subject'] == 'Araling Panlipunan' && $row['quarter'] == 3) {
-        $pdf->SetXY(70,73); 
-        $pdf->MultiCell(60, 16, $row['final_grade'] );     
+        $pdf->SetXY(70, 73);
+        $pdf->MultiCell(60, 16, $row['final_grade']);
     }
     if ($row['subject'] == 'Araling Panlipunan' && $row['quarter'] == 4) {
-        $pdf->SetXY(80, 73); 
-        $pdf->MultiCell(60, 16, $row['final_grade'] );     
+        $pdf->SetXY(80, 73);
+        $pdf->MultiCell(60, 16, $row['final_grade']);
     }
 
     if ($row['subject'] == 'Edukasyon sa Pagpapakatao') {
@@ -283,22 +283,22 @@ while ($row = mysqli_fetch_assoc($data_grades)) {
         $esp_grades[$quarterIndex] = $row['final_grade'];
     }
 
-     // Edukasyon sa Pagpapakatao
-     if ($row['subject'] == 'Edukasyon sa Pagpapakatao' && $row['quarter'] == 1) {
-        $pdf->SetXY(50, 83); 
-        $pdf->MultiCell(60, 16, $row['final_grade'] );     
+    // Edukasyon sa Pagpapakatao
+    if ($row['subject'] == 'Edukasyon sa Pagpapakatao' && $row['quarter'] == 1) {
+        $pdf->SetXY(50, 83);
+        $pdf->MultiCell(60, 16, $row['final_grade']);
     }
     if ($row['subject'] == 'Edukasyon sa Pagpapakatao' && $row['quarter'] == 2) {
-        $pdf->SetXY(60, 83); 
-        $pdf->MultiCell(60, 16, $row['final_grade'] );     
+        $pdf->SetXY(60, 83);
+        $pdf->MultiCell(60, 16, $row['final_grade']);
     }
     if ($row['subject'] == 'Edukasyon sa Pagpapakatao' && $row['quarter'] == 3) {
-        $pdf->SetXY(70,83); 
-        $pdf->MultiCell(60, 16, $row['final_grade'] );     
+        $pdf->SetXY(70, 83);
+        $pdf->MultiCell(60, 16, $row['final_grade']);
     }
     if ($row['subject'] == 'Edukasyon sa Pagpapakatao' && $row['quarter'] == 4) {
-        $pdf->SetXY(80, 83); 
-        $pdf->MultiCell(60, 16, $row['final_grade'] );     
+        $pdf->SetXY(80, 83);
+        $pdf->MultiCell(60, 16, $row['final_grade']);
     }
 
     if ($row['subject'] == 'TLE') {
@@ -309,20 +309,20 @@ while ($row = mysqli_fetch_assoc($data_grades)) {
 
     // Edukasyong Pantahanan at Pangkabuhayan/TLE
     if ($row['subject'] == 'TLE' && $row['quarter'] == 1) {
-        $pdf->SetXY(50, 95); 
-        $pdf->MultiCell(60, 16, $row['final_grade'] );     
+        $pdf->SetXY(50, 95);
+        $pdf->MultiCell(60, 16, $row['final_grade']);
     }
     if ($row['subject'] == 'TLE' && $row['quarter'] == 2) {
-        $pdf->SetXY(60, 95); 
-        $pdf->MultiCell(60, 16, $row['final_grade'] );     
+        $pdf->SetXY(60, 95);
+        $pdf->MultiCell(60, 16, $row['final_grade']);
     }
     if ($row['subject'] == 'TLE' && $row['quarter'] == 3) {
-        $pdf->SetXY(70,95); 
-        $pdf->MultiCell(60, 16, $row['final_grade'] );     
+        $pdf->SetXY(70, 95);
+        $pdf->MultiCell(60, 16, $row['final_grade']);
     }
     if ($row['subject'] == 'TLE' && $row['quarter'] == 4) {
-        $pdf->SetXY(80, 95); 
-        $pdf->MultiCell(60, 16, $row['final_grade'] );     
+        $pdf->SetXY(80, 95);
+        $pdf->MultiCell(60, 16, $row['final_grade']);
     }
 
     // // Mapeh
@@ -342,103 +342,102 @@ while ($row = mysqli_fetch_assoc($data_grades)) {
     //     $pdf->SetXY(80, 104); 
     //     $pdf->MultiCell(60, 16, $row['final_grade'] );     
     // }
-    
+
     // Mapeh/Music
-    if ($row['subject'] == 'Music' && $row['quarter'] == 1) 
-    {
-        $pdf->SetXY(50, 110); 
-        $pdf->MultiCell(60, 16, $row['final_grade'] );
-        $mq1_grades[0] = $row['final_grade'];  
+    if ($row['subject'] == 'Music' && $row['quarter'] == 1) {
+        $pdf->SetXY(50, 110);
+        $pdf->MultiCell(60, 16, $row['final_grade']);
+        $mq1_grades[0] = $row['final_grade'];
     }
     if ($row['subject'] == 'Music' && $row['quarter'] == 2) {
-        $pdf->SetXY(60, 110); 
-        $pdf->MultiCell(60, 16, $row['final_grade'] );
-        $mq2_grades[0] = $row['final_grade'];       
+        $pdf->SetXY(60, 110);
+        $pdf->MultiCell(60, 16, $row['final_grade']);
+        $mq2_grades[0] = $row['final_grade'];
     }
     if ($row['subject'] == 'Music' && $row['quarter'] == 3) {
-        $pdf->SetXY(70,110); 
-        $pdf->MultiCell(60, 16, $row['final_grade'] ); 
-        $mq3_grades[0] = $row['final_grade'];     
+        $pdf->SetXY(70, 110);
+        $pdf->MultiCell(60, 16, $row['final_grade']);
+        $mq3_grades[0] = $row['final_grade'];
     }
     if ($row['subject'] == 'Music' && $row['quarter'] == 4) {
-        $pdf->SetXY(80, 110); 
-        $pdf->MultiCell(60, 16, $row['final_grade'] );  
-        $mq4_grades[0] = $row['final_grade'];    
+        $pdf->SetXY(80, 110);
+        $pdf->MultiCell(60, 16, $row['final_grade']);
+        $mq4_grades[0] = $row['final_grade'];
     }
 
     // Mapeh/Arts
     if ($row['subject'] == 'Arts' && $row['quarter'] == 1) {
-        $pdf->SetXY(50, 118); 
-        $pdf->MultiCell(60, 16, $row['final_grade'] );
-        $mq1_grades[1] = $row['final_grade']; 
-            
+        $pdf->SetXY(50, 118);
+        $pdf->MultiCell(60, 16, $row['final_grade']);
+        $mq1_grades[1] = $row['final_grade'];
+
     }
     if ($row['subject'] == 'Arts' && $row['quarter'] == 2) {
-        $pdf->SetXY(60, 118); 
-        $pdf->MultiCell(60, 16, $row['final_grade'] );
-        $mq2_grades[1] = $row['final_grade'];     
+        $pdf->SetXY(60, 118);
+        $pdf->MultiCell(60, 16, $row['final_grade']);
+        $mq2_grades[1] = $row['final_grade'];
     }
     if ($row['subject'] == 'Arts' && $row['quarter'] == 3) {
-        $pdf->SetXY(70, 118); 
-        $pdf->MultiCell(60, 16, $row['final_grade'] ); 
-        $mq3_grades[1] = $row['final_grade'];     
+        $pdf->SetXY(70, 118);
+        $pdf->MultiCell(60, 16, $row['final_grade']);
+        $mq3_grades[1] = $row['final_grade'];
     }
     if ($row['subject'] == 'Arts' && $row['quarter'] == 4) {
-        $pdf->SetXY(80, 118); 
-        $pdf->MultiCell(60, 16, $row['final_grade'] );   
-        $mq4_grades[1] = $row['final_grade'];   
+        $pdf->SetXY(80, 118);
+        $pdf->MultiCell(60, 16, $row['final_grade']);
+        $mq4_grades[1] = $row['final_grade'];
     }
-    
+
     // Mapeh/Physical Education
     if ($row['subject'] == 'PE' && $row['quarter'] == 1) {
-        $pdf->SetXY(50, 125); 
-        $pdf->MultiCell(60, 16, $row['final_grade'] ); 
-        $mq1_grades[2] = $row['final_grade'];       
+        $pdf->SetXY(50, 125);
+        $pdf->MultiCell(60, 16, $row['final_grade']);
+        $mq1_grades[2] = $row['final_grade'];
     }
     if ($row['subject'] == 'PE' && $row['quarter'] == 2) {
-        $pdf->SetXY(60, 125); 
-        $pdf->MultiCell(60, 16, $row['final_grade'] );     
-        $mq2_grades[2] = $row['final_grade']; 
+        $pdf->SetXY(60, 125);
+        $pdf->MultiCell(60, 16, $row['final_grade']);
+        $mq2_grades[2] = $row['final_grade'];
     }
     if ($row['subject'] == 'PE' && $row['quarter'] == 3) {
-        $pdf->SetXY(70,125); 
-        $pdf->MultiCell(60, 16, $row['final_grade'] );
-        $mq3_grades[2] = $row['final_grade'];      
+        $pdf->SetXY(70, 125);
+        $pdf->MultiCell(60, 16, $row['final_grade']);
+        $mq3_grades[2] = $row['final_grade'];
     }
     if ($row['subject'] == 'PE' && $row['quarter'] == 4) {
-        $pdf->SetXY(80, 125); 
-        $pdf->MultiCell(60, 16, $row['final_grade'] );  
-        $mq4_grades[2] = $row['final_grade'];    
+        $pdf->SetXY(80, 125);
+        $pdf->MultiCell(60, 16, $row['final_grade']);
+        $mq4_grades[2] = $row['final_grade'];
     }
 
     // Mapeh/Health
     if ($row['subject'] == 'Health' && $row['quarter'] == 1) {
-        $pdf->SetXY(50, 133); 
-        $pdf->MultiCell(60, 16, $row['final_grade'] );
-        $mq1_grades[3] = $row['final_grade'];        
+        $pdf->SetXY(50, 133);
+        $pdf->MultiCell(60, 16, $row['final_grade']);
+        $mq1_grades[3] = $row['final_grade'];
     }
     if ($row['subject'] == 'Health' && $row['quarter'] == 2) {
-        $pdf->SetXY(60, 133); 
+        $pdf->SetXY(60, 133);
         $pdf->MultiCell(60, 16, $row['final_grade']);
-        $mq2_grades[3] = $row['final_grade'];   
+        $mq2_grades[3] = $row['final_grade'];
     }
     if ($row['subject'] == 'Health' && $row['quarter'] == 3) {
-        $pdf->SetXY(70,133); 
-        $pdf->MultiCell(60, 16, $row['final_grade'] ); 
-        $mq3_grades[3] = $row['final_grade'];     
+        $pdf->SetXY(70, 133);
+        $pdf->MultiCell(60, 16, $row['final_grade']);
+        $mq3_grades[3] = $row['final_grade'];
     }
     if ($row['subject'] == 'Health' && $row['quarter'] == 4) {
-        $pdf->SetXY(80, 133); 
-        $pdf->MultiCell(60, 16, $row['final_grade'] );  
-        $mq4_grades[3] = $row['final_grade'];    
+        $pdf->SetXY(80, 133);
+        $pdf->MultiCell(60, 16, $row['final_grade']);
+        $mq4_grades[3] = $row['final_grade'];
     }
- 
-    
+
+
 }
 //filipino
 $filipino_total = array_sum($filipino_grades);
 $filipino_ave = $filipino_total / count($filipino_grades);
-$pdf->SetXY(90, 50); 
+$pdf->SetXY(90, 50);
 $pdf->MultiCell(60, 15, transmute_grade($filipino_ave));
 $pdf->SetXY(102, 50);
 $pdf->MultiCell(60, 15, status(transmute_grade($filipino_ave)));
@@ -446,49 +445,49 @@ $pdf->MultiCell(60, 15, status(transmute_grade($filipino_ave)));
 //english
 $english_total = array_sum($english_grades);
 $english_ave = $english_total / count($english_grades);
-$pdf->SetXY(90, 55); 
+$pdf->SetXY(90, 55);
 $pdf->MultiCell(60, 15, transmute_grade($english_ave));
-$pdf->SetXY(102, 55); 
+$pdf->SetXY(102, 55);
 $pdf->MultiCell(60, 15, status(transmute_grade($english_ave)));
 
 //mathematics
 $math_total = array_sum($math_grades);
 $math_ave = $math_total / count($math_grades);
-$pdf->SetXY(90, 61); 
+$pdf->SetXY(90, 61);
 $pdf->MultiCell(60, 15, transmute_grade($math_ave));
-$pdf->SetXY(102, 61); 
+$pdf->SetXY(102, 61);
 $pdf->MultiCell(60, 15, status(transmute_grade($math_ave)));
 
 //science
 $sci_total = array_sum($sci_grades);
 $sci_ave = $sci_total / count($sci_grades);
-$pdf->SetXY(90, 67); 
+$pdf->SetXY(90, 67);
 $pdf->MultiCell(60, 15, transmute_grade($sci_ave));
-$pdf->SetXY(102, 67); 
+$pdf->SetXY(102, 67);
 $pdf->MultiCell(60, 15, status(transmute_grade($sci_ave)));
 
 //araling panlipunan
 $ap_total = array_sum($ap_grades);
 $ap_ave = $ap_total / count($ap_grades);
-$pdf->SetXY(90, 73); 
+$pdf->SetXY(90, 73);
 $pdf->MultiCell(60, 15, transmute_grade($ap_ave));
-$pdf->SetXY(102, 73); 
+$pdf->SetXY(102, 73);
 $pdf->MultiCell(60, 15, status(transmute_grade($ap_ave)));
 
 //Edukasyon sa Pagpapakatao
 $esp_total = array_sum($esp_grades);
 $esp_ave = $esp_total / count($esp_grades);
-$pdf->SetXY(90, 83); 
+$pdf->SetXY(90, 83);
 $pdf->MultiCell(60, 15, transmute_grade($esp_ave));
-$pdf->SetXY(102, 83); 
+$pdf->SetXY(102, 83);
 $pdf->MultiCell(60, 15, status(transmute_grade($esp_ave)));
 
 //tle
 $tle_total = array_sum($tle_grades);
 $tle_ave = $tle_total / count($tle_grades);
-$pdf->SetXY(90, 95); 
+$pdf->SetXY(90, 95);
 $pdf->MultiCell(60, 15, transmute_grade($tle_ave));
-$pdf->SetXY(102, 95); 
+$pdf->SetXY(102, 95);
 $pdf->MultiCell(60, 15, status(transmute_grade($tle_ave)));
 
 //mapeh/quarter 1
@@ -516,15 +515,15 @@ $pdf->SetXY(79, 103);
 $pdf->MultiCell(60, 15, $mq4_ave);
 
 //mapeh/final?
-$mapeh_final = $mq1_ave + $mq2_ave + $mq3_ave + $mq4_ave ;
+$mapeh_final = $mq1_ave + $mq2_ave + $mq3_ave + $mq4_ave;
 $pdf->SetXY(90, 103);
-$pdf -> MultiCell(60, 15, ceil($mapeh_final/4));
+$pdf->MultiCell(60, 15, ceil($mapeh_final / 4));
 $pdf->SetXY(102, 103);
-$pdf->MultiCell(60, 15, status(transmute_grade($mapeh_final)));
+$pdf->MultiCell(60, 15, status($mapeh_final / 4));
 
 //General Average
-$general_ave = (transmute_grade($filipino_ave)+ transmute_grade($english_ave) + transmute_grade($math_ave) + transmute_grade($sci_ave) + transmute_grade($ap_ave) + transmute_grade($esp_ave) + transmute_grade($tle_ave))/7;
-$pdf->SetXY(90, 140); 
+$general_ave = (transmute_grade($filipino_ave) + transmute_grade($english_ave) + transmute_grade($math_ave) + transmute_grade($sci_ave) + transmute_grade($ap_ave) + transmute_grade($esp_ave) + transmute_grade($tle_ave)) / 7;
+$pdf->SetXY(90, 140);
 $pdf->MultiCell(60, 15, ceil($general_ave));
 
 

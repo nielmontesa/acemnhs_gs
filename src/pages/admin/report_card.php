@@ -312,10 +312,10 @@ if (isset($_POST['export'])) {
     }
 
     // Get student information from the database
-    $sql = "SELECT s.first_name, s.last_name, s.LRN, sec.grade_level, sec.section_name, sec.school_year, s.gender
-        FROM students s
-        JOIN section sec ON s.section_ID = sec.section_id
-        WHERE s.student_id = ?";
+    $sql = "SELECT s.first_name, s.last_name, s.LRN, sec.grade_level, sec.section_name, sec.school_year, s.gender, s.bday
+    FROM students s
+    JOIN section sec ON s.section_ID = sec.section_id
+    WHERE s.student_id = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param('i', $student_id); // Assuming student_id is an integer
     $stmt->execute();
@@ -324,13 +324,18 @@ if (isset($_POST['export'])) {
     if ($result->num_rows > 0) {
         $student_data = $result->fetch_assoc();
 
+        // Calculate the age based on the birthdate
+        $birthDate = new DateTime($student_data['bday']);
+        $currentDate = new DateTime(); // Current date
+        $age = $currentDate->diff($birthDate)->y; // Difference in years
+
         // Select the 'FRONT' sheet where the student information will be placed
         $frontSheet = $spreadsheet->getSheetByName('FRONT');
 
         // Set the student data in the specified cells
         $frontSheet->setCellValue('P22', 'Name: ' . $student_data['first_name'] . ' ' . $student_data['last_name']);
         $frontSheet->setCellValue('P24', 'Learner\'s Reference Number: ' . (int) $student_data['LRN']);
-        $frontSheet->setCellValue('P26', 'Sex: ' . $student_data['gender']);
+        $frontSheet->setCellValue('P26', 'Age: ' . $age . '                 Sex: ' . $student_data['gender']);
         $frontSheet->setCellValue('P28', 'Grade: ' . $student_data['grade_level'] . ' Section: ' . $student_data['section_name']);
         $frontSheet->setCellValue('P30', 'School Year: ' . $student_data['school_year']);
 
@@ -341,6 +346,7 @@ if (isset($_POST['export'])) {
         $frontSheet->getStyle('P28')->getFont()->setUnderline(true);
         $frontSheet->getStyle('P30')->getFont()->setUnderline(true);
     }
+
     // Save the modified file as .xlsx
     $writer = new Xlsx($spreadsheet);
     $filename = 'sf9_final_' . date('Y-m-d_H-i-s') . '.xlsx';

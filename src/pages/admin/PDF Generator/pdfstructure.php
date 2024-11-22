@@ -522,9 +522,9 @@ $pdf->SetXY(102, 103);
 $pdf->MultiCell(60, 15, status($mapeh_final / 4));
 
 //General Average
-$general_ave = (transmute_grade($filipino_ave) + transmute_grade($english_ave) + transmute_grade($math_ave) + transmute_grade($sci_ave) + transmute_grade($ap_ave) + transmute_grade($esp_ave) + transmute_grade($tle_ave)) / 7;
+$general_ave = (transmute_grade($filipino_ave) + transmute_grade($english_ave) + transmute_grade($math_ave) + transmute_grade($sci_ave) + transmute_grade($ap_ave) + transmute_grade($esp_ave) + transmute_grade($tle_ave) + ($mapeh_final / 4)) / 8;
 $pdf->SetXY(90, 140);
-$pdf->MultiCell(60, 15, ceil($general_ave));
+$pdf->MultiCell(60, 15, round($general_ave));
 
 
 
